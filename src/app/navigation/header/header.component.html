@@ -1,0 +1,22 @@
+<mat-toolbar color="primary">
+  <div>
+    <a routerLink="/">
+      <img class="smarter-logo" src="assets/Sm_4.png" alt="SMARTER">
+    </a>
+  </div>
+  <div fxHide.gt-xs fxFlex fxLayout fxLayoutAlign="flex-end">
+    <button mat-icon-button (click)="onToggleSidenav()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </div>
+  <div fxHide.xs fxFlex fxLayout fxLayoutAlign="flex-end">
+    <ul fxLayout fxLayoutGap="10px" class="navigation-items">
+      <li>
+        <a routerLink="/login">Login</a>
+      </li>
+      <li>
+        <a>Logout</a>
+      </li>
+    </ul>
+  </div>
+</mat-toolbar>
