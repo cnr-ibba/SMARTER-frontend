@@ -1,6 +1,17 @@
 <mat-sidenav-container>
   <mat-sidenav #sidenav role="navigation">
-    <p>I'm SideNav</p>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/login" (click)="sidenav.close()">
+        <mat-icon>face</mat-icon>
+        <span class="nav-caption">Login</span>
+      </a>
+      <mat-list-item>
+        <button mat-icon-button (click)="sidenav.close()">
+          <mat-icon>eject</mat-icon>
+          <span class="nav-caption">Logout</span>
+        </button>
+      </mat-list-item>
+    </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color="primary">
@@ -18,6 +29,9 @@
         <ul fxLayout fxLayoutGap="10px" class="navigation-items">
           <li>
             <a routerLink="/login">Login</a>
+          </li>
+          <li>
+            <a>Logout</a>
           </li>
         </ul>
       </div>
