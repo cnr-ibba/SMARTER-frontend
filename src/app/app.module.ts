@@ -10,6 +10,7 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './auth/login/login.component';
 import { HeaderComponent } from './navigation/header/header.component';
 import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
+import { DatasetsComponent } from './datasets/datasets.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.com
     HomeComponent,
     LoginComponent,
     HeaderComponent,
-    SidenavListComponent
+    SidenavListComponent,
+    DatasetsComponent
   ],
   imports: [
     BrowserModule,
