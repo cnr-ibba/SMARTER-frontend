@@ -1,0 +1,32 @@
+
+mat-sidenav-container, mat-sidenav-content, mat-sidenav {
+  height: 100%;
+}
+
+mat-sidenav {
+  width: 250px;
+}
+
+/* style toolbar links */
+a {
+  text-decoration: none;
+  color: white;
+}
+
+a:hover, a:active {
+  color: lightgray;
+}
+
+.navigation-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.smarter-logo {
+  height: 30px;
+  // background-color: whitesmoke;
+  // margin-top: 0.50rem;
+  // padding: 0.75rem;
+  // border-radius: 10px;
+}

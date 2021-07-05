@@ -5,13 +5,21 @@
   <mat-sidenav-content>
     <mat-toolbar color="primary">
       <div>
-        <button (click)="sidenav.toggle()">Toggle Sidenav</button>
+        <a routerLink="/">
+          <img class="smarter-logo" src="assets/Sm_4.png" alt="SMARTER">
+        </a>
       </div>
-      <div>
-        LOGO
+      <div fxHide.gt-xs fxFlex fxLayout fxLayoutAlign="flex-end">
+        <button mat-icon-button (click)="sidenav.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
       </div>
-      <div>
-        <a routerLink="/login">Login</a>
+      <div fxHide.xs fxFlex fxLayout fxLayoutAlign="flex-end">
+        <ul fxLayout fxLayoutGap="10px" class="navigation-items">
+          <li>
+            <a routerLink="/login">Login</a>
+          </li>
+        </ul>
       </div>
     </mat-toolbar>
     <main>
