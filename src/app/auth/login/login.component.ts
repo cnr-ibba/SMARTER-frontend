@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
+import { AuthService } from '../auth.service';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -11,7 +13,7 @@ export class LoginComponent implements OnInit {
   // tell TS that this property will be used as this, even if I don't assign a value here or in constructor
   loginForm!: FormGroup;
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({
@@ -22,7 +24,10 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log(this.loginForm);
+    this.authService.login({
+      // this is reactive approach
+      username: this.loginForm.value.username,
+      password: this.loginForm.value.password
+    });
   }
-
 }
