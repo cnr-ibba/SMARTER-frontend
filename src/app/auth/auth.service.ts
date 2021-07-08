@@ -27,6 +27,9 @@ export class AuthService {
   // login)
   user = new BehaviorSubject<User | null>(null);
 
+  // track the timer for autoLogout. If I logout manually, this need to be cleared
+  private tokenExpirationTimer: any;
+
   constructor(
     private http: HttpClient,
     private uiService: UIService,
@@ -46,6 +49,10 @@ export class AuthService {
 
           // emit user as a currently logged user
           this.user.next(user);
+
+          // every time I emit a new user, I need to set the timer for autoLogout
+          // passing expiresIn (milliseconds)
+          this.autoLogout(user.expiresIn);
 
           /* we need also to save data somewhere since when I reload the page, the application
           start a new instance and so all the data I have (ie, the token) is lost. I can
@@ -74,7 +81,7 @@ export class AuthService {
     // JSON.parse need a string as an argument
     } = JSON.parse(localStorage.getItem('userData') || '{}');
 
-    if (!userData) {
+    if (!userData._token) {
       // no user data: you must sign in
       return;
     }
@@ -89,7 +96,18 @@ export class AuthService {
     if (loadedUser.token) {
       // emit loaded user with our subject
       this.user.next(loadedUser);
+
+      // set the autoLogout timer
+      this.autoLogout(loadedUser.expiresIn);
     }
+  }
+
+  autoLogout(expirationDuration: number) {
+    // set a timer to log out the user fater a certain time. however, if I log out
+    // manually, thsi timer need to be disabled
+    this.tokenExpirationTimer = setTimeout(() => {
+      this.logout();
+    }, expirationDuration)
   }
 
   logout() {
@@ -99,5 +117,11 @@ export class AuthService {
     // if I logout, I need to clear out the localStorage from user data, since
     // the token won't be valid forever
     localStorage.removeItem('userData');
+
+    // clear the logout timer
+    if (this.tokenExpirationTimer) {
+      clearTimeout(this.tokenExpirationTimer);
+      this.tokenExpirationTimer = null;
+    }
   }
 }

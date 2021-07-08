@@ -2,7 +2,8 @@
 import jwt_decode, { JwtPayload } from 'jwt-decode'
 
 export class User {
-  private _tokenExpirationDate: Date | undefined;
+  private _tokenExpirationDate: Date;
+  private decoded: JwtPayload;
 
   // constructor enable the new keyword to create an object
   constructor(
@@ -14,8 +15,8 @@ export class User {
   ) {
     // determining expiration time from token
     // https://github.com/auth0/jwt-decode/issues/82#issuecomment-782941154
-    const decoded = jwt_decode<JwtPayload>(_token);
-    this._tokenExpirationDate = new Date(Number(decoded.exp) * 1000);
+    this.decoded = jwt_decode<JwtPayload>(_token);
+    this._tokenExpirationDate = new Date(Number(this.decoded.exp) * 1000);
   }
 
   // getter: is like a function but is accessed as a property (ex user.token)
@@ -30,5 +31,16 @@ export class User {
 
     // return value of a private string
     return this._token;
+  }
+
+  get expiresIn() {
+    const now = new Date().getTime();
+    const expiresIn = this._tokenExpirationDate.getTime() - now;
+
+    if (expiresIn < 0) {
+      return 0;
+    } else {
+      return expiresIn;
+    }
   }
 }
