@@ -33,7 +33,7 @@ export class AuthService {
     this.uiService.loadingStateChanged.next(true);
 
     // sending the auth request
-    this.http.post<AuthResponseData>(environment.backend_url + '/api/auth/login', authData)
+    this.http.post<AuthResponseData>(environment.backend_url + '/auth/login', authData)
       .subscribe(
         authResponseData => {
           // create a new user object
