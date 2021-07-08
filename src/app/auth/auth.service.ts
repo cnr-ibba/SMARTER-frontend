@@ -19,7 +19,11 @@ export interface AuthResponseData {
   providedIn: 'root'
 })
 export class AuthService {
-  // "Replays" or emits old values to new subscribers
+  // "Replays" or emits old values to new subscribers. A normal Subject is optimal
+  // to see status changes, like when user login and logout since UI need to change
+  // immediately. However, I need a user to do my request, so I need this value
+  // even after I made the subscription (for instance, when fetching data after
+  // login)
   user = new ReplaySubject<User>();
 
   constructor(
