@@ -13,11 +13,6 @@ export class AuthInterceptorService implements HttpInterceptor {
   constructor(private authService: AuthService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    if (req.url.endsWith('auth/login')) {
-      // during login, I don't have a user
-      return next.handle(req);
-    }
-
     // this will be executed for each request
     return this.authService.user.pipe(
       // take: subscribe to user subject, get N objects and then unsubscribe

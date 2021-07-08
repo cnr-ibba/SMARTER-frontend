@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
-import { ReplaySubject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 import { UIService } from '../shared/ui.service';
@@ -19,12 +19,13 @@ export interface AuthResponseData {
   providedIn: 'root'
 })
 export class AuthService {
-  // "Replays" or emits old values to new subscribers. A normal Subject is optimal
+  // A variant of Subject that requires an initial value and emits its current
+  // value whenever it is subscribed to. A normal Subject is optimal
   // to see status changes, like when user login and logout since UI need to change
   // immediately. However, I need a user to do my request, so I need this value
   // even after I made the subscription (for instance, when fetching data after
   // login)
-  user = new ReplaySubject<User>();
+  user = new BehaviorSubject<User | null>(null);
 
   constructor(
     private http: HttpClient,
