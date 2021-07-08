@@ -47,6 +47,13 @@ export class AuthService {
           // emit user as a currently logged user
           this.user.next(user);
 
+          /* we need also to save data somewhere since when I reload the page, the application
+          start a new instance and so all the data I have (ie, the token) is lost. I can
+          use localStorage which is a persistent location on the browser which can store
+          key->value pairs. 'userData' is the key. The value can't be a JS object, need to
+          be converted as a string with JSON.stringify method, which can serialize a JS object */
+          localStorage.setItem('userData', JSON.stringify(user));
+
           // redirect to home page
           this.router.navigate(["/"])
         }, (error: HttpErrorResponse) => {
@@ -56,8 +63,41 @@ export class AuthService {
       this.uiService.loadingStateChanged.next(false);
   }
 
+  /* when application starts (or is reloaded), search for userData saved in localStorage
+  an try to setUp a user object */
+  autoLogin() {
+    const userData: {
+      username: string;
+      _token: string;
+      _tokenExpirationDate: string;
+    // https://stackoverflow.com/a/46915314/4385116
+    // JSON.parse need a string as an argument
+    } = JSON.parse(localStorage.getItem('userData') || '{}');
+
+    if (!userData) {
+      // no user data: you must sign in
+      return;
+    }
+
+    const loadedUser = new User(
+      userData.username,
+      userData._token
+    );
+
+    // check token validity. token property is a getter method, which returns
+    // null if token is expired. So:
+    if (loadedUser.token) {
+      // emit loaded user with our subject
+      this.user.next(loadedUser);
+    }
+  }
+
   logout() {
     this.user.next(null);
-    this.router.navigate(["/login"])
+    this.router.navigate(["/login"]);
+
+    // if I logout, I need to clear out the localStorage from user data, since
+    // the token won't be valid forever
+    localStorage.removeItem('userData');
   }
 }
