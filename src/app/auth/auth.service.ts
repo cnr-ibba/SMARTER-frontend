@@ -56,4 +56,8 @@ export class AuthService {
       this.uiService.loadingStateChanged.next(false);
   }
 
+  logout() {
+    this.user.next(null);
+    this.router.navigate(["/login"])
+  }
 }
