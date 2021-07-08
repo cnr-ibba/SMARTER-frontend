@@ -7,11 +7,11 @@
     <mat-icon>folder</mat-icon>
     <span class="nav-caption">Datasets</span>
   </a>
-  <a mat-list-item routerLink="/login" (click)="onClose()">
+  <a *ngIf="!isAuthenticated" mat-list-item routerLink="/login" (click)="onClose()">
     <mat-icon>face</mat-icon>
     <span class="nav-caption">Login</span>
   </a>
-  <mat-list-item>
+  <mat-list-item *ngIf="isAuthenticated">
     <button mat-icon-button (click)="onClose()">
       <mat-icon>eject</mat-icon>
       <span class="nav-caption">Logout</span>

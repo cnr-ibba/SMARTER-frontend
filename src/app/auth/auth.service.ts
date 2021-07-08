@@ -1,5 +1,6 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 import { ReplaySubject } from 'rxjs';
 
@@ -24,6 +25,7 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private uiService: UIService,
+    private router: Router,
   ) { }
 
   login(authData: AuthData) {
@@ -34,10 +36,14 @@ export class AuthService {
     this.http.post<AuthResponseData>(environment.backend_url + '/api/auth/login', authData)
       .subscribe(
         authResponseData => {
+          // create a new user object
           const user = new User(authData.username, authResponseData.token);
 
           // emit user as a currently logged user
           this.user.next(user);
+
+          // redirect to home page
+          this.router.navigate(["/"])
         }, (error: HttpErrorResponse) => {
           this.uiService.showSnackbar(error.error.message, "Dismiss");
         })

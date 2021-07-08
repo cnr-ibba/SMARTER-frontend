@@ -15,10 +15,10 @@
         <a routerLink="/datasets">Datasets</a>
       </li>
       <li>
-        <a routerLink="/login">Login</a>
+        <a routerLink="/login" *ngIf="!isAuthenticated">Login</a>
       </li>
       <li>
-        <a>Logout</a>
+        <a *ngIf="isAuthenticated">Logout</a>
       </li>
     </ul>
   </div>
