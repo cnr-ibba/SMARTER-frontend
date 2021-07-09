@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
+import { ActivatedRouteSnapshot, CanActivate, Params, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
 
 import { Observable } from "rxjs";
 import { map, take } from "rxjs/operators";
@@ -32,8 +32,13 @@ export class AuthGuard implements CanActivate {
           return true;
         }
 
+        // get the requested url to redirect after login
+        const params: Params = {
+          next: router.url
+        };
+
         // if not authenticated, redirect to login page
-        return this.router.createUrlTree(['/login']);
+        return this.router.createUrlTree(['/login'], {queryParams: params});
       })
     );
   }

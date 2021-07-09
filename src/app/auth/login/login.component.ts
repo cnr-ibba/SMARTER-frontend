@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { UIService } from '../../shared/ui.service';
@@ -16,13 +17,19 @@ export class LoginComponent implements OnInit, OnDestroy {
   loginForm!: FormGroup;
   isLoading = false;
   private loadingSubscription!: Subscription;
+  redirectTo!: string;
 
   constructor(
+    private route: ActivatedRoute,
     private authService: AuthService,
     private uiService: UIService
   ) { }
 
   ngOnInit(): void {
+    // partially inspired from https://jasonwatmore.com/post/2016/12/08/angular-2-redirect-to-previous-url-after-login-with-auth-guard
+    // get return url from route parameters or default to '/'
+    this.redirectTo = this.route.snapshot.queryParams['next'] || '/';
+
     // subscribe to see when request are performed by the server
     this.loadingSubscription = this.uiService.loadingStateChanged.subscribe(isLoading => {
       this.isLoading = isLoading;
@@ -39,7 +46,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authService.login({
       // this is reactive approach
       username: this.loginForm.value.username,
-      password: this.loginForm.value.password
+      password: this.loginForm.value.password,
+      redirectTo: this.redirectTo
     });
   }
 

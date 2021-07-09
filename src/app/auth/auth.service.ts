@@ -61,8 +61,8 @@ export class AuthService {
           be converted as a string with JSON.stringify method, which can serialize a JS object */
           localStorage.setItem('userData', JSON.stringify(user));
 
-          // redirect to home page
-          this.router.navigate(["/"])
+          // redirect to a path or "/"
+          this.router.navigate([authData.redirectTo]);
         }, (error: HttpErrorResponse) => {
           this.uiService.showSnackbar(error.error.message, "Dismiss");
         })
