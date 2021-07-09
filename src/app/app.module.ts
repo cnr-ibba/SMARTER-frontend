@@ -14,6 +14,7 @@ import { HeaderComponent } from './navigation/header/header.component';
 import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
 import { DatasetsComponent } from './datasets/datasets.component';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { AuthInterceptorService } from './auth/auth-interceptor.service';
     LoginComponent,
     HeaderComponent,
     SidenavListComponent,
-    DatasetsComponent
+    DatasetsComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,

@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './auth/login/login.component';
 import { DatasetsComponent } from './datasets/datasets.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
@@ -13,7 +14,14 @@ const routes: Routes = [
     path: 'datasets',
     component: DatasetsComponent,
     canActivate: [ AuthGuard ]
-  }
+  },
+  {
+    path: 'not-found',
+    component: NotFoundComponent,
+    // pass custom data to NotFoundComponent
+    data: { message: 'Sorry, this page doesn\'t exist...' }
+  },
+  { path: '**', redirectTo: '/not-found' }
 ];
 
 @NgModule({
