@@ -2,7 +2,7 @@
 <mat-table [dataSource]="dataSource">
   <ng-container matColumnDef="file">
     <mat-header-cell *matHeaderCellDef>Dataset</mat-header-cell>
-    <mat-cell *matCellDef="let element">{{ element.file }}</mat-cell>
+    <mat-cell *matCellDef="let element">{{ element.file | shorten : 35 }}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="type">

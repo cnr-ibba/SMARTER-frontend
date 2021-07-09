@@ -15,6 +15,7 @@ import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.com
 import { DatasetsComponent } from './datasets/datasets.component';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { ShortenPipe } from './shared/shorten.pipe';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
     HeaderComponent,
     SidenavListComponent,
     DatasetsComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    ShortenPipe,
   ],
   imports: [
     BrowserModule,
