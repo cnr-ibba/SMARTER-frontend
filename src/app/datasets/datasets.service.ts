@@ -3,21 +3,17 @@ import { HttpClient } from '@angular/common/http';
 
 import { environment } from '../../environments/environment';
 
+import { DatasetsAPI } from './datasets.model';
+
 @Injectable({
   providedIn: 'root'
 })
 export class DatasetsService {
-
   constructor(
     private http: HttpClient,
   ) { }
 
   getDatasets() {
-    this.http.get(environment.backend_url + '/datasets')
-      .subscribe(response => {
-        console.log(response);
-      }, error => {
-        console.log(error);
-      })
+    return this.http.get<DatasetsAPI>(environment.backend_url + '/datasets');
   }
 }
