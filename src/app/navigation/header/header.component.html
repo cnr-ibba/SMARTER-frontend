@@ -12,10 +12,10 @@
   <div fxHide.xs fxFlex fxLayout fxLayoutAlign="flex-end">
     <ul fxLayout fxLayoutGap="10px" class="navigation-items">
       <li>
-        <a routerLink="/datasets">Datasets</a>
+        <a routerLink="/datasets" routerLinkActive="active">Datasets</a>
       </li>
       <li>
-        <a routerLink="/login" *ngIf="!isAuthenticated">Login</a>
+        <a routerLink="/login" routerLinkActive="active" *ngIf="!isAuthenticated">Login</a>
       </li>
       <li>
         <a *ngIf="isAuthenticated" (click)="onLogout()">Logout</a>
