@@ -8,6 +8,7 @@ import { MatPaginator } from '@angular/material/paginator';
 
 import { Dataset } from './datasets.model';
 import { DatasetsService } from './datasets.service';
+import { UIService } from '../shared/ui.service';
 
 @Component({
   selector: 'app-datasets',
@@ -23,9 +24,12 @@ export class DatasetsComponent implements AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   resultsLength = 0;
-  isLoadingResults = true;
+  isLoading = true;
 
-  constructor(private datasetsService: DatasetsService) { }
+  constructor(
+    private datasetsService: DatasetsService,
+    private uiService: UIService,
+  ) { }
 
   ngAfterViewInit() {
     // If the user changes the sort order, reset back to the first page.
@@ -35,21 +39,22 @@ export class DatasetsComponent implements AfterViewInit, OnDestroy {
       .pipe(
         startWith({}),
         switchMap(() => {
-          this.isLoadingResults = true;
+          this.isLoading = true;
           return this.datasetsService.getDatasets(
               this.sort.active,
               this.sort.direction,
               this.paginator.pageIndex,
               this.paginator.pageSize)
             .pipe(catchError((error) => {
-              console.error(error);
+              console.log(error);
+              this.uiService.showSnackbar("Error while fetching data. Please, try again later", "Dismiss");
               return observableOf(null)
             })
           );
         }),
         map(data => {
           // Flip flag to show that loading has finished.
-          this.isLoadingResults = false;
+          this.isLoading = false;
 
           if (data === null) {
             return [];
