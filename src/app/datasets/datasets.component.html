@@ -1,30 +1,41 @@
 
-<mat-table [dataSource]="dataSource">
-  <ng-container matColumnDef="file">
-    <mat-header-cell *matHeaderCellDef>Dataset</mat-header-cell>
-    <mat-cell *matCellDef="let element">{{ element.file | shorten : 35 }}</mat-cell>
-  </ng-container>
+<mat-table
+  [dataSource]="dataSource"
+  matSort
+  matSortActive
+  matSortDirection="desc">
+    <ng-container matColumnDef="file">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Dataset</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.file | shorten : 35 }}</mat-cell>
+    </ng-container>
 
-  <ng-container matColumnDef="type">
-    <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
-    <mat-cell *matCellDef="let element">{{ element.type }}</mat-cell>
-  </ng-container>
+    <ng-container matColumnDef="type">
+      <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.type }}</mat-cell>
+    </ng-container>
 
-  <ng-container matColumnDef="species">
-    <mat-header-cell *matHeaderCellDef>Species</mat-header-cell>
-    <mat-cell *matCellDef="let element">{{ element.species }}</mat-cell>
-  </ng-container>
+    <ng-container matColumnDef="species">
+      <mat-header-cell *matHeaderCellDef>Species</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.species }}</mat-cell>
+    </ng-container>
 
-  <ng-container matColumnDef="breed">
-    <mat-header-cell *matHeaderCellDef>Breed</mat-header-cell>
-    <mat-cell *matCellDef="let element">{{ element.breed }}</mat-cell>
-  </ng-container>
+    <ng-container matColumnDef="breed">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Breed</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.breed }}</mat-cell>
+    </ng-container>
 
-  <ng-container matColumnDef="country">
-    <mat-header-cell *matHeaderCellDef>Country</mat-header-cell>
-    <mat-cell *matCellDef="let element">{{ element.country }}</mat-cell>
-  </ng-container>
+    <ng-container matColumnDef="country">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Country</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.country }}</mat-cell>
+    </ng-container>
 
-  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 </mat-table>
+
+<mat-paginator
+  [length]="resultsLength"
+  [pageSize]="10"
+  [pageSizeOptions]="[5, 10, 15, 20]"
+  showFirstLastButtons>
+</mat-paginator>

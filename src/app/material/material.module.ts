@@ -11,6 +11,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+
 
 
 @NgModule({
@@ -25,6 +28,8 @@ import { MatTableModule } from '@angular/material/table';
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
   ],
   exports: [
     MatSidenavModule,
@@ -37,6 +42,8 @@ import { MatTableModule } from '@angular/material/table';
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
   ],
 })
 export class MaterialModule { }
