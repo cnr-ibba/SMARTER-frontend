@@ -3,6 +3,10 @@
     <mat-icon>home</mat-icon>
     <span class="nav-caption">Home</span>
   </a>
+  <a mat-list-item routerLink="/breeds" routerLinkActive="active" (click)="onClose()">
+    <mat-icon>pets</mat-icon>
+    <span class="nav-caption">Breeds</span>
+  </a>
   <a mat-list-item routerLink="/datasets" routerLinkActive="active" (click)="onClose()">
     <mat-icon>folder</mat-icon>
     <span class="nav-caption">Datasets</span>

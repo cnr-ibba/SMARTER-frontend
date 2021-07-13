@@ -16,6 +16,7 @@ import { DatasetsComponent } from './datasets/datasets.component';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { ShortenPipe } from './shared/shorten.pipe';
+import { BreedsComponent } from './breeds/breeds.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { ShortenPipe } from './shared/shorten.pipe';
     DatasetsComponent,
     NotFoundComponent,
     ShortenPipe,
+    BreedsComponent,
   ],
   imports: [
     BrowserModule,

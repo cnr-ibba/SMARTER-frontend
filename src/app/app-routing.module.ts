@@ -1,15 +1,21 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { AuthGuard } from './auth/auth.guard';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './auth/login/login.component';
 import { DatasetsComponent } from './datasets/datasets.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { AuthGuard } from './auth/auth.guard';
+import { BreedsComponent } from './breeds/breeds.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
+  {
+    path: 'breeds',
+    component: BreedsComponent,
+    canActivate: [ AuthGuard ]
+  },
   {
     path: 'datasets',
     component: DatasetsComponent,
