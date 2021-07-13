@@ -10,12 +10,17 @@ import { BreedsAPI } from './breeds.model';
   providedIn: 'root'
 })
 export class BreedsService {
+  selectedSpecie = "Sheep";
+
   constructor(
     private http: HttpClient,
   ) { }
 
-  getBreeds(sort: string, order: SortDirection, page: number, size: number, searchValue: string) {
+  getBreeds(sort: string, order: SortDirection, page: number, size: number, searchValue?: string) {
     let params = new HttpParams();
+
+    // set my species
+    params = params.append('species', this.selectedSpecie);
 
     if (page) {
       // HttpParams object is immutable. Overwrite old value with new one

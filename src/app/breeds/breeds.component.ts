@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, ElementRef, ViewChild, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild, OnDestroy, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 import { fromEvent, merge, Observable, of as observableOf, Subscription } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap } from 'rxjs/operators';
@@ -16,12 +17,13 @@ import { UIService } from '../shared/ui.service';
   templateUrl: './breeds.component.html',
   styleUrls: ['./breeds.component.scss']
 })
-export class BreedsComponent implements AfterViewInit, OnDestroy {
+export class BreedsComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns = ['name', 'species', 'code', 'n_individuals'];
   dataSource = new MatTableDataSource<Breed>();
   private sortSubscription!: Subscription;
   private searchSubscription!: Subscription;
   private mergeSubscription!: Subscription;
+  private speciesSubscription!: Subscription;
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -30,11 +32,16 @@ export class BreedsComponent implements AfterViewInit, OnDestroy {
   resultsLength = 0;
   isLoading = true;
   search$!: Observable<object>;
+  speciesControl!: FormControl;
 
   constructor(
     private breedsService: BreedsService,
     private uiService: UIService,
   ) { }
+
+  ngOnInit() {
+    this.speciesControl = new FormControl(this.breedsService.selectedSpecie);
+  }
 
   ngAfterViewInit() {
     this.search$ = fromEvent(this.searchBox.nativeElement, 'keyup').pipe(
@@ -52,25 +59,23 @@ export class BreedsComponent implements AfterViewInit, OnDestroy {
     // the same applies when user start searching stuff
     this.searchSubscription = this.search$.subscribe(() => this.paginator.pageIndex = 0);
 
-    this.mergeSubscription = merge(this.sort.sortChange, this.paginator.page, this.search$)
+    // free searchBox text
+    this.speciesSubscription = this.speciesControl.valueChanges.subscribe(() => {
+      this.searchBox.nativeElement.value = '';
+      this.breedsService.selectedSpecie = this.speciesControl.value;
+    });
+
+    this.mergeSubscription = merge(this.sort.sortChange, this.paginator.page, this.search$, this.speciesControl.valueChanges)
       .pipe(
         startWith({}),
         switchMap((inputData) => {
-          // inputData could be any of the merged events (sort change, paginator, keyup)
-          let searchValue = '';
-
-          // test if inputData comes from search$ observable
-          if ('searchValue' in inputData) {
-            searchValue = inputData["searchValue"];
-          }
-
           this.isLoading = true;
           return this.breedsService.getBreeds(
               this.sort.active,
               this.sort.direction,
               this.paginator.pageIndex,
               this.paginator.pageSize,
-              searchValue)
+              inputData?.searchValue)
             .pipe(catchError((error) => {
               console.log(error);
               this.uiService.showSnackbar("Error while fetching data. Please, try again later", "Dismiss");
@@ -100,6 +105,7 @@ export class BreedsComponent implements AfterViewInit, OnDestroy {
     this.sortSubscription.unsubscribe();
     this.searchSubscription.unsubscribe();
     this.mergeSubscription.unsubscribe();
+    this.speciesSubscription.unsubscribe();
   }
 
 }

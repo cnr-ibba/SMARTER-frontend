@@ -1,5 +1,12 @@
 
 <div fxLayoutAlign="center center">
+  <mat-button-toggle-group [formControl]="speciesControl" aria-label="Choose species">
+    <mat-button-toggle value="Sheep">Sheep</mat-button-toggle>
+    <mat-button-toggle value="Goat">Goat</mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
+
+<div fxLayoutAlign="center center">
   <mat-form-field fxFlex="40%">
     <input matInput type="text" placeholder="Search breed by name" #searchBox>
   </mat-form-field>
