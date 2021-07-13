@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 
-import { merge, of as observableOf } from 'rxjs';
-import { catchError, map, startWith, switchMap } from 'rxjs/operators';
+import { fromEvent, merge, Observable, of as observableOf } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
@@ -21,9 +21,11 @@ export class DatasetsComponent implements AfterViewInit {
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('searchBox') searchBox!: ElementRef;
 
   resultsLength = 0;
   isLoading = true;
+  search$!: Observable<object>;
 
   constructor(
     private datasetsService: DatasetsService,
@@ -31,19 +33,37 @@ export class DatasetsComponent implements AfterViewInit {
   ) { }
 
   ngAfterViewInit() {
+    this.search$ = fromEvent(this.searchBox.nativeElement, 'keyup').pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      // get value
+      map((event: any) => {
+        return { 'searchValue': event.target.value };
+      })
+    );
+
     // If the user changes the sort order, reset back to the first page.
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
-    merge(this.sort.sortChange, this.paginator.page)
+    merge(this.sort.sortChange, this.paginator.page, this.search$)
       .pipe(
         startWith({}),
-        switchMap(() => {
+        switchMap((inputData) => {
+          // inputData could be any of the merged events (sort change, paginator, keyup)
+          let searchValue = '';
+
+          // test if inputData comes from search$ observable
+          if ('searchValue' in inputData) {
+            searchValue = inputData["searchValue"];
+          }
+
           this.isLoading = true;
           return this.datasetsService.getDatasets(
               this.sort.active,
               this.sort.direction,
               this.paginator.pageIndex,
-              this.paginator.pageSize)
+              this.paginator.pageSize,
+              searchValue)
             .pipe(catchError((error) => {
               console.log(error);
               this.uiService.showSnackbar("Error while fetching data. Please, try again later", "Dismiss");

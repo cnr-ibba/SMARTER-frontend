@@ -1,4 +1,10 @@
 
+<div fxLayoutAlign="center center">
+  <mat-form-field fxFlex="40%">
+    <input matInput type="text" placeholder="Search by content" #searchBox>
+  </mat-form-field>
+</div>
+
 <mat-table
   [dataSource]="dataSource"
   matSort

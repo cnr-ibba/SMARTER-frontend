@@ -14,7 +14,7 @@ export class DatasetsService {
     private http: HttpClient,
   ) { }
 
-  getDatasets(sort: string, order: SortDirection, page: number, size: number) {
+  getDatasets(sort: string, order: SortDirection, page: number, size: number, searchValue: string) {
     let params = new HttpParams();
 
     if (page) {
@@ -29,6 +29,10 @@ export class DatasetsService {
     if (sort) {
       params = params.append('sort', sort);
       params = params.append('order', order);
+    }
+
+    if (searchValue) {
+      params = params.append('search', searchValue);
     }
 
     return this.http.get<DatasetsAPI>(
