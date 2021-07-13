@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 
-import { fromEvent, merge, Observable, of as observableOf } from 'rxjs';
+import { fromEvent, merge, Observable, of as observableOf, Subscription } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -15,9 +15,11 @@ import { UIService } from '../shared/ui.service';
   templateUrl: './datasets.component.html',
   styleUrls: ['./datasets.component.scss']
 })
-export class DatasetsComponent implements AfterViewInit {
+export class DatasetsComponent implements AfterViewInit, OnDestroy {
   displayedColumns = ['file', 'species', 'breed', 'country', 'type'];
   dataSource = new MatTableDataSource<Dataset>();
+  private sortSubscription!: Subscription;
+  private mergeSubscription!: Subscription;
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -43,9 +45,9 @@ export class DatasetsComponent implements AfterViewInit {
     );
 
     // If the user changes the sort order, reset back to the first page.
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sortSubscription = this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
-    merge(this.sort.sortChange, this.paginator.page, this.search$)
+    this.mergeSubscription = merge(this.sort.sortChange, this.paginator.page, this.search$)
       .pipe(
         startWith({}),
         switchMap((inputData) => {
@@ -87,6 +89,11 @@ export class DatasetsComponent implements AfterViewInit {
         })
       ).subscribe(data => this.dataSource.data = data);
 
+  }
+
+  ngOnDestroy() {
+    this.sortSubscription.unsubscribe();
+    this.mergeSubscription.unsubscribe();
   }
 
 }
