@@ -19,6 +19,7 @@ export class DatasetsComponent implements AfterViewInit, OnDestroy {
   displayedColumns = ['file', 'species', 'breed', 'country', 'type'];
   dataSource = new MatTableDataSource<Dataset>();
   private sortSubscription!: Subscription;
+  private searchSubscription!: Subscription;
   private mergeSubscription!: Subscription;
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -46,6 +47,9 @@ export class DatasetsComponent implements AfterViewInit, OnDestroy {
 
     // If the user changes the sort order, reset back to the first page.
     this.sortSubscription = this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
+    // the same applies when user start searching stuff
+    this.searchSubscription = this.search$.subscribe(() => this.paginator.pageIndex = 0);
 
     this.mergeSubscription = merge(this.sort.sortChange, this.paginator.page, this.search$)
       .pipe(
@@ -93,6 +97,7 @@ export class DatasetsComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.sortSubscription.unsubscribe();
+    this.searchSubscription.unsubscribe();
     this.mergeSubscription.unsubscribe();
   }
 
