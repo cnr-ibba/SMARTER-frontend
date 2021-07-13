@@ -18,6 +18,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   isLoading = false;
   private loadingSubscription!: Subscription;
   redirectTo!: string;
+  hide = true;
 
   constructor(
     private route: ActivatedRoute,
