@@ -5,6 +5,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
+import { MatTableExporterModule } from 'mat-table-exporter';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MaterialModule } from './material/material.module';
@@ -37,7 +39,8 @@ import { BreedsComponent } from './breeds/breeds.component';
     ReactiveFormsModule,
     HttpClientModule,
     FlexLayoutModule,
-    MaterialModule
+    MaterialModule,
+    MatTableExporterModule,
   ],
   providers: [
     {
