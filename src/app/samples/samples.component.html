@@ -5,6 +5,73 @@
   </mat-button-toggle-group>
 </div>
 
+<form
+  [formGroup]="samplesForm"
+  (ngSubmit)="onSubmit()">
+    <div fxLayout="row wrap" fxLayoutAlign="center center" fxLayoutGap="20px">
+      <mat-form-field>
+        <input
+          type="text"
+          matInput
+          placeholder="Original ID"
+          formControlName="original_id">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input
+          type="text"
+          matInput
+          placeholder="Smarter ID"
+          formControlName="smarter_id">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input
+          type="text"
+          matInput
+          placeholder="Breed"
+          formControlName="breed">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input
+          type="text"
+          matInput
+          placeholder="Breed Code"
+          formControlName="breed_code">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input
+          type="text"
+          matInput
+          placeholder="Country"
+          formControlName="country">
+      </mat-form-field>
+    </div>
+
+    <div fxLayoutAlign="center center" fxLayoutGap="20px">
+      <button
+      *ngIf="!isLoading"
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="samplesForm.invalid">
+        <mat-icon>search</mat-icon> Search
+      </button>
+
+      <button
+      *ngIf="!isLoading"
+      type="button"
+      mat-raised-button
+      color="accent"
+      (click)="onReset()">
+        <mat-icon>restart_alt</mat-icon> Reset
+      </button>
+    </div>
+
+</form>
+
 <mat-table
   [dataSource]="dataSource"
   matSort

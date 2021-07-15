@@ -21,3 +21,9 @@ export interface SamplesAPI {
   size: number;
   total: number;
 }
+
+export interface SamplesSearch {
+  breed?: string;
+  country?: string;
+  breed_code?: string;
+}

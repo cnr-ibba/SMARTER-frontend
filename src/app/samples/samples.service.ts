@@ -4,7 +4,7 @@ import { SortDirection } from '@angular/material/sort';
 
 import { environment } from 'src/environments/environment';
 
-import { SamplesAPI } from './samples.model';
+import { SamplesAPI, SamplesSearch } from './samples.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class SamplesService {
     private http: HttpClient,
   ) { }
 
-  getSamples(sort: string, order: SortDirection, page: number, size: number) {
+  getSamples(sort: string, order: SortDirection, page: number, size: number, search?: SamplesSearch) {
     let params = new HttpParams();
 
     if (page) {
@@ -31,6 +31,16 @@ export class SamplesService {
     if (sort) {
       params = params.append('sort', sort);
       params = params.append('order', order);
+    }
+
+    if (search) {
+      // iterate over object values
+      for (const [key, value] of Object.entries(search)) {
+        // value could be null
+        if (value) {
+          params = params.append(key, value);
+        }
+      }
     }
 
     return this.http.get<SamplesAPI>(

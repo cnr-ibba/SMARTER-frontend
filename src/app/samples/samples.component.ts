@@ -1,13 +1,13 @@
 import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 
-import { merge, of as observableOf, Subscription } from 'rxjs';
+import { merge, of as observableOf, Subscription, Subject } from 'rxjs';
 import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 
-import { Sample } from './samples.model';
+import { Sample, SamplesSearch } from './samples.model';
 import { SamplesService } from './samples.service';
 import { UIService } from '../shared/ui.service';
 
@@ -23,6 +23,7 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
   private sortSubscription!: Subscription;
   private mergeSubscription!: Subscription;
   private speciesSubscription!: Subscription;
+  private searchSubscription!: Subscription;
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -31,6 +32,11 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoading = true;
   speciesControl!: FormControl;
 
+  // control samples query parameters
+  samplesForm!: FormGroup;
+  formChanged = new Subject();
+  private samplesSearch: SamplesSearch = {};
+
   constructor(
     private samplesService: SamplesService,
     private uiService: UIService,
@@ -38,20 +44,35 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.speciesControl = new FormControl(this.samplesService.selectedSpecie);
+    this.samplesForm = new FormGroup({
+      original_id: new FormControl(),
+      smarter_id: new FormControl(),
+      breed: new FormControl(),
+      country: new FormControl(),
+      breed_code: new FormControl(),
+    });
   }
 
   ngAfterViewInit() {
     // If the user changes the sort order, reset back to the first page.
     this.sortSubscription = this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
-    // free searchBox text
+    // the same applies when user start searching stuff
+    this.searchSubscription = this.formChanged.subscribe(() => this.paginator.pageIndex = 0);
+
+    // reset pagination and forms
     this.speciesSubscription = this.speciesControl.valueChanges.subscribe(() => {
       this.paginator.pageIndex = 0;
+      this.onReset()
       this.samplesService.selectedSpecie = this.speciesControl.value;
     });
 
-    this.mergeSubscription = merge(this.sort.sortChange, this.paginator.page, this.speciesControl.valueChanges)
-      .pipe(
+    this.mergeSubscription = merge(
+      this.sort.sortChange,
+      this.paginator.page,
+      this.speciesControl.valueChanges,
+      this.formChanged
+      ).pipe(
         startWith({}),
         switchMap((inputData) => {
           this.isLoading = true;
@@ -59,7 +80,8 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
               this.sort.active,
               this.sort.direction,
               this.paginator.pageIndex,
-              this.paginator.pageSize)
+              this.paginator.pageSize,
+              this.samplesSearch)
             .pipe(catchError((error) => {
               console.log(error);
               this.uiService.showSnackbar("Error while fetching data. Please, try again later", "Dismiss");
@@ -82,6 +104,18 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
           return data.items;
         })
       ).subscribe(data => this.dataSource.data = data);
+  }
+
+  onSubmit() {
+    // copy form values into my private instance of SampleSearch
+    this.samplesSearch = this.samplesForm.value;
+    this.formChanged.next();
+  }
+
+  onReset() {
+    this.samplesForm.reset();
+    this.samplesSearch = {};
+    this.formChanged.next();
   }
 
   ngOnDestroy() {
