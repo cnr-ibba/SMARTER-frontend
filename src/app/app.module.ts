@@ -17,6 +17,7 @@ import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { ShortenPipe } from './shared/shorten.pipe';
 import { BreedsComponent } from './breeds/breeds.component';
+import { SamplesComponent } from './samples/samples.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { BreedsComponent } from './breeds/breeds.component';
     NotFoundComponent,
     ShortenPipe,
     BreedsComponent,
+    SamplesComponent,
   ],
   imports: [
     BrowserModule,

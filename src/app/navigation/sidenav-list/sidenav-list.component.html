@@ -11,6 +11,10 @@
     <mat-icon>folder</mat-icon>
     <span class="nav-caption">Datasets</span>
   </a>
+  <a mat-list-item routerLink="/samples" routerLinkActive="active" (click)="onClose()">
+    <mat-icon>science</mat-icon>
+    <span class="nav-caption">Samples</span>
+  </a>
   <a *ngIf="!isAuthenticated" mat-list-item routerLink="/login" routerLinkActive="active" (click)="onClose()">
     <mat-icon>face</mat-icon>
     <span class="nav-caption">Login</span>
