@@ -1,1 +1,56 @@
-<p>samples works!</p>
+<div fxLayoutAlign="center center">
+  <mat-button-toggle-group [formControl]="speciesControl" aria-label="Choose species">
+    <mat-button-toggle value="Sheep">Sheep</mat-button-toggle>
+    <mat-button-toggle value="Goat">Goat</mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
+
+<mat-table
+  [dataSource]="dataSource"
+  matSort
+  matSortActive
+  matSortDirection="desc">
+    <ng-container matColumnDef="original_id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Original ID</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.original_id }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="smarter_id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Smarter ID</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.smarter_id }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="breed">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Breed</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.breed }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="breed_code">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Code</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.breed_code }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="country">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Country</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.country }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="species">
+      <mat-header-cell *matHeaderCellDef>Species</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.species }}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
+
+<div *ngIf="isLoading" class="spinner-container">
+  <mat-spinner></mat-spinner>
+</div>
+
+<mat-paginator
+  [length]="resultsLength"
+  [pageSize]="10"
+  [pageSizeOptions]="[5, 10, 15, 20]"
+  showFirstLastButtons>
+</mat-paginator>
