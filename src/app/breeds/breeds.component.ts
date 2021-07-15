@@ -62,6 +62,7 @@ export class BreedsComponent implements OnInit, AfterViewInit, OnDestroy {
     // free searchBox text
     this.speciesSubscription = this.speciesControl.valueChanges.subscribe(() => {
       this.searchBox.nativeElement.value = '';
+      this.paginator.pageIndex = 0;
       this.breedsService.selectedSpecie = this.speciesControl.value;
     });
 

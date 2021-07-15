@@ -9,4 +9,6 @@ mat-sidenav {
 
 main {
   margin-top: 1rem;
+  // this the 100% viewport hight, minus toolbar height and the margin top
+  height: calc(100vh - 64px - 1rem);
 }
