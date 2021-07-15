@@ -6,3 +6,16 @@
   background-color: #FFFFFF;
   padding: 25px 0px; // top-bottom left-right
 }
+
+mat-table {
+  margin-top: 2rem;
+  min-width: 600px;
+}
+
+mat-paginator {
+  min-width: 600px;
+}
+
+.table-container {
+  overflow-x: auto;
+}
