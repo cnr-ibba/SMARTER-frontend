@@ -1,5 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
+import { MaterialModule } from '../../material/material.module';
 import { SidenavListComponent } from './sidenav-list.component';
 
 describe('SidenavListComponent', () => {
@@ -8,6 +12,12 @@ describe('SidenavListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [
+        RouterTestingModule.withRoutes([]),
+        BrowserAnimationsModule,
+        HttpClientTestingModule,
+        MaterialModule,
+      ],
       declarations: [ SidenavListComponent ]
     })
     .compileComponents();
