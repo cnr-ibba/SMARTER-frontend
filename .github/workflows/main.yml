@@ -11,10 +11,12 @@ on:
       - devel
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Use Node.js 14.x
         uses: actions/setup-node@v1
@@ -27,9 +29,6 @@ jobs:
       - name: Test
         run: |
           npm test -- --no-watch --no-progress --code-coverage --browsers=ChromeHeadlessCI
-
-      - name: Deploy to github pages
-        run: npm run ng deploy --base-href=/SMARTER-frontend/
 
       - name: Coveralls
         uses: coverallsapp/github-action@master

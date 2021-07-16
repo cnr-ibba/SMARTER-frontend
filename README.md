@@ -2,6 +2,7 @@
 
 [![Coverage Status](https://coveralls.io/repos/github/cnr-ibba/SMARTER-frontend/badge.svg?branch=master)](https://coveralls.io/github/cnr-ibba/SMARTER-frontend?branch=master)
 [![CI Angular app through Github Actions](https://github.com/cnr-ibba/SMARTER-frontend/actions/workflows/main.yml/badge.svg)](https://github.com/cnr-ibba/SMARTER-frontend/actions/workflows/main.yml)
+[![Deploy to GitHub Pages via angular-cli-ghpages](https://github.com/cnr-ibba/SMARTER-frontend/actions/workflows/deploy.yml/badge.svg)](https://github.com/cnr-ibba/SMARTER-frontend/actions/workflows/deploy.yml)
 [![GitHub deployments](https://img.shields.io/github/deployments/cnr-ibba/SMARTER-frontend/github-pages)](https://cnr-ibba.github.io/SMARTER-frontend/)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.1.1.
