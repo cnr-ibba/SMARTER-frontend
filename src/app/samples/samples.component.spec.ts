@@ -1,3 +1,4 @@
+import { ReactiveFormsModule } from '@angular/forms';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -14,6 +15,7 @@ describe('SamplesComponent', () => {
       imports: [
         BrowserAnimationsModule,
         HttpClientTestingModule,
+        ReactiveFormsModule,
         MaterialModule,
       ],
       declarations: [ SamplesComponent ]
