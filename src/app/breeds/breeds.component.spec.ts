@@ -1,5 +1,9 @@
+import { ReactiveFormsModule } from '@angular/forms';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
+import { MaterialModule } from '../material/material.module';
 import { BreedsComponent } from './breeds.component';
 
 describe('BreedsComponent', () => {
@@ -8,6 +12,12 @@ describe('BreedsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [
+        BrowserAnimationsModule,
+        HttpClientTestingModule,
+        ReactiveFormsModule,
+        MaterialModule,
+      ],
       declarations: [ BreedsComponent ]
     })
     .compileComponents();
