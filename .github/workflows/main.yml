@@ -28,6 +28,9 @@ jobs:
         run: |
           npm test -- --no-watch --no-progress --code-coverage --browsers=ChromeHeadlessCI
 
+      - name: Deploy to github pages
+        run: npm run ng deploy --base-href=/SMARTER-frontend/
+
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
