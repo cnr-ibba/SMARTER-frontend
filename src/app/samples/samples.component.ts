@@ -34,7 +34,7 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // control samples query parameters
   samplesForm!: FormGroup;
-  formChanged = new Subject();
+  formChanged = new Subject<void>();
   private samplesSearch: SamplesSearch = {};
 
   constructor(
@@ -112,7 +112,7 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.formChanged.next();
   }
 
-  onReset() {
+  onReset(): void {
     this.samplesForm.reset();
     this.samplesSearch = {};
     this.formChanged.next();
