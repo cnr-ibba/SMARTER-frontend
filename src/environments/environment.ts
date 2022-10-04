@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  backend_url: "http://localhost:27080/api",
+  backend_url: "http://localhost:27080/smarter-api",
 };
 
 /*
