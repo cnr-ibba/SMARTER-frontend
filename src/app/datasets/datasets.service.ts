@@ -4,7 +4,7 @@ import { SortDirection } from '@angular/material/sort';
 
 import { environment } from '../../environments/environment';
 
-import { DatasetsAPI } from './datasets.model';
+import { Dataset, DatasetsAPI } from './datasets.model';
 
 @Injectable({
   providedIn: 'root'
@@ -39,5 +39,10 @@ export class DatasetsService {
       environment.backend_url + '/datasets', {
         params: params
       });
+  }
+
+  getDataset(_id: string) {
+    const url = environment.backend_url + '/datasets/' + _id;
+    return this.http.get<Dataset>(url);
   }
 }

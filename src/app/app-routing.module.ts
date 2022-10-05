@@ -5,6 +5,7 @@ import { AuthGuard } from './auth/auth.guard';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './auth/login/login.component';
 import { DatasetsComponent } from './datasets/datasets.component';
+import { DatasetDetailComponent } from './datasets/dataset-detail/dataset-detail.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { BreedsComponent } from './breeds/breeds.component';
 import { SamplesComponent } from './samples/samples.component';
@@ -20,6 +21,11 @@ const routes: Routes = [
   {
     path: 'datasets',
     component: DatasetsComponent,
+    canActivate: [ AuthGuard ]
+  },
+  {
+    path: 'datasets/:_id',
+    component: DatasetDetailComponent,
     canActivate: [ AuthGuard ]
   },
   {
