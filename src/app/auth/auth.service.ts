@@ -42,8 +42,8 @@ export class AuthService {
 
     // sending the auth request
     this.http.post<AuthResponseData>(environment.backend_url + '/auth/login', authData)
-      .subscribe(
-        authResponseData => {
+      .subscribe({
+        next: (authResponseData: AuthResponseData) => {
           // create a new user object
           const user = new User(authData.username, authResponseData.token);
 
@@ -63,11 +63,14 @@ export class AuthService {
 
           // redirect to a path or "/"
           this.router.navigate([authData.redirectTo]);
-        }, (error: HttpErrorResponse) => {
-          this.uiService.showSnackbar(error.error.message, "Dismiss");
-        })
+        },
+        error: (error: HttpErrorResponse) => {
+          this.uiService.showSnackbar(error.message, "Dismiss");
+        }
+      });
 
-      this.uiService.loadingStateChanged.next(false);
+    // reset loading state
+    this.uiService.loadingStateChanged.next(false);
   }
 
   /* when application starts (or is reloaded), search for userData saved in localStorage
@@ -103,8 +106,8 @@ export class AuthService {
   }
 
   autoLogout(expirationDuration: number) {
-    // set a timer to log out the user fater a certain time. however, if I log out
-    // manually, thsi timer need to be disabled
+    // set a timer to log out the user after a certain time. however, if I log out
+    // manually, this timer need to be disabled
     this.tokenExpirationTimer = setTimeout(() => {
       this.logout();
     }, expirationDuration)
