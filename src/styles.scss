@@ -43,4 +43,9 @@ $my-theme: mat.define-light-theme((
 @include mat-table-hover(false);
 
 html, body { height: 100%; }
+
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+h1 {
+  color: map_get($my-primary, 500);
+}

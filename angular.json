@@ -111,5 +111,7 @@
       }
     }
   },
-  "defaultProject": "SMARTER-frontend"
+  "cli": {
+    "analytics": false
+  }
 }
