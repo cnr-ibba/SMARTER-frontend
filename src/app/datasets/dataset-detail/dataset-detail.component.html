@@ -1,3 +1,20 @@
 
-<h1 *ngIf="dataset">{{ dataset._id.$oid }}</h1>
-<p>dataset-detail works!</p>
+<div fxLayout="row" fxLayout fxLayoutAlign="center center" fxFill>
+  <mat-card *ngIf="dataset" fxFlex="75%">
+    <h1>{{ dataset.file }}</h1>
+    <h2>{{ dataset._id.$oid }}</h2>
+    <p>Uploader: {{ dataset.uploader }}</p>
+    <p>Size: {{ dataset.size}} </p>
+    <p>Partner: {{ dataset.partner }}</p>
+    <p>Country: {{ dataset.country }}</p>
+    <p>Species: {{ dataset.species }}</p>
+    <p>Breed: {{ dataset.breed }}</p>
+    <p>N of individuals: {{ dataset.n_of_individuals }}</p>
+    <p>n_of_records: {{ dataset.n_of_records }}</p>
+    <p>trait: {{ dataset.trait }}</p>
+    <p>gene_array: {{ dataset.gene_array }}</p>
+    <p>type: {{ dataset.type }}</p>
+    <p>contents: {{ dataset.contents }}</p>
+    <p>chip_name: {{ dataset.chip_name }}</p>
+  </mat-card>
+</div>
