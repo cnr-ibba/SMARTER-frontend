@@ -1,20 +1,81 @@
 
-<div fxLayout="row" fxLayout fxLayoutAlign="center center" fxFill>
-  <mat-card *ngIf="dataset" fxFlex="75%">
-    <h1>{{ dataset.file }}</h1>
-    <h2>{{ dataset._id.$oid }}</h2>
-    <p>Uploader: {{ dataset.uploader }}</p>
-    <p>Size: {{ dataset.size}} </p>
-    <p>Partner: {{ dataset.partner }}</p>
-    <p>Country: {{ dataset.country }}</p>
-    <p>Species: {{ dataset.species }}</p>
-    <p>Breed: {{ dataset.breed }}</p>
-    <p>N of individuals: {{ dataset.n_of_individuals }}</p>
-    <p>n_of_records: {{ dataset.n_of_records }}</p>
-    <p>trait: {{ dataset.trait }}</p>
-    <p>gene_array: {{ dataset.gene_array }}</p>
-    <p>type: {{ dataset.type }}</p>
-    <p>contents: {{ dataset.contents }}</p>
-    <p>chip_name: {{ dataset.chip_name }}</p>
-  </mat-card>
+<div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px">
+  <div fxLayout="row" fxLayout fxLayoutAlign="center center" fxFill>
+    <mat-card *ngIf="dataset" fxFlex="75%">
+      <h1>{{ dataset.file }}</h1>
+      <h2>id: {{ dataset._id.$oid }}</h2>
+
+      <mat-list role="list">
+
+        <mat-list-item role="listitem">
+          Uploader: {{ dataset.uploader }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem">
+          Size: {{ dataset.size}}
+        </mat-list-item>
+
+        <mat-list-item role="listitem">
+          Partner: {{ dataset.partner }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem">
+          Country: {{ dataset.country }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem">
+          Species: {{ dataset.species }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem">
+          Breed: {{ dataset.breed }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem">
+          N of individuals: {{ dataset.n_of_individuals }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem" *ngIf="dataset.n_of_records">
+          N of records: {{ dataset.n_of_records }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem" *ngIf="dataset.trait">
+          Trait: {{ dataset.trait }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem">
+          Gene array: {{ dataset.gene_array }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem">
+          Type: {{ dataset.type }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem">
+          Chip name: {{ dataset.chip_name }}
+        </mat-list-item>
+
+        <ng-container>
+          <mat-list-item>Contents: </mat-list-item>
+          <mat-list style="margin-left:30px;">
+            <div *ngFor="let content of dataset.contents">
+              <mat-list-item>{{ content }}</mat-list-item>
+            </div>
+          </mat-list>
+        </ng-container>
+
+      </mat-list>
+    </mat-card>
+  </div>
+
+  <div fxLayout="row" fxLayout fxLayoutAlign="center center">
+    <button
+    [style.margin-bottom]="'24px'"
+    type="button"
+    mat-raised-button
+    color="accent"
+    (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon> Back
+    </button>
+  </div>
 </div>
