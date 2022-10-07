@@ -13,6 +13,7 @@ import { DatasetsService } from '../datasets.service';
 })
 export class DatasetDetailComponent implements OnInit {
   dataset!: Dataset;
+  panelOpenState = false;
 
   constructor(
     private route: ActivatedRoute,

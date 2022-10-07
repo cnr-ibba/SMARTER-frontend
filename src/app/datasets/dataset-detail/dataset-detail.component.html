@@ -43,7 +43,7 @@
           Trait: {{ dataset.trait }}
         </mat-list-item>
 
-        <mat-list-item role="listitem">
+        <mat-list-item role="listitem" *ngIf="dataset.gene_array">
           Gene array: {{ dataset.gene_array }}
         </mat-list-item>
 
@@ -51,18 +51,25 @@
           Type: {{ dataset.type }}
         </mat-list-item>
 
-        <mat-list-item role="listitem">
+        <mat-list-item role="listitem" *ngIf="dataset.chip_name">
           Chip name: {{ dataset.chip_name }}
         </mat-list-item>
 
-        <ng-container>
-          <mat-list-item>Contents: </mat-list-item>
-          <mat-list style="margin-left:30px;">
-            <div *ngFor="let content of dataset.contents">
-              <mat-list-item>{{ content }}</mat-list-item>
-            </div>
-          </mat-list>
-        </ng-container>
+        <mat-expansion-panel
+            (opened)="panelOpenState = true"
+            (closed)="panelOpenState = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Dataset contents:
+            </mat-panel-title>
+            <mat-panel-description>
+              Files received with this dataset
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div *ngFor="let content of dataset.contents">
+            <mat-list-item>{{ content }}</mat-list-item>
+          </div>
+        </mat-expansion-panel>
 
       </mat-list>
     </mat-card>

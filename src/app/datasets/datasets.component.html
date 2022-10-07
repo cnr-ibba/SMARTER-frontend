@@ -13,7 +13,11 @@
     matSortDirection="desc">
       <ng-container matColumnDef="file">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Dataset</mat-header-cell>
-        <mat-cell *matCellDef="let element">{{ element.file | shorten : 35 }}</mat-cell>
+        <mat-cell *matCellDef="let element">
+          <a routerLink="/datasets/{{element._id.$oid}}">
+            {{ element.file | shorten : 35 }}
+          </a>
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="type">
@@ -37,7 +41,7 @@
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row routerLink="/datasets/{{row._id.$oid}}" *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
 
   <div *ngIf="isLoading" class="spinner-container">
