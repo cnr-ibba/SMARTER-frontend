@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 
 import { fromEvent, merge, Observable, of as observableOf, Subscription } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap } from 'rxjs/operators';
+import { catchError, debounceTime, delay, distinctUntilChanged, map, startWith, switchMap } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
@@ -27,7 +27,7 @@ export class DatasetsComponent implements AfterViewInit, OnDestroy {
   @ViewChild('searchBox') searchBox!: ElementRef;
 
   resultsLength = 0;
-  isLoading = true;
+  isLoading = false;
   search$!: Observable<object>;
 
   constructor(
@@ -54,6 +54,9 @@ export class DatasetsComponent implements AfterViewInit, OnDestroy {
     this.mergeSubscription = merge(this.sort.sortChange, this.paginator.page, this.search$)
       .pipe(
         startWith({}),
+        // delay(0) is required to solve the ExpressionChangedAfterItHasBeenCheckedError:
+        // Expression has changed after it was checked. See https://blog.angular-university.io/angular-debugging/
+        delay(0),
         switchMap((inputData) => {
           // inputData could be any of the merged events (sort change, paginator, keyup)
           let searchValue = '';

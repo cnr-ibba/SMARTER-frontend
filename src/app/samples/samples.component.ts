@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular
 import { FormControl, FormGroup } from '@angular/forms';
 
 import { merge, of as observableOf, Subscription, Subject } from 'rxjs';
-import { catchError, map, startWith, switchMap } from 'rxjs/operators';
+import { catchError, delay, map, startWith, switchMap } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
@@ -29,7 +29,7 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   resultsLength = 0;
-  isLoading = true;
+  isLoading = false;
   speciesControl!: FormControl;
 
   // control samples query parameters
@@ -74,6 +74,9 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
       this.formChanged
       ).pipe(
         startWith({}),
+        // delay(0) is required to solve the ExpressionChangedAfterItHasBeenCheckedError:
+        // Expression has changed after it was checked. See https://blog.angular-university.io/angular-debugging/
+        delay(0),
         switchMap((inputData) => {
           this.isLoading = true;
           return this.samplesService.getSamples(

@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, ViewChild, OnDestroy, OnInit } fr
 import { FormControl } from '@angular/forms';
 
 import { fromEvent, merge, Observable, of as observableOf, Subscription } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap } from 'rxjs/operators';
+import { catchError, debounceTime, delay, distinctUntilChanged, map, startWith, switchMap } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
@@ -30,7 +30,7 @@ export class BreedsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('searchBox') searchBox!: ElementRef;
 
   resultsLength = 0;
-  isLoading = true;
+  isLoading = false;
   search$!: Observable<object>;
   speciesControl!: FormControl;
 
@@ -69,6 +69,9 @@ export class BreedsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.mergeSubscription = merge(this.sort.sortChange, this.paginator.page, this.search$, this.speciesControl.valueChanges)
       .pipe(
         startWith({}),
+        // delay(0) is required to solve the ExpressionChangedAfterItHasBeenCheckedError:
+        // Expression has changed after it was checked. See https://blog.angular-university.io/angular-debugging/
+        delay(0),
         switchMap((inputData) => {
           this.isLoading = true;
           return this.breedsService.getBreeds(
