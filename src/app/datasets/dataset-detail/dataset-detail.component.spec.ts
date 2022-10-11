@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { DatasetDetailComponent } from './dataset-detail.component';
 
@@ -8,6 +10,10 @@ describe('DatasetDetailComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [
+        RouterTestingModule,
+        HttpClientTestingModule,
+      ],
       declarations: [ DatasetDetailComponent ]
     })
     .compileComponents();
