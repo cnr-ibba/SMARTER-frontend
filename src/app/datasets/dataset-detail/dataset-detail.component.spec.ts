@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { DatasetDetailComponent } from './dataset-detail.component';
 
@@ -14,7 +15,9 @@ describe('DatasetDetailComponent', () => {
         RouterTestingModule,
         HttpClientTestingModule,
       ],
-      declarations: [ DatasetDetailComponent ]
+      declarations: [ DatasetDetailComponent ],
+      // https://testing-angular.com/testing-components-with-children/#unit-test
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     })
     .compileComponents();
 
