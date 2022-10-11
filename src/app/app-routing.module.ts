@@ -9,6 +9,7 @@ import { DatasetDetailComponent } from './datasets/dataset-detail/dataset-detail
 import { NotFoundComponent } from './not-found/not-found.component';
 import { BreedsComponent } from './breeds/breeds.component';
 import { SamplesComponent } from './samples/samples.component';
+import { DatasetResolver } from './datasets/dataset-detail/dataset-resolver.service';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -26,7 +27,8 @@ const routes: Routes = [
   {
     path: 'datasets/:_id',
     component: DatasetDetailComponent,
-    canActivate: [ AuthGuard ]
+    canActivate: [ AuthGuard ],
+    resolve: {dataset: DatasetResolver }
   },
   {
     path: 'samples',
