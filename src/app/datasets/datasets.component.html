@@ -1,7 +1,7 @@
 
 <div fxLayoutAlign="center center">
   <mat-form-field fxFlex="40%">
-    <input matInput type="text" placeholder="Search datasets by content" #searchBox>
+    <input matInput type="text" placeholder="Search datasets by content" #searchBox value="{{ searchValue }}">
   </mat-form-field>
 </div>
 
@@ -15,8 +15,8 @@
   <mat-table
     [dataSource]="dataSource"
     matSort
-    matSortActive
-    matSortDirection="desc">
+    [matSortActive]="sortActive"
+    [matSortDirection]="sortDirection">
       <ng-container matColumnDef="file">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Dataset</mat-header-cell>
         <mat-cell *matCellDef="let element">
@@ -52,7 +52,8 @@
 
   <mat-paginator
     [length]="resultsLength"
-    [pageSize]="10"
+    [pageIndex]="pageIndex"
+    [pageSize]="pageSize"
     [pageSizeOptions]="[5, 10, 15, 20]"
     showFirstLastButtons>
   </mat-paginator>
