@@ -23,7 +23,6 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
   private sortSubscription!: Subscription;
   private mergeSubscription!: Subscription;
   private speciesSubscription!: Subscription;
-  private searchSubscription!: Subscription;
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -57,9 +56,6 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
     // If the user changes the sort order, reset back to the first page.
     this.sortSubscription = this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
-    // the same applies when user start searching stuff
-    this.searchSubscription = this.formChanged.subscribe(() => this.paginator.pageIndex = 0);
-
     // reset pagination and forms
     this.speciesSubscription = this.speciesControl.valueChanges.subscribe(() => {
       this.paginator.pageIndex = 0;
@@ -77,7 +73,7 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
         // delay(0) is required to solve the ExpressionChangedAfterItHasBeenCheckedError:
         // Expression has changed after it was checked. See https://blog.angular-university.io/angular-debugging/
         delay(0),
-        switchMap((inputData) => {
+        switchMap(() => {
           this.isLoading = true;
           return this.samplesService.getSamples(
               this.sort.active,
@@ -118,7 +114,6 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
   onReset(): void {
     this.samplesForm.reset();
     this.samplesSearch = {};
-    this.formChanged.next();
   }
 
   ngOnDestroy() {
