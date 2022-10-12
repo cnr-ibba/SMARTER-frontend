@@ -67,11 +67,6 @@ export class DatasetsComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    // set initial values from url
-    // if (this.pageIndex) {
-    //   this.paginator.pageIndex = this.pageIndex;
-    // }
-
     this.search$ = fromEvent(this.searchBox.nativeElement, 'keyup').pipe(
       debounceTime(500),
       distinctUntilChanged(),
@@ -81,13 +76,7 @@ export class DatasetsComponent implements AfterViewInit, OnInit, OnDestroy {
         this.router.navigate(
           ["/datasets"],
           {
-            queryParams: {
-              search: this.searchValue,
-              page: this.pageIndex,
-              size: this.pageSize,
-              sort: this.sortActive,
-              order: this.sortDirection
-            }
+            queryParams: this.getQueryParams()
           }
         )
       })
@@ -108,6 +97,12 @@ export class DatasetsComponent implements AfterViewInit, OnInit, OnDestroy {
         switchMap(() => {
           this.isLoading = true;
 
+          // update values
+          this.sortActive = this.sort.active;
+          this.sortDirection = this.sort.direction;
+          this.pageIndex = this.paginator.pageIndex;
+          this.pageSize = this.paginator.pageSize;
+
           return this.datasetsService.getDatasets(
               this.sort.active,
               this.sort.direction,
@@ -122,6 +117,13 @@ export class DatasetsComponent implements AfterViewInit, OnInit, OnDestroy {
           );
         }),
         map(data => {
+          this.router.navigate(
+            ["/datasets"],
+            {
+              queryParams: this.getQueryParams()
+            }
+          );
+
           // Flip flag to show that loading has finished.
           this.isLoading = false;
 
@@ -136,7 +138,40 @@ export class DatasetsComponent implements AfterViewInit, OnInit, OnDestroy {
           return data.items;
         })
       ).subscribe(data => this.dataSource.data = data);
+  }
 
+  getQueryParams(): Object {
+    interface QueryParams {
+      search?: string;
+      page?: number;
+      size?: number;
+      sort?: string;
+      order?: string;
+    }
+
+    let queryParams: QueryParams = {};
+
+    if (this.searchValue) {
+      queryParams['search'] = this.searchValue;
+    }
+
+    if (this.pageIndex) {
+      queryParams['page'] = this.pageIndex;
+    }
+
+    if (this.pageSize) {
+      queryParams['size'] = this.pageSize;
+    }
+
+    if (this.sortActive) {
+      queryParams['sort'] = this.sortActive;
+    }
+
+    if (this.sortDirection && this.sortActive) {
+      queryParams['order'] = this.sortDirection;
+    }
+
+    return queryParams;
   }
 
   ngOnDestroy() {
