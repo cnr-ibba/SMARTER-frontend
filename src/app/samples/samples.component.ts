@@ -35,13 +35,13 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
   // control samples query parameters
   samplesForm!: FormGroup;
   formChanged = new Subject<void>();
-  private samplesSearch: SamplesSearch = {};
 
   // track query params
   pageIndex = 0;
   pageSize = 10;
   sortActive = '';
   sortDirection: SortDirection = "desc";
+  dataset = '';
 
   constructor(
     private samplesService: SamplesService,
@@ -51,15 +51,6 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.speciesControl = new FormControl(this.samplesService.selectedSpecie);
-    this.samplesForm = new FormGroup({
-      original_id: new FormControl(),
-      smarter_id: new FormControl(),
-      breed: new FormControl(),
-      country: new FormControl(),
-      breed_code: new FormControl(),
-    });
-
     // get parameters from url
     this.route.queryParams.subscribe(params => {
       if (params['page']) {
@@ -74,6 +65,20 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
       if (params['order']) {
         this.sortDirection = params['order'];
       }
+      if (params['dataset']) {
+        this.dataset = params['dataset'];
+      }
+    });
+
+    this.speciesControl = new FormControl(this.samplesService.selectedSpecie);
+
+    this.samplesForm = new FormGroup({
+      original_id: new FormControl(),
+      smarter_id: new FormControl(),
+      dataset: new FormControl(this.dataset),
+      breed: new FormControl(),
+      country: new FormControl(),
+      breed_code: new FormControl(),
     });
   }
 
@@ -113,13 +118,14 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
           this.sortDirection = this.sort.direction;
           this.pageIndex = this.paginator.pageIndex;
           this.pageSize = this.paginator.pageSize;
+          this.dataset = this.samplesForm.value.dataset;
 
           return this.samplesService.getSamples(
               this.sort.active,
               this.sort.direction,
               this.paginator.pageIndex,
               this.paginator.pageSize,
-              this.samplesSearch)
+              this.samplesForm.value)
             .pipe(catchError((error) => {
               console.log(error);
               this.uiService.showSnackbar("Error while fetching data. Please, try again later", "Dismiss");
@@ -153,14 +159,12 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onSubmit() {
     // copy form values into my private instance of SampleSearch
-    this.samplesSearch = this.samplesForm.value;
     this.paginator.pageIndex = 0
     this.formChanged.next();
   }
 
   onReset(): void {
     this.samplesForm.reset();
-    this.samplesSearch = {};
     this.paginator.pageIndex = 0;
     this.formChanged.next();
   }
@@ -171,6 +175,7 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
       size?: number;
       sort?: string;
       order?: string;
+      dataset?: string;
     }
 
     let queryParams: QueryParams = {};
@@ -189,6 +194,10 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (this.sortDirection && this.sortActive) {
       queryParams['order'] = this.sortDirection;
+    }
+
+    if (this.samplesForm.value.dataset) {
+      queryParams['dataset'] = this.samplesForm.value.dataset;
     }
 
     return queryParams;

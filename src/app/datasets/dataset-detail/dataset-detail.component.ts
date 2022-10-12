@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Data } from '@angular/router';
+import { ActivatedRoute, Data, Router } from '@angular/router';
 import { Location } from '@angular/common';
 
 import { Dataset } from '../datasets.model';
@@ -15,6 +15,7 @@ export class DatasetDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private location: Location
   ) { }
 
@@ -28,6 +29,16 @@ export class DatasetDetailComponent implements OnInit {
 
   goBack(): void {
     this.location.back();
+  }
+
+  getSamples(): void {
+    this.router.navigate(
+      ['/samples'],
+      {queryParams: {
+        "dataset": this.dataset._id.$oid,
+        "size": 10
+      }
+    });
   }
 
 }

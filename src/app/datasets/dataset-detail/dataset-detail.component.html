@@ -75,14 +75,28 @@
     </mat-card>
   </div>
 
-  <div fxLayout="row" fxLayout fxLayoutAlign="center center">
+  <div fxLayout="row" fxLayout fxLayoutAlign="space-between center">
     <button
+    fxFlexOffset="25"
     [style.margin-bottom]="'24px'"
     type="button"
     mat-raised-button
     color="accent"
     (click)="goBack()">
       <mat-icon>arrow_back</mat-icon> Back
+    </button>
+
+    <button
+    [disabled]="dataset.type.includes('phenotypes')"
+    *ngIf="dataset"
+    fxFlexOffset="25"
+    dir="rtl"
+    [style.margin-bottom]="'24px'"
+    type="button"
+    mat-raised-button
+    color="primary"
+    (click)="getSamples()">
+      <mat-icon>open_in_new</mat-icon> Samples
     </button>
   </div>
 </div>
