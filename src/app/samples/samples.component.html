@@ -82,8 +82,8 @@
   <mat-table
     [dataSource]="dataSource"
     matSort
-    matSortActive
-    matSortDirection="desc">
+    [matSortActive]="sortActive"
+    [matSortDirection]="sortDirection">
       <ng-container matColumnDef="smarter_id">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Smarter ID</mat-header-cell>
         <mat-cell *matCellDef="let element">
@@ -122,7 +122,8 @@
 
   <mat-paginator
     [length]="resultsLength"
-    [pageSize]="10"
+    [pageIndex]="pageIndex"
+    [pageSize]="pageSize"
     [pageSizeOptions]="[5, 10, 15, 20]"
     showFirstLastButtons>
   </mat-paginator>

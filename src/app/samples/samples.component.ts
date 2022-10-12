@@ -4,8 +4,9 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { merge, of as observableOf, Subscription, Subject } from 'rxjs';
 import { catchError, delay, map, startWith, switchMap } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, SortDirection } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Sample, SamplesSearch } from './samples.model';
 import { SamplesService } from './samples.service';
@@ -36,9 +37,17 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
   formChanged = new Subject<void>();
   private samplesSearch: SamplesSearch = {};
 
+  // track query params
+  pageIndex = 0;
+  pageSize = 10;
+  sortActive = '';
+  sortDirection: SortDirection = "desc";
+
   constructor(
     private samplesService: SamplesService,
     private uiService: UIService,
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -50,9 +59,32 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
       country: new FormControl(),
       breed_code: new FormControl(),
     });
+
+    // get parameters from url
+    this.route.queryParams.subscribe(params => {
+      if (params['page']) {
+        this.pageIndex = +params['page'];
+      }
+      if (params['size']) {
+        this.pageSize = +params['size'];
+      }
+      if (params['sort']) {
+        this.sortActive = params['sort'];
+      }
+      if (params['order']) {
+        this.sortDirection = params['order'];
+      }
+    });
   }
 
   ngAfterViewInit() {
+    this.router.navigate(
+      ["/samples"],
+      {
+        queryParams: this.getQueryParams()
+      }
+    );
+
     // If the user changes the sort order, reset back to the first page.
     this.sortSubscription = this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
@@ -75,6 +107,13 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
         delay(0),
         switchMap(() => {
           this.isLoading = true;
+
+          // update values
+          this.sortActive = this.sort.active;
+          this.sortDirection = this.sort.direction;
+          this.pageIndex = this.paginator.pageIndex;
+          this.pageSize = this.paginator.pageSize;
+
           return this.samplesService.getSamples(
               this.sort.active,
               this.sort.direction,
@@ -89,6 +128,13 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
           );
         }),
         map(data => {
+          this.router.navigate(
+            ["/samples"],
+            {
+              queryParams: this.getQueryParams()
+            }
+          );
+
           // Flip flag to show that loading has finished.
           this.isLoading = false;
 
@@ -108,12 +154,44 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
   onSubmit() {
     // copy form values into my private instance of SampleSearch
     this.samplesSearch = this.samplesForm.value;
+    this.paginator.pageIndex = 0
     this.formChanged.next();
   }
 
   onReset(): void {
     this.samplesForm.reset();
     this.samplesSearch = {};
+    this.paginator.pageIndex = 0;
+    this.formChanged.next();
+  }
+
+  getQueryParams(): Object {
+    interface QueryParams {
+      page?: number;
+      size?: number;
+      sort?: string;
+      order?: string;
+    }
+
+    let queryParams: QueryParams = {};
+
+    if (this.pageIndex) {
+      queryParams['page'] = this.pageIndex;
+    }
+
+    if (this.pageSize) {
+      queryParams['size'] = this.pageSize;
+    }
+
+    if (this.sortActive) {
+      queryParams['sort'] = this.sortActive;
+    }
+
+    if (this.sortDirection && this.sortActive) {
+      queryParams['order'] = this.sortDirection;
+    }
+
+    return queryParams;
   }
 
   ngOnDestroy() {
