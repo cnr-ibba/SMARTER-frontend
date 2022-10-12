@@ -20,6 +20,7 @@ import { BreedsComponent } from './breeds/breeds.component';
 import { SamplesComponent } from './samples/samples.component';
 import { DatasetDetailComponent } from './datasets/dataset-detail/dataset-detail.component';
 import { ProgressSpinnerComponent } from './shared/progress-spinner/progress-spinner.component';
+import { SampleDetailComponent } from './samples/sample-detail/sample-detail.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { ProgressSpinnerComponent } from './shared/progress-spinner/progress-spi
     SamplesComponent,
     DatasetDetailComponent,
     ProgressSpinnerComponent,
+    SampleDetailComponent,
   ],
   imports: [
     BrowserModule,

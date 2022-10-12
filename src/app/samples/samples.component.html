@@ -84,14 +84,16 @@
     matSort
     matSortActive
     matSortDirection="desc">
+      <ng-container matColumnDef="smarter_id">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Smarter ID</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <a routerLink="/samples/{{ speciesControl.value | lowercase }}/{{element._id.$oid}}">{{ element.smarter_id }}</a>
+        </mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="original_id">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Original ID</mat-header-cell>
         <mat-cell *matCellDef="let element">{{ element.original_id }}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="smarter_id">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Smarter ID</mat-header-cell>
-        <mat-cell *matCellDef="let element">{{ element.smarter_id }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="breed">

@@ -6,10 +6,13 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './auth/login/login.component';
 import { DatasetsComponent } from './datasets/datasets.component';
 import { DatasetDetailComponent } from './datasets/dataset-detail/dataset-detail.component';
+import { DatasetResolver } from './datasets/dataset-detail/dataset-resolver.service';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { BreedsComponent } from './breeds/breeds.component';
 import { SamplesComponent } from './samples/samples.component';
-import { DatasetResolver } from './datasets/dataset-detail/dataset-resolver.service';
+import { SampleDetailComponent } from './samples/sample-detail/sample-detail.component';
+import { SampleResolver } from './samples/sample-detail/sample-resolver.service';
+
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -28,12 +31,18 @@ const routes: Routes = [
     path: 'datasets/:_id',
     component: DatasetDetailComponent,
     canActivate: [ AuthGuard ],
-    resolve: {dataset: DatasetResolver }
+    resolve: { dataset: DatasetResolver }
   },
   {
     path: 'samples',
     component: SamplesComponent,
     canActivate: [ AuthGuard ]
+  },
+  {
+    path: 'samples/:species/:_id',
+    component: SampleDetailComponent,
+    canActivate: [ AuthGuard ],
+    resolve: { sample: SampleResolver }
   },
   {
     path: 'not-found',

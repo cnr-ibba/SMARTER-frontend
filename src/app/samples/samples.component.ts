@@ -18,7 +18,7 @@ import { UIService } from '../shared/ui.service';
   styleUrls: ['./samples.component.scss']
 })
 export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
-  displayedColumns = ['original_id', 'smarter_id', 'breed', 'breed_code', 'country', 'species'];
+  displayedColumns = ['smarter_id', 'original_id', 'breed', 'breed_code', 'country', 'species'];
   dataSource = new MatTableDataSource<Sample>();
   private sortSubscription!: Subscription;
   private mergeSubscription!: Subscription;
