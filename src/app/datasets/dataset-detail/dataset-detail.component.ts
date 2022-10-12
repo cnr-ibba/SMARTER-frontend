@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-
 import { ActivatedRoute, Data } from '@angular/router';
 import { Location } from '@angular/common';
 
 import { Dataset } from '../datasets.model';
-import { DatasetsService } from '../datasets.service';
 
 @Component({
   selector: 'app-dataset-detail',
@@ -17,7 +15,6 @@ export class DatasetDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private datasetsService: DatasetsService,
     private location: Location
   ) { }
 

@@ -1,1 +1,106 @@
-<p>sample-detail works!</p>
+
+<div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px">
+  <div fxLayout="row" fxLayout fxLayoutAlign="center center" fxFill>
+    <mat-card *ngIf="sample" fxFlex="75%">
+      <h1>{{ sample.smarter_id }}</h1>
+      <h2>id: {{ sample._id.$oid }}</h2>
+
+      <mat-list role="list">
+
+        <mat-list-item role="listitem">
+          Original Id: {{ sample.original_id }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem" *ngIf="sample.alias">
+          Alias: {{ sample.alias }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem">
+          Breed: {{ sample.breed }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem">
+          Breed Code: {{ sample.breed_code }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem">
+          Chip name: {{ sample.chip_name }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem">
+          Country: {{ sample.country }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem">
+          Dataset Id:&nbsp;<a [routerLink]="['/datasets', sample.dataset_id.$oid ]">{{ sample.dataset_id.$oid }}</a>
+        </mat-list-item>
+
+        <mat-list-item role="listitem" *ngIf="sample.father_id">
+          Sire:&nbsp;<a [routerLink]="['../', sample.father_id.$oid ]">{{ sample.father_id.$oid }}</a>
+        </mat-list-item>
+
+        <mat-list-item role="listitem" *ngIf="sample.mother_id">
+          Dam:&nbsp;<a [routerLink]="['../', sample.mother_id.$oid ]">{{ sample.mother_id.$oid }}</a>
+        </mat-list-item>
+
+        <mat-list-item role="listitem">
+          Species: {{ sample.species }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem" *ngIf="sample.sex">
+          Sex: {{ sample.sex | sex2string }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem">
+          Type: {{ sample.type }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem" *ngIf="sample.locations">
+          Locations: {{ sample.locations | locationsList }}
+        </mat-list-item>
+
+        <mat-expansion-panel
+            *ngIf="sample.metadata"
+            [expanded]="panelMetadata"
+            (opened)="panelMetadata = true"
+            (closed)="panelMetadata = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Metadata:
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div *ngFor="let item of sample.metadata | keyvalue">
+            <mat-list-item role="listitem">{{ item.key | titlecase }}: {{ item.value }}</mat-list-item>
+          </div>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel
+            *ngIf="sample.phenotype"
+            [expanded]="panelMetadata"
+            (opened)="panelPhenotype = true"
+            (closed)="panelPhenotype = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Phenotype:
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div *ngFor="let item of sample.phenotype | keyvalue">
+            <mat-list-item role="listitem">{{ item.key | titlecase }}: {{ item.value }}</mat-list-item>
+          </div>
+        </mat-expansion-panel>
+
+      </mat-list>
+    </mat-card>
+  </div>
+
+  <div fxLayout="row" fxLayout fxLayoutAlign="center center">
+    <button
+    [style.margin-bottom]="'24px'"
+    type="button"
+    mat-raised-button
+    color="accent"
+    (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon> Back
+    </button>
+  </div>
+</div>

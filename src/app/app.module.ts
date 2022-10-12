@@ -21,6 +21,8 @@ import { SamplesComponent } from './samples/samples.component';
 import { DatasetDetailComponent } from './datasets/dataset-detail/dataset-detail.component';
 import { ProgressSpinnerComponent } from './shared/progress-spinner/progress-spinner.component';
 import { SampleDetailComponent } from './samples/sample-detail/sample-detail.component';
+import { LocationsListPipe } from './shared/locations-list.pipe';
+import { SexToStringPipe } from './shared/sex.pipe';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,8 @@ import { SampleDetailComponent } from './samples/sample-detail/sample-detail.com
     DatasetDetailComponent,
     ProgressSpinnerComponent,
     SampleDetailComponent,
+    LocationsListPipe,
+    SexToStringPipe,
   ],
   imports: [
     BrowserModule,

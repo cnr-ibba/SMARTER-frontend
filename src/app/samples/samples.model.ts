@@ -2,14 +2,38 @@ export interface ObjectID {
   $oid: string;
 }
 
+export interface Multipoint {
+  coordinates: number[][];
+  type: string;
+}
+
+type JSONValue =
+    | string
+    | number
+    | boolean
+
+export interface JSONObject {
+  [x: string]: JSONValue;
+}
+
 export interface Sample {
   _id: ObjectID;
-  original_id: string;
-  smarter_id: string;
-  country: string;
-  species: string;
+  alias: string;
   breed: string;
   breed_code: string;
+  chip_name: string;
+  country: string;
+  dataset_id: ObjectID;
+  father_id: ObjectID;
+  locations: Multipoint;
+  metadata: JSONObject;
+  mother_id: ObjectID;
+  original_id: string;
+  phenotype: JSONObject;
+  smarter_id: string;
+  species: string;
+  sex: string;
+  type: string;
 }
 
 export interface SamplesAPI {
