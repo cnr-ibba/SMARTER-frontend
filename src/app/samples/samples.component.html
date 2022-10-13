@@ -60,7 +60,7 @@
 
     <div fxLayoutAlign="center center" fxLayoutGap="20px">
       <button
-      *ngIf="!isLoading"
+      [disabled]="isLoading"
       type="submit"
       mat-raised-button
       color="primary"
@@ -69,7 +69,7 @@
       </button>
 
       <button
-      *ngIf="!isLoading"
+      [disabled]="isLoading"
       type="button"
       mat-raised-button
       color="accent"
