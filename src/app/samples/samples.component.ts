@@ -112,6 +112,9 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.samplesForm.patchValue(this.samplesSearch);
+
+    // get all countries
+    this.samplesService.getCountries();
   }
 
   ngAfterViewInit() {

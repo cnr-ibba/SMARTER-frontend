@@ -1,16 +1,19 @@
+
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { SortDirection } from '@angular/material/sort';
 
 import { environment } from 'src/environments/environment';
 
-import { Sample, SamplesAPI, SamplesSearch } from './samples.model';
+import { Sample, SamplesAPI, SamplesSearch, CountriesAPI, Country } from './samples.model';
+import { forkJoin, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SamplesService {
   selectedSpecie = "Sheep";
+  countries: Country[] = [];
   pageSize = 10;
 
   constructor(
@@ -49,6 +52,39 @@ export class SamplesService {
       // set URL with species
       environment.backend_url + '/samples/' + this.selectedSpecie.toLowerCase(), {
         params: params
+      });
+  }
+
+  getCountries(): void {
+    let params = new HttpParams().set('species', this.selectedSpecie);
+
+    //make the first request
+    this.http.get<CountriesAPI>(
+      environment.backend_url + '/countries', {
+        params: params
+      }).subscribe(firstPage => {
+        // read first page items
+        firstPage.items.forEach((country: Country) => {
+          this.countries.push(country);
+        });
+
+        // now create an array of observables
+        let requests: Observable<CountriesAPI>[] = [];
+
+        // next create an HttpResponse observable for each page
+        for (let index = 2; index <= firstPage.pages; index++) {
+          params = params.set('page', index);
+          requests.push(this.http.get<CountriesAPI>( environment.backend_url + '/countries', {params: params}));
+        }
+
+        // now execute all the requests in parallel. Then subscribe
+        forkJoin(requests).subscribe(results => {
+          results.forEach((page: CountriesAPI) => {
+            page.items.forEach((country: Country) => {
+              this.countries.push(country);
+            })
+          })
+        });
       });
   }
 
