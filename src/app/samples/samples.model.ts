@@ -47,7 +47,10 @@ export interface SamplesAPI {
 }
 
 export interface SamplesSearch {
+  smarter_id?: string;
+  original_id?: string;
+  dataset?: string;
   breed?: string;
-  country?: string;
   breed_code?: string;
+  country?: string;
 }

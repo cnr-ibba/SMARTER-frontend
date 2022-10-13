@@ -1,4 +1,4 @@
-import { Breed } from './../breeds/breeds.model';
+
 import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
@@ -42,12 +42,7 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
   pageSize = 10;
   sortActive = '';
   sortDirection: SortDirection = "desc";
-  smarter_id = '';
-  original_id = '';
-  dataset = '';
-  breed = '';
-  breed_code = '';
-  country = '';
+  samplesSearch: SamplesSearch = {};
 
   constructor(
     private samplesService: SamplesService,
@@ -72,35 +67,37 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
         this.sortDirection = params['order'];
       }
       if (params['smarter_id']) {
-        this.smarter_id = params['smarter_id'];
+        this.samplesSearch.smarter_id = params['smarter_id'];
       }
       if (params['original_id']) {
-        this.original_id = params['original_id'];
+        this.samplesSearch.original_id = params['original_id'];
       }
       if (params['dataset']) {
-        this.dataset = params['dataset'];
+        this.samplesSearch.dataset = params['dataset'];
       }
       if (params['breed']) {
-        this.breed = params['breed'];
+        this.samplesSearch.breed = params['breed'];
       }
       if (params['breed_code']) {
-        this.breed_code = params['breed_code'];
+        this.samplesSearch.breed_code = params['breed_code'];
       }
       if (params['country']) {
-        this.country = params['country'];
+        this.samplesSearch.country = params['country'];
       }
     });
 
     this.speciesControl = new FormControl(this.samplesService.selectedSpecie);
 
     this.samplesForm = new FormGroup({
-      original_id: new FormControl(this.original_id),
-      smarter_id: new FormControl(this.smarter_id),
-      dataset: new FormControl(this.dataset),
-      breed: new FormControl(this.breed),
-      breed_code: new FormControl(this.breed_code),
-      country: new FormControl(this.country),
+      original_id: new FormControl(),
+      smarter_id: new FormControl(),
+      dataset: new FormControl(),
+      breed: new FormControl(),
+      breed_code: new FormControl(),
+      country: new FormControl(),
     });
+
+    this.samplesForm.patchValue(this.samplesSearch);
   }
 
   ngAfterViewInit() {
@@ -139,19 +136,13 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
           this.sortDirection = this.sort.direction;
           this.pageIndex = this.paginator.pageIndex;
           this.pageSize = this.paginator.pageSize;
-          this.smarter_id = this.samplesForm.value.smarter_id;
-          this.original_id = this.samplesForm.value.original_id;
-          this.dataset = this.samplesForm.value.dataset;
-          this.breed = this.samplesForm.value.breed;
-          this.breed_code = this.samplesForm.value.breed_code;
-          this.country = this.samplesForm.value.country;
 
           return this.samplesService.getSamples(
               this.sort.active,
               this.sort.direction,
               this.paginator.pageIndex,
               this.paginator.pageSize,
-              this.samplesForm.value)
+              this.samplesSearch)
             .pipe(catchError((error) => {
               console.log(error);
               this.uiService.showSnackbar("Error while fetching data. Please, try again later", "Dismiss");
@@ -185,6 +176,7 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onSubmit() {
     // copy form values into my private instance of SampleSearch
+    this.samplesSearch = this.samplesForm.value;
     this.paginator.pageIndex = 0
     this.formChanged.next();
   }
@@ -227,28 +219,28 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
       queryParams['order'] = this.sortDirection;
     }
 
-    if (this.samplesForm.value.smarter_id) {
-      queryParams['smarter_id'] = this.samplesForm.value.smarter_id;
+    if (this.samplesSearch.smarter_id) {
+      queryParams['smarter_id'] = this.samplesSearch.smarter_id;
     }
 
-    if (this.samplesForm.value.original_id) {
-      queryParams['original_id'] = this.samplesForm.value.original_id;
+    if (this.samplesSearch.original_id) {
+      queryParams['original_id'] = this.samplesSearch.original_id;
     }
 
-    if (this.samplesForm.value.dataset) {
-      queryParams['dataset'] = this.samplesForm.value.dataset;
+    if (this.samplesSearch.dataset) {
+      queryParams['dataset'] = this.samplesSearch.dataset;
     }
 
-    if (this.samplesForm.value.breed) {
-      queryParams['breed'] = this.samplesForm.value.breed;
+    if (this.samplesSearch.breed) {
+      queryParams['breed'] = this.samplesSearch.breed;
     }
 
-    if (this.samplesForm.value.breed_code) {
-      queryParams['breed_code'] = this.samplesForm.value.breed_code;
+    if (this.samplesSearch.breed_code) {
+      queryParams['breed_code'] = this.samplesSearch.breed_code;
     }
 
-    if (this.samplesForm.value.country) {
-      queryParams['country'] = this.samplesForm.value.country;
+    if (this.samplesSearch.country) {
+      queryParams['country'] = this.samplesSearch.country;
     }
 
     return queryParams;
