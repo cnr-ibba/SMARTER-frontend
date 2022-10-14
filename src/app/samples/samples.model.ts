@@ -7,32 +7,37 @@ export interface Multipoint {
   type: string;
 }
 
-type JSONValue =
+// https://dev.to/ankittanna/how-to-create-a-type-for-complex-json-object-in-typescript-d81
+export type JSONValue =
     | string
     | number
     | boolean
+    | JSONObject
+    | JSONArray;
 
 export interface JSONObject {
   [x: string]: JSONValue;
 }
+
+export interface JSONArray extends Array<JSONValue> { }
 
 export interface Sample {
   _id: ObjectID;
   alias: string;
   breed: string;
   breed_code: string;
-  chip_name: string;
+  chip_name?: string;
   country: string;
   dataset_id: ObjectID;
-  father_id: ObjectID;
-  locations: Multipoint;
+  father_id?: ObjectID;
+  locations?: Multipoint;
   metadata: JSONObject;
-  mother_id: ObjectID;
+  mother_id?: ObjectID;
   original_id: string;
   phenotype: JSONObject;
   smarter_id: string;
   species: string;
-  sex: string;
+  sex?: string;
   type: string;
 }
 

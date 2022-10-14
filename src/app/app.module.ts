@@ -23,6 +23,7 @@ import { ProgressSpinnerComponent } from './shared/progress-spinner/progress-spi
 import { SampleDetailComponent } from './samples/sample-detail/sample-detail.component';
 import { LocationsListPipe } from './shared/locations-list.pipe';
 import { SexToStringPipe } from './shared/sex.pipe';
+import { SampleMetadataComponent } from './samples/sample-detail/sample-metadata/sample-metadata.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { SexToStringPipe } from './shared/sex.pipe';
     SampleDetailComponent,
     LocationsListPipe,
     SexToStringPipe,
+    SampleMetadataComponent,
   ],
   imports: [
     BrowserModule,

@@ -69,9 +69,7 @@
               Metadata:
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <div *ngFor="let item of sample.metadata | keyvalue">
-            <mat-list-item role="listitem">{{ item.key | titlecase }}: {{ item.value }}</mat-list-item>
-          </div>
+          <app-sample-metadata [sample]="sample"></app-sample-metadata>
         </mat-expansion-panel>
 
         <mat-expansion-panel
