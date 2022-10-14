@@ -161,10 +161,6 @@ export class DatasetsComponent implements AfterViewInit, OnInit, OnDestroy {
       queryParams['page'] = this.pageIndex;
     }
 
-    if (this.pageSize) {
-      queryParams['size'] = this.pageSize;
-    }
-
     if (this.sortActive) {
       queryParams['sort'] = this.sortActive;
     }

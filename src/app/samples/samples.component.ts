@@ -230,10 +230,6 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
       queryParams['page'] = this.pageIndex;
     }
 
-    if (this.pageSize) {
-      queryParams['size'] = this.pageSize;
-    }
-
     if (this.sortActive) {
       queryParams['sort'] = this.sortActive;
     }
