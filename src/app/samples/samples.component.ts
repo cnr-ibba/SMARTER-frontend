@@ -68,6 +68,9 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
       if (params['order']) {
         this.sortDirection = params['order'];
       }
+      if (params['species']) {
+        this.samplesService.selectedSpecie = params['species'];
+      }
       if (params['smarter_id']) {
         this.samplesSearch.smarter_id = params['smarter_id'];
       }
@@ -116,8 +119,15 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
     // reset pagination and forms
     this.speciesSubscription = this.speciesControl.valueChanges.subscribe(() => {
       this.paginator.pageIndex = 0;
-      this.onReset()
       this.samplesService.selectedSpecie = this.speciesControl.value;
+      this.samplesForm.reset();
+      this.samplesSearch = this.samplesForm.value;
+      this.router.navigate(
+        ["/samples"],
+        {
+          queryParams: this.getQueryParams()
+        }
+      );
     });
 
     this.mergeSubscription = merge(
@@ -202,6 +212,7 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
       size?: number;
       sort?: string;
       order?: string;
+      species?: string;
       smarter_id?: string;
       original_id?: string;
       dataset?: string;
@@ -211,6 +222,9 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     let queryParams: QueryParams = {};
+
+    // this value is always defined
+    queryParams['species'] = this.samplesService.selectedSpecie;
 
     if (this.pageIndex) {
       queryParams['page'] = this.pageIndex;

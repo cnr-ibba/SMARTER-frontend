@@ -35,7 +35,8 @@ export class DatasetDetailComponent implements OnInit {
     this.router.navigate(
       ['/samples'],
       {queryParams: {
-        "dataset": this.dataset._id.$oid
+        "dataset": this.dataset._id.$oid,
+        "species": this.dataset.species
       }
     });
   }
