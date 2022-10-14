@@ -138,10 +138,10 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
           this.pageSize = this.paginator.pageSize;
 
           return this.samplesService.getSamples(
-              this.sort.active,
-              this.sort.direction,
-              this.paginator.pageIndex,
-              this.paginator.pageSize,
+              this.sortActive,
+              this.sortDirection,
+              this.pageIndex,
+              this.pageSize,
               this.samplesSearch)
             .pipe(catchError((error) => {
               console.log(error);

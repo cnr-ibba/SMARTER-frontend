@@ -104,10 +104,10 @@ export class DatasetsComponent implements AfterViewInit, OnInit, OnDestroy {
           this.pageSize = this.paginator.pageSize;
 
           return this.datasetsService.getDatasets(
-              this.sort.active,
-              this.sort.direction,
-              this.paginator.pageIndex,
-              this.paginator.pageSize,
+              this.sortActive,
+              this.sortDirection,
+              this.pageIndex,
+              this.pageSize,
               this.searchValue)
             .pipe(catchError((error) => {
               console.log(error);
