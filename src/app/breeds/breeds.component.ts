@@ -65,6 +65,9 @@ export class BreedsComponent implements OnInit, AfterViewInit, OnDestroy {
       if (params['order']) {
         this.sortDirection = params['order'];
       }
+      if (params['species']) {
+        this.breedsService.selectedSpecie = params['species'];
+      }
       if (params['search']) {
         this.searchValue = params['search'];
       }
@@ -104,6 +107,12 @@ export class BreedsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.searchBox.nativeElement.value = '';
       this.paginator.pageIndex = 0;
       this.breedsService.selectedSpecie = this.speciesControl.value;
+      this.router.navigate(
+        ["/breeds"],
+        {
+          queryParams: this.getQueryParams()
+        }
+      );
     });
 
     this.mergeSubscription = merge(this.sort.sortChange, this.paginator.page, this.search$, this.speciesControl.valueChanges)
@@ -171,10 +180,14 @@ export class BreedsComponent implements OnInit, AfterViewInit, OnDestroy {
       size?: number;
       sort?: string;
       order?: string;
+      species?: string;
       searchValue?: string;
     }
 
     let queryParams: QueryParams = {};
+
+    // this value is always defined
+    queryParams['species'] = this.breedsService.selectedSpecie;
 
     if (this.pageIndex) {
       queryParams['page'] = this.pageIndex;
