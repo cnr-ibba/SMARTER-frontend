@@ -49,7 +49,9 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
     private uiService: UIService,
     private route: ActivatedRoute,
     private router: Router
-  ) { }
+  ) {
+    this.pageSize = this.samplesService.pageSize;
+  }
 
   ngOnInit(): void {
     // get parameters from url

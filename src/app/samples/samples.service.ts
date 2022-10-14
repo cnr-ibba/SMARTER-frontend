@@ -11,6 +11,7 @@ import { Sample, SamplesAPI, SamplesSearch } from './samples.model';
 })
 export class SamplesService {
   selectedSpecie = "Sheep";
+  pageSize = 10;
 
   constructor(
     private http: HttpClient,
@@ -26,6 +27,7 @@ export class SamplesService {
 
     if (size) {
       params = params.append('size', size);
+      this.pageSize = size;
     }
 
     if (sort) {

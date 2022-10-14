@@ -46,7 +46,9 @@ export class BreedsComponent implements OnInit, AfterViewInit, OnDestroy {
     private uiService: UIService,
     private route: ActivatedRoute,
     private router: Router
-  ) { }
+  ) {
+    this.pageSize = this.breedsService.pageSize;
+  }
 
   ngOnInit() {
     // get parameters from url

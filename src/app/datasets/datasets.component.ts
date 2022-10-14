@@ -43,7 +43,9 @@ export class DatasetsComponent implements AfterViewInit, OnInit, OnDestroy {
     private uiService: UIService,
     private route: ActivatedRoute,
     private router: Router
-  ) { }
+  ) {
+    this.pageSize = this.datasetsService.pageSize;
+  }
 
   ngOnInit() {
     // get parameters from url
