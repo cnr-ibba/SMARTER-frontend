@@ -185,8 +185,15 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onReset(): void {
     this.samplesForm.reset();
+    this.samplesSearch = this.samplesForm.value;
     this.paginator.pageIndex = 0;
     this.formChanged.next();
+    this.router.navigate(
+      ["/samples"],
+      {
+        queryParams: this.getQueryParams()
+      }
+    );
   }
 
   getQueryParams(): Object {
