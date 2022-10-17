@@ -14,32 +14,28 @@ interface Link {
   styleUrls: ['./sample-metadata.component.scss']
 })
 export class SampleMetadataComponent implements OnInit {
-  @Input() sample!: Sample;
+  @Input() metadata!: JSONObject;
   links: Link[] = [];
 
   constructor() { }
 
   ngOnInit(): void {
-    let metadata: JSONObject = this.sample.metadata;
-
-    for (const [key, value] of Object.entries(metadata)) {
+    for (const [key, value] of Object.entries(this.metadata)) {
       // search for keys with a _url suffix
       if (key.search('url') > 0) {
         // search for keys with _id suffix but same prefix (ex. biosample_url -> biosample_id)
         let newkey = key.replace('_url', "_id");
 
-        if (metadata.hasOwnProperty(newkey)) {
+        if (this.metadata.hasOwnProperty(newkey)) {
           // if I find both keys, track in links array
-          this.links.push({id: metadata[newkey], url: value, key: newkey})
+          this.links.push({id: this.metadata[newkey], url: value, key: newkey})
 
           // remove links and keys from metadata attribute
-          delete metadata[key];
-          delete metadata[newkey];
+          delete this.metadata[key];
+          delete this.metadata[newkey];
         }
       }
     }
-
-    this.sample.metadata = metadata;
   }
 
 }
