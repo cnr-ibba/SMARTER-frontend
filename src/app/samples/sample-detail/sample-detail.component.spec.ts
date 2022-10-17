@@ -1,8 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { SpyLocation } from '@angular/common/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { SampleDetailComponent } from './sample-detail.component';
@@ -36,6 +38,7 @@ const route = { data: of({ sample: sample }) };
 describe('SampleDetailComponent', () => {
   let component: SampleDetailComponent;
   let fixture: ComponentFixture<SampleDetailComponent>;
+  let location: SpyLocation;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -48,12 +51,14 @@ describe('SampleDetailComponent', () => {
       // https://stackoverflow.com/questions/60222623/angular-test-how-to-mock-activatedroute-data
       providers: [
         { provide: ActivatedRoute, useValue: route },
+        { provide: Location, useClass: SpyLocation }
       ]
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(SampleDetailComponent);
     component = fixture.componentInstance;
+    location = <SpyLocation>TestBed.inject(Location);
     fixture.detectChanges();
   });
 
@@ -66,5 +71,12 @@ describe('SampleDetailComponent', () => {
       component.ngOnInit();
       expect(component.sample).toEqual(sample);
     });
+  });
+
+  // https://codeutility.org/unit-testing-angular-6-location-go-back-stack-overflow/
+  it('should go back to previous page on back button click', () => {
+    spyOn(location, 'back');
+    component.goBack();
+    expect(location.back).toHaveBeenCalled();
   });
 });
