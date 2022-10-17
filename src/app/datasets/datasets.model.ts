@@ -13,8 +13,8 @@ export interface Dataset {
   species: string;
   breed: string;
   n_of_individuals: number;
-  n_of_records: number;
-  trait: string;
+  n_of_records?: number;
+  trait?: string;
   gene_array: string;
   type: string[];
   contents: string[];
