@@ -1,6 +1,6 @@
 
 import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors } from '@angular/forms';
 
 import { merge, of as observableOf, Subscription, Subject } from 'rxjs';
 import { catchError, delay, map, startWith, switchMap } from 'rxjs/operators';
@@ -53,6 +53,15 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.pageSize = this.samplesService.pageSize;
   }
 
+  noWhiteSpaceValidator(control: AbstractControl): ValidationErrors | null {
+    if (control.value) {
+      if (control.value.startsWith(" ") || control.value.endsWith(" ")) {
+        return {"noWhiteSpaces": true};
+      }
+    }
+    return null;
+  }
+
   ngOnInit(): void {
     // get parameters from url
     this.route.queryParams.subscribe(params => {
@@ -94,12 +103,12 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.speciesControl = new FormControl(this.samplesService.selectedSpecie);
 
     this.samplesForm = new FormGroup({
-      original_id: new FormControl(),
-      smarter_id: new FormControl(),
-      dataset: new FormControl(),
-      breed: new FormControl(),
-      breed_code: new FormControl(),
-      country: new FormControl(),
+      original_id: new FormControl(null, [this.noWhiteSpaceValidator]),
+      smarter_id: new FormControl(null, [this.noWhiteSpaceValidator]),
+      dataset: new FormControl(null, [this.noWhiteSpaceValidator]),
+      breed: new FormControl(null, [this.noWhiteSpaceValidator]),
+      breed_code: new FormControl(null, [this.noWhiteSpaceValidator]),
+      country: new FormControl(null, [this.noWhiteSpaceValidator]),
     });
 
     this.samplesForm.patchValue(this.samplesSearch);

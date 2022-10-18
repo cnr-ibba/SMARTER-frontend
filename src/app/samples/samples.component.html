@@ -15,6 +15,7 @@
           matInput
           placeholder="Original ID"
           formControlName="original_id">
+          <mat-error *ngIf="samplesForm.controls['original_id'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
       </mat-form-field>
 
       <mat-form-field>
@@ -23,6 +24,7 @@
           matInput
           placeholder="Smarter ID"
           formControlName="smarter_id">
+          <mat-error *ngIf="samplesForm.controls['smarter_id'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
       </mat-form-field>
 
       <mat-form-field>
@@ -31,6 +33,7 @@
           matInput
           placeholder="Dataset ID"
           formControlName="dataset">
+          <mat-error *ngIf="samplesForm.controls['dataset'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
       </mat-form-field>
 
       <mat-form-field>
@@ -39,6 +42,7 @@
           matInput
           placeholder="Breed"
           formControlName="breed">
+        <mat-error *ngIf="samplesForm.controls['breed'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
       </mat-form-field>
 
       <mat-form-field>
@@ -47,6 +51,7 @@
           matInput
           placeholder="Breed Code"
           formControlName="breed_code">
+        <mat-error *ngIf="samplesForm.controls['breed_code'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
       </mat-form-field>
 
       <mat-form-field>
@@ -55,6 +60,7 @@
           matInput
           placeholder="Country"
           formControlName="country">
+          <mat-error *ngIf="samplesForm.controls['country'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
       </mat-form-field>
     </div>
 
