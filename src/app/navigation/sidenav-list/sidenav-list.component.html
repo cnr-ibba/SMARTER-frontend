@@ -15,6 +15,10 @@
     <mat-icon>science</mat-icon>
     <span class="nav-caption">Samples</span>
   </a>
+  <a mat-list-item routerLink="/variants" routerLinkActive="active" (click)="onClose()">
+    <mat-icon>list</mat-icon>
+    <span class="nav-caption">Variants</span>
+  </a>
   <a *ngIf="!isAuthenticated" mat-list-item routerLink="/login" routerLinkActive="active" (click)="onClose()">
     <mat-icon>face</mat-icon>
     <span class="nav-caption">Login</span>

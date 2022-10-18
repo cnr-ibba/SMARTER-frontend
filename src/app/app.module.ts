@@ -24,6 +24,7 @@ import { SampleDetailComponent } from './samples/sample-detail/sample-detail.com
 import { LocationsListPipe } from './shared/locations-list.pipe';
 import { SexToStringPipe } from './shared/sex.pipe';
 import { SampleMetadataComponent } from './samples/sample-detail/sample-metadata/sample-metadata.component';
+import { VariantsComponent } from './variants/variants.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { SampleMetadataComponent } from './samples/sample-detail/sample-metadata
     LocationsListPipe,
     SexToStringPipe,
     SampleMetadataComponent,
+    VariantsComponent,
   ],
   imports: [
     BrowserModule,

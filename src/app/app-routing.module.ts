@@ -12,6 +12,7 @@ import { BreedsComponent } from './breeds/breeds.component';
 import { SamplesComponent } from './samples/samples.component';
 import { SampleDetailComponent } from './samples/sample-detail/sample-detail.component';
 import { SampleResolver } from './samples/sample-detail/sample-resolver.service';
+import { VariantsComponent } from './variants/variants.component';
 
 
 const routes: Routes = [
@@ -43,6 +44,11 @@ const routes: Routes = [
     component: SampleDetailComponent,
     canActivate: [ AuthGuard ],
     resolve: { sample: SampleResolver }
+  },
+  {
+    path: 'variants',
+    component: VariantsComponent,
+    canActivate: [ AuthGuard ],
   },
   {
     path: 'not-found',
