@@ -1,0 +1,5 @@
+<mat-tab-group>
+  <mat-tab *ngFor="let tab of tabs; let index = index" [label]="tab">
+    <p>variants-species works for {{ selectedSpecie }}: {{ tab }}!</p>
+  </mat-tab>
+</mat-tab-group>

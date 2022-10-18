@@ -3,19 +3,17 @@ import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { SamplesService } from '../samples/samples.service';
-
 @Component({
   selector: 'app-variants',
   templateUrl: './variants.component.html',
   styleUrls: ['./variants.component.scss']
 })
 export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
+  selectedSpecie = "Sheep";
   private speciesSubscription!: Subscription;
   speciesControl!: FormControl;
 
   constructor(
-    private samplesService: SamplesService,
     private route: ActivatedRoute,
     private router: Router
   ) { }
@@ -24,11 +22,11 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
     // get parameters from url
     this.route.queryParams.subscribe(params => {
       if (params['species']) {
-        this.samplesService.selectedSpecie = params['species'];
+        this.selectedSpecie = params['species'];
       }
     });
 
-    this.speciesControl = new FormControl(this.samplesService.selectedSpecie);
+    this.speciesControl = new FormControl(this.selectedSpecie);
   }
 
   ngAfterViewInit(): void {
@@ -41,7 +39,7 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // reset pagination and forms
     this.speciesSubscription = this.speciesControl.valueChanges.subscribe(() => {
-      this.samplesService.selectedSpecie = this.speciesControl.value;
+      this.selectedSpecie = this.speciesControl.value;
 
       this.router.navigate(
         ["/variants"],
@@ -60,7 +58,7 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
     let queryParams: QueryParams = {};
 
     // this value is always defined
-    queryParams['species'] = this.samplesService.selectedSpecie;
+    queryParams['species'] = this.selectedSpecie;
 
     return queryParams;
   }

@@ -1,28 +1,27 @@
-
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { MaterialModule } from '../material/material.module';
-import { VariantsComponent } from './variants.component';
+import { MaterialModule } from '../../material/material.module';
+import { VariantsSpeciesComponent } from './variants-species.component';
 
-describe('VariantsComponent', () => {
-  let component: VariantsComponent;
-  let fixture: ComponentFixture<VariantsComponent>;
+describe('VariantsSpeciesComponent', () => {
+  let component: VariantsSpeciesComponent;
+  let fixture: ComponentFixture<VariantsSpeciesComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
+        BrowserAnimationsModule,
         MaterialModule,
       ],
-      declarations: [ VariantsComponent ],
+      declarations: [ VariantsSpeciesComponent ],
       // https://testing-angular.com/testing-components-with-children/#unit-test
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(VariantsComponent);
+    fixture = TestBed.createComponent(VariantsSpeciesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
