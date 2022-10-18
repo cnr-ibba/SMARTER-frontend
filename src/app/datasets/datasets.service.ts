@@ -4,12 +4,14 @@ import { SortDirection } from '@angular/material/sort';
 
 import { environment } from '../../environments/environment';
 
-import { DatasetsAPI } from './datasets.model';
+import { Dataset, DatasetsAPI } from './datasets.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DatasetsService {
+  pageSize = 10;
+
   constructor(
     private http: HttpClient,
   ) { }
@@ -24,6 +26,7 @@ export class DatasetsService {
 
     if (size) {
       params = params.append('size', size);
+      this.pageSize = size;
     }
 
     if (sort) {
@@ -39,5 +42,10 @@ export class DatasetsService {
       environment.backend_url + '/datasets', {
         params: params
       });
+  }
+
+  getDataset(_id: string) {
+    const url = environment.backend_url + '/datasets/' + _id;
+    return this.http.get<Dataset>(url);
   }
 }

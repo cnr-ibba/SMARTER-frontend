@@ -1,0 +1,102 @@
+
+<div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px">
+  <div fxLayout="row" fxLayout fxLayoutAlign="center center" fxFill>
+    <mat-card fxFlex="75%">
+      <h1>{{ dataset.file }}</h1>
+      <h2>id: {{ dataset._id.$oid }}</h2>
+
+      <mat-list role="list">
+
+        <mat-list-item role="listitem">
+          Uploader: {{ dataset.uploader }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem">
+          Size: {{ dataset.size}}
+        </mat-list-item>
+
+        <mat-list-item role="listitem">
+          Partner: {{ dataset.partner }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem">
+          Country: {{ dataset.country }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem">
+          Species: {{ dataset.species }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem">
+          Breed: {{ dataset.breed }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem">
+          N of individuals: {{ dataset.n_of_individuals }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem" *ngIf="dataset.n_of_records">
+          N of records: {{ dataset.n_of_records }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem" *ngIf="dataset.trait">
+          Trait: {{ dataset.trait }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem" *ngIf="dataset.gene_array">
+          Gene array: {{ dataset.gene_array }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem">
+          Type: {{ dataset.type }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem" *ngIf="dataset.chip_name">
+          Chip name: {{ dataset.chip_name }}
+        </mat-list-item>
+
+        <mat-expansion-panel
+            (opened)="panelOpenState = true"
+            (closed)="panelOpenState = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Dataset contents:
+            </mat-panel-title>
+            <mat-panel-description>
+              Files received with this dataset
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div *ngFor="let content of dataset.contents">
+            <mat-list-item>{{ content }}</mat-list-item>
+          </div>
+        </mat-expansion-panel>
+
+      </mat-list>
+    </mat-card>
+  </div>
+
+  <div fxLayout="row" fxLayout fxLayoutAlign="space-between center">
+    <button
+    fxFlexOffset="25"
+    [style.margin-bottom]="'24px'"
+    type="button"
+    mat-raised-button
+    color="accent"
+    (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon> Back
+    </button>
+
+    <button
+    [disabled]="dataset.type.includes('phenotypes')"
+    *ngIf="dataset"
+    fxFlexOffset="25"
+    dir="rtl"
+    [style.margin-bottom]="'24px'"
+    type="button"
+    mat-raised-button
+    color="primary"
+    (click)="getSamples()">
+      <mat-icon>open_in_new</mat-icon> Samples
+    </button>
+  </div>
+</div>

@@ -15,6 +15,7 @@
           matInput
           placeholder="Original ID"
           formControlName="original_id">
+          <mat-error *ngIf="samplesForm.controls['original_id'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
       </mat-form-field>
 
       <mat-form-field>
@@ -23,6 +24,16 @@
           matInput
           placeholder="Smarter ID"
           formControlName="smarter_id">
+          <mat-error *ngIf="samplesForm.controls['smarter_id'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input
+          type="text"
+          matInput
+          placeholder="Dataset ID"
+          formControlName="dataset">
+          <mat-error *ngIf="samplesForm.controls['dataset'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
       </mat-form-field>
 
       <mat-form-field>
@@ -31,6 +42,7 @@
           matInput
           placeholder="Breed"
           formControlName="breed">
+        <mat-error *ngIf="samplesForm.controls['breed'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
       </mat-form-field>
 
       <mat-form-field>
@@ -39,6 +51,7 @@
           matInput
           placeholder="Breed Code"
           formControlName="breed_code">
+        <mat-error *ngIf="samplesForm.controls['breed_code'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
       </mat-form-field>
 
       <mat-form-field>
@@ -47,12 +60,13 @@
           matInput
           placeholder="Country"
           formControlName="country">
+          <mat-error *ngIf="samplesForm.controls['country'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
       </mat-form-field>
     </div>
 
     <div fxLayoutAlign="center center" fxLayoutGap="20px">
       <button
-      *ngIf="!isLoading"
+      [disabled]="isLoading"
       type="submit"
       mat-raised-button
       color="primary"
@@ -61,7 +75,7 @@
       </button>
 
       <button
-      *ngIf="!isLoading"
+      [disabled]="isLoading"
       type="button"
       mat-raised-button
       color="accent"
@@ -72,20 +86,28 @@
 
 </form>
 
+<app-progress-spinner
+  [backdropEnabled]="true"
+  [positionGloballyCenter]="true"
+  [displayProgressSpinner]="isLoading">
+</app-progress-spinner>
+
 <div class="table-container">
   <mat-table
     [dataSource]="dataSource"
     matSort
-    matSortActive
-    matSortDirection="desc">
+    [matSortActive]="sortActive"
+    [matSortDirection]="sortDirection">
+      <ng-container matColumnDef="smarter_id">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Smarter ID</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <a routerLink="/samples/{{ speciesControl.value | lowercase }}/{{element._id.$oid}}">{{ element.smarter_id }}</a>
+        </mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="original_id">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Original ID</mat-header-cell>
         <mat-cell *matCellDef="let element">{{ element.original_id }}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="smarter_id">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Smarter ID</mat-header-cell>
-        <mat-cell *matCellDef="let element">{{ element.smarter_id }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="breed">
@@ -112,13 +134,10 @@
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
 
-  <div *ngIf="isLoading" class="spinner-container">
-    <mat-spinner></mat-spinner>
-  </div>
-
   <mat-paginator
     [length]="resultsLength"
-    [pageSize]="10"
+    [pageIndex]="pageIndex"
+    [pageSize]="pageSize"
     [pageSizeOptions]="[5, 10, 15, 20]"
     showFirstLastButtons>
   </mat-paginator>

@@ -1,0 +1,6 @@
+<div *ngFor="let item of links">
+  <mat-list-item role="listitem">{{ item.key | titlecase }}:&nbsp;<a href="{{ item.url }}" target="_blank">{{ item.id }}</a></mat-list-item>
+</div>
+<div *ngFor="let item of metadata | keyvalue">
+  <mat-list-item role="listitem">{{ item.key | titlecase }}: {{ item.value }}</mat-list-item>
+</div>

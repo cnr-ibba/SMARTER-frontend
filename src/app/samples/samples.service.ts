@@ -4,13 +4,14 @@ import { SortDirection } from '@angular/material/sort';
 
 import { environment } from 'src/environments/environment';
 
-import { SamplesAPI, SamplesSearch } from './samples.model';
+import { Sample, SamplesAPI, SamplesSearch } from './samples.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SamplesService {
   selectedSpecie = "Sheep";
+  pageSize = 10;
 
   constructor(
     private http: HttpClient,
@@ -26,6 +27,7 @@ export class SamplesService {
 
     if (size) {
       params = params.append('size', size);
+      this.pageSize = size;
     }
 
     if (sort) {
@@ -50,4 +52,8 @@ export class SamplesService {
       });
   }
 
+  getSample(_id: string, species: string) {
+    const url = environment.backend_url + '/samples/' + species + "/" + _id;
+    return this.http.get<Sample>(url);
+  }
 }

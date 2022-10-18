@@ -1,19 +1,29 @@
 
 <div fxLayoutAlign="center center">
   <mat-form-field fxFlex="40%">
-    <input matInput type="text" placeholder="Search datasets by content" #searchBox>
+    <input matInput type="text" placeholder="Search datasets by content" #searchBox value="{{ searchValue }}">
   </mat-form-field>
 </div>
+
+<app-progress-spinner
+  [backdropEnabled]="true"
+  [positionGloballyCenter]="true"
+  [displayProgressSpinner]="isLoading">
+</app-progress-spinner>
 
 <div class="table-container">
   <mat-table
     [dataSource]="dataSource"
     matSort
-    matSortActive
-    matSortDirection="desc">
+    [matSortActive]="sortActive"
+    [matSortDirection]="sortDirection">
       <ng-container matColumnDef="file">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Dataset</mat-header-cell>
-        <mat-cell *matCellDef="let element">{{ element.file | shorten : 35 }}</mat-cell>
+        <mat-cell *matCellDef="let element">
+          <a routerLink="/datasets/{{element._id.$oid}}">
+            {{ element.file | shorten : 35 }}
+          </a>
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="type">
@@ -40,13 +50,10 @@
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
 
-  <div *ngIf="isLoading" class="spinner-container">
-    <mat-spinner></mat-spinner>
-  </div>
-
   <mat-paginator
     [length]="resultsLength"
-    [pageSize]="10"
+    [pageIndex]="pageIndex"
+    [pageSize]="pageSize"
     [pageSizeOptions]="[5, 10, 15, 20]"
     showFirstLastButtons>
   </mat-paginator>
