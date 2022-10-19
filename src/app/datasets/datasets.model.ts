@@ -1,7 +1,4 @@
-
-export interface ObjectID {
-  "$oid": string;
-}
+import { ObjectID } from "../shared/shared.model";
 
 export interface Dataset {
   _id: ObjectID;
