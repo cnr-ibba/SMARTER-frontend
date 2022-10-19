@@ -25,7 +25,6 @@ import { LocationsListPipe } from './shared/locations-list.pipe';
 import { SexToStringPipe } from './shared/sex.pipe';
 import { SampleMetadataComponent } from './samples/sample-detail/sample-metadata/sample-metadata.component';
 import { VariantsComponent } from './variants/variants.component';
-import { VariantsSpeciesComponent } from './variants/variants-species/variants-species.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +45,6 @@ import { VariantsSpeciesComponent } from './variants/variants-species/variants-s
     SexToStringPipe,
     SampleMetadataComponent,
     VariantsComponent,
-    VariantsSpeciesComponent,
   ],
   imports: [
     BrowserModule,
