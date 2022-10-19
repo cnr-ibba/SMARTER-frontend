@@ -5,4 +5,54 @@
   </mat-button-toggle-group>
 </div>
 
-<app-variants-species [selectedSpecie]="selectedSpecie"></app-variants-species>
+<mat-tab-group [selectedIndex]="selectedIndex" (selectedIndexChange)="tabChanged($event)">
+  <mat-tab *ngFor="let tab of tabs; let index = index" [label]="tab">
+
+    <div class="table-container">
+      <mat-table
+          [dataSource]="dataSource"
+          matSort
+          [matSortActive]="sortActive"
+          [matSortDirection]="sortDirection">
+
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{ element.name }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="chrom">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Chrom</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{ element.locations[0].chrom }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="position">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Position</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{ element.locations[0].position }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="illumina_top">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Illumina TOP</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{ element.locations[0].illumina_top }}</mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+
+      <mat-paginator
+        [length]="resultsLength"
+        [pageIndex]="pageIndex"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 15, 20]"
+        showFirstLastButtons>
+      </mat-paginator>
+    </div>
+
+  </mat-tab>
+</mat-tab-group>
+
+<app-progress-spinner
+  [backdropEnabled]="true"
+  [positionGloballyCenter]="true"
+  [displayProgressSpinner]="isLoading">
+</app-progress-spinner>
