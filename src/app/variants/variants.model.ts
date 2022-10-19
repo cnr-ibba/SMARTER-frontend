@@ -8,6 +8,7 @@ export interface Location {
   position: number;
   alleles: string;
   illumina: string;
+  illumina_top: string;
   illumina_forward: string;
   illumina_strand: string;
   affymetrix_ab: string;
@@ -21,7 +22,6 @@ export interface Variant {
   chip_name: string[];
   name: string;
   sequence: JSONObject;
-  illumina_top: string;
   locations: Location[];
   sender: string;
   probesets: JSONObject[];
