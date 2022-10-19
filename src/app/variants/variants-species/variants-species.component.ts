@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 import { VariantsService } from '../variants.service';
 
@@ -9,6 +10,8 @@ import { VariantsService } from '../variants.service';
 })
 export class VariantsSpeciesComponent implements OnInit, OnChanges {
   @Input() selectedSpecie = "Sheep";
+  selectedIndex = 0;
+  selectedAssembly = '';
   tabs: string[] = [];
 
   constructor(
@@ -16,15 +19,24 @@ export class VariantsSpeciesComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit(): void {
-    this.getVariants();
+    this.tabs = this.variantsService.supportedAssemblies[this.selectedSpecie];
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     // triggered when selectedSpecie changes
+    this.tabs = this.variantsService.supportedAssemblies[this.selectedSpecie];
+    this.getVariants();
+  }
+
+  indexChanged(index: number): void {
+    this.selectedIndex = index;
     this.getVariants();
   }
 
   getVariants(): void {
-    this.tabs = this.variantsService.supportedAssemblies[this.selectedSpecie];
+    this.selectedAssembly = this.tabs[this.selectedIndex];
+    this.variantsService.getVariants(this.selectedSpecie, this.selectedAssembly).subscribe(results => {
+      console.log(results);
+    });
   }
 }
