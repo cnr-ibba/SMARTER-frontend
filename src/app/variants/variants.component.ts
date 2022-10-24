@@ -49,6 +49,18 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     // get parameters from url
     this.route.queryParams.subscribe(params => {
+      if (params['page']) {
+        this.pageIndex = +params['page'];
+      }
+      if (params['size']) {
+        this.pageSize = +params['size'];
+      }
+      if (params['sort']) {
+        this.sortActive = params['sort'];
+      }
+      if (params['order']) {
+        this.sortDirection = params['order'];
+      }
       if (params['species']) {
         this.selectedSpecie = params['species'];
       }
@@ -162,6 +174,10 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getQueryParams(): Object {
     interface QueryParams {
+      page?: number;
+      size?: number;
+      sort?: string;
+      order?: string;
       species?: string;
     }
 
@@ -169,6 +185,18 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // this value is always defined
     queryParams['species'] = this.selectedSpecie;
+
+    if (this.pageIndex) {
+      queryParams['page'] = this.pageIndex;
+    }
+
+    if (this.sortActive) {
+      queryParams['sort'] = this.sortActive;
+    }
+
+    if (this.sortDirection && this.sortActive) {
+      queryParams['order'] = this.sortDirection;
+    }
 
     return queryParams;
   }
