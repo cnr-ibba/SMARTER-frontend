@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, SortDirection } from '@angular/material/sort';
+import { PageEvent } from '@angular/material/paginator';
+import { Sort, SortDirection } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of as observableOf, merge, Subject, Subscription } from 'rxjs';
@@ -19,12 +19,8 @@ import { VariantsService } from './variants.service';
 export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns = ['name', 'chrom', 'position', 'illumina_top'];
   dataSource = new MatTableDataSource<Variant>();
-  private sortSubscription!: Subscription;
-  private mergeSubscription!: Subscription;
+  private tableSubscription!: Subscription;
   private speciesSubscription!: Subscription;
-
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   resultsLength = 0;
   isLoading = false;
@@ -33,13 +29,13 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
   selectedIndex = 0;
   selectedAssembly = '';
   tabs: string[] = [];
-  assemblyChanged = new Subject<void>();
+  tableChanged = new Subject<void>();
 
   // track query params
   pageIndex = 0;
   pageSize = 10;
   sortActive = '';
-  sortDirection: SortDirection = "desc";
+  sortDirection: SortDirection = "";
 
   constructor(
     private variantsService: VariantsService,
@@ -71,18 +67,13 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     );
 
-    // If the user changes the sort order, reset back to the first page.
-    this.sortSubscription = this.sort.sortChange.subscribe(() => {
-      this.paginator.pageIndex = 0;
-    });
-
     // reset pagination and forms
     this.speciesSubscription = this.speciesControl.valueChanges.subscribe(() => {
-      this.paginator.pageIndex = 0;
+      this.pageIndex = 0;
       this.selectedSpecie = this.speciesControl.value;
       this.tabs = this.variantsService.supportedAssemblies[this.selectedSpecie];
       this.selectedAssembly = this.tabs[this.selectedIndex];
-      this.assemblyChanged.next();
+      this.tableChanged.next();
 
       this.router.navigate(
         ["/variants"],
@@ -92,10 +83,8 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
       );
     });
 
-    this.mergeSubscription = merge(
-      this.sort.sortChange,
-      this.paginator.page,
-      this.assemblyChanged,
+    this.tableSubscription = merge(
+      this.tableChanged
     ).pipe(
       startWith({}),
       // delay(0) is required to solve the ExpressionChangedAfterItHasBeenCheckedError:
@@ -103,12 +92,6 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
       delay(0),
       switchMap(() => {
         this.isLoading = true;
-
-        // update values
-        this.sortActive = this.sort.active;
-        this.sortDirection = this.sort.direction;
-        this.pageIndex = this.paginator.pageIndex;
-        this.pageSize = this.paginator.pageSize;
 
         return this.variantsService.getVariants(
             this.selectedSpecie,
@@ -152,9 +135,29 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   tabChanged(index: number): void {
     this.selectedIndex = index;
-    this.paginator.pageIndex = 0;
+    this.pageIndex = 0;
     this.selectedAssembly = this.tabs[this.selectedIndex];
-    this.assemblyChanged.next();
+    this.tableChanged.next();
+  }
+
+  sortData(sort: Sort) {
+    this.pageIndex = 0;
+
+    // unset sortActive when no direction
+    if (sort.direction == '') {
+      this.sortActive = '';
+    } else {
+      this.sortActive = sort.active;
+    }
+
+    this.sortDirection = sort.direction;
+    this.tableChanged.next();
+  }
+
+  pageData(pageEvent: PageEvent) {
+    this.pageIndex = pageEvent.pageIndex;
+    this.pageSize = pageEvent.pageSize;
+    this.tableChanged.next();
   }
 
   getQueryParams(): Object {
@@ -172,7 +175,6 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.speciesSubscription.unsubscribe();
-    this.sortSubscription.unsubscribe();
-    this.mergeSubscription.unsubscribe();
+    this.tableSubscription.unsubscribe();
   }
 }
