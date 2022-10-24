@@ -60,6 +60,18 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
     return null;
   }
 
+  regionValidator(control: AbstractControl): ValidationErrors | null {
+    const chrom_pattern = new RegExp('^[a-zA-Z0-9_]+$');
+    const region_pattern = new RegExp('^[a-zA-Z0-9_]:[0-9]+-[0-9]+$')
+
+    if (control.value) {
+      if (!chrom_pattern.test(control.value) && !region_pattern.test(control.value)) {
+        return {"invalidRegion": true}
+      }
+    }
+    return null;
+  }
+
   ngOnInit(): void {
     // get parameters from url
     this.route.queryParams.subscribe(params => {
@@ -92,7 +104,10 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.variantsForm = new FormGroup({
       name: new FormControl(null, [this.noWhiteSpaceValidator]),
-      region: new FormControl(null, [this.noWhiteSpaceValidator]),
+      region: new FormControl(null, [
+        this.noWhiteSpaceValidator,
+        this.regionValidator
+      ])
     });
     this.variantsForm.patchValue(this.variantSearch);
   }

@@ -25,6 +25,7 @@
           placeholder="<chrom>:<start>-<end> or <chrom>"
           formControlName="region">
           <mat-error *ngIf="variantsForm.controls['region'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
+          <mat-error *ngIf="variantsForm.controls['region'].errors?.['invalidRegion']">Invalid region!</mat-error>
       </mat-form-field>
     </div>
 
