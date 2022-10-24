@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { SortDirection } from '@angular/material/sort';
 import { environment } from 'src/environments/environment';
 
-import { VariantsAPI } from './variants.model';
+import { VariantsAPI, VariantsSearch } from './variants.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +25,8 @@ export class VariantsService {
       sort?: string,
       order: SortDirection = "desc",
       page?: number,
-      size?: number
+      size?: number,
+      search?: VariantsSearch
   ) {
     let params = new HttpParams();
 
@@ -42,6 +43,16 @@ export class VariantsService {
     if (sort) {
       params = params.append('sort', sort);
       params = params.append('order', order);
+    }
+
+    if (search) {
+      // iterate over object values
+      for (const [key, value] of Object.entries(search)) {
+        // value could be null
+        if (value) {
+          params = params.append(key, value);
+        }
+      }
     }
 
     return this.http.get<VariantsAPI>(

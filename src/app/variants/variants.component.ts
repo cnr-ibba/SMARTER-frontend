@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { Sort, SortDirection } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -8,7 +8,7 @@ import { of as observableOf, merge, Subject, Subscription } from 'rxjs';
 import { catchError, switchMap, map, startWith, delay } from 'rxjs/operators';
 
 import { UIService } from '../shared/ui.service';
-import { Variant } from './variants.model';
+import { Variant, VariantsSearch } from './variants.model';
 import { VariantsService } from './variants.service';
 
 @Component({
@@ -31,11 +31,16 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
   tabs: string[] = [];
   tableChanged = new Subject<void>();
 
+  // control variants query parameters
+  variantsForm!: FormGroup;
+  formChanged = new Subject<void>();
+
   // track query params
   pageIndex = 0;
   pageSize = 10;
   sortActive = '';
   sortDirection: SortDirection = "";
+  variantSearch: VariantsSearch = {};
 
   constructor(
     private variantsService: VariantsService,
@@ -44,6 +49,15 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router
   ) {
     this.pageSize = this.variantsService.pageSize;
+  }
+
+  noWhiteSpaceValidator(control: AbstractControl): ValidationErrors | null {
+    if (control.value) {
+      if (control.value.startsWith(" ") || control.value.endsWith(" ")) {
+        return {"noWhiteSpaces": true};
+      }
+    }
+    return null;
   }
 
   ngOnInit(): void {
@@ -64,11 +78,23 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
       if (params['species']) {
         this.selectedSpecie = params['species'];
       }
+      if (params['name']) {
+        this.variantSearch.name = params['original_id'];
+      }
+      if (params['region']) {
+        this.variantSearch.region = params['region'];
+      }
     });
 
     this.speciesControl = new FormControl(this.selectedSpecie);
     this.tabs = this.variantsService.supportedAssemblies[this.selectedSpecie];
     this.selectedAssembly = this.tabs[this.selectedIndex];
+
+    this.variantsForm = new FormGroup({
+      name: new FormControl(null, [this.noWhiteSpaceValidator]),
+      region: new FormControl(null, [this.noWhiteSpaceValidator]),
+    });
+    this.variantsForm.patchValue(this.variantSearch);
   }
 
   ngAfterViewInit(): void {
@@ -85,6 +111,10 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.selectedSpecie = this.speciesControl.value;
       this.tabs = this.variantsService.supportedAssemblies[this.selectedSpecie];
       this.selectedAssembly = this.tabs[this.selectedIndex];
+
+      this.variantsForm.reset();
+      this.variantSearch = this.variantsForm.value;
+
       this.tableChanged.next();
 
       this.router.navigate(
@@ -96,7 +126,8 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.tableSubscription = merge(
-      this.tableChanged
+      this.tableChanged,
+      this.formChanged
     ).pipe(
       startWith({}),
       // delay(0) is required to solve the ExpressionChangedAfterItHasBeenCheckedError:
@@ -111,7 +142,8 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
             this.sortActive,
             this.sortDirection,
             this.pageIndex,
-            this.pageSize)
+            this.pageSize,
+            this.variantSearch)
           .pipe(catchError((error) => {
             console.log(error);
             this.uiService.showSnackbar("Error while fetching data. Please, try again later", "Dismiss");
@@ -172,6 +204,26 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.tableChanged.next();
   }
 
+  onSubmit(): void {
+    // copy form values into my private instance of SampleSearch
+    this.variantSearch = this.variantsForm.value;
+    this.pageIndex = 0
+    this.formChanged.next();
+  }
+
+  onReset(): void {
+    this.variantsForm.reset();
+    this.variantSearch = this.variantsForm.value;
+    this.pageIndex = 0;
+    this.formChanged.next();
+    this.router.navigate(
+      ["/variants"],
+      {
+        queryParams: this.getQueryParams()
+      }
+    );
+  }
+
   getQueryParams(): Object {
     interface QueryParams {
       page?: number;
@@ -179,6 +231,8 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
       sort?: string;
       order?: string;
       species?: string;
+      name?: string;
+      region?: string;
     }
 
     let queryParams: QueryParams = {};
@@ -196,6 +250,14 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (this.sortDirection && this.sortActive) {
       queryParams['order'] = this.sortDirection;
+    }
+
+    if (this.variantSearch.name) {
+      queryParams['name'] = this.variantSearch.name;
+    }
+
+    if (this.variantSearch.region) {
+      queryParams['region'] = this.variantSearch.region;
     }
 
     return queryParams;

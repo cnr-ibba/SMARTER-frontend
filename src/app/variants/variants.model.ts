@@ -38,3 +38,8 @@ export interface VariantsAPI {
   size: number;
   total: number;
 }
+
+export interface VariantsSearch {
+  name?: string;
+  region?: string;
+}
