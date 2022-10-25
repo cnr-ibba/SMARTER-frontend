@@ -7,12 +7,12 @@ export interface Location {
   chrom: string;
   position: number;
   alleles?: string;
-  illumina: string;
+  illumina?: string;
   illumina_top: string;
   illumina_forward?: string;
   illumina_strand?: string;
   affymetrix_ab?: string;
-  strand: string;
+  strand?: string;
   imported_from: string;
   date?: JSONObject;
 }

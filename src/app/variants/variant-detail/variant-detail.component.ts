@@ -13,6 +13,7 @@ export class VariantDetailComponent implements OnInit {
   variant!: Variant;
   panelProbesets = false;
   panelSequence = false;
+  panelLocation = false;
 
   constructor(
     private route: ActivatedRoute,
