@@ -2,18 +2,19 @@
 import { JSONObject, ObjectID } from "../shared/shared.model";
 
 export interface Location {
-  ss_id: string;
+  ss_id?: string;
   version: string;
   chrom: string;
   position: number;
-  alleles: string;
+  alleles?: string;
   illumina: string;
   illumina_top: string;
-  illumina_forward: string;
-  illumina_strand: string;
-  affymetrix_ab: string;
+  illumina_forward?: string;
+  illumina_strand?: string;
+  affymetrix_ab?: string;
   strand: string;
   imported_from: string;
+  date?: JSONObject;
 }
 
 export interface Probeset {
@@ -29,9 +30,9 @@ export interface Variant {
   sequence: JSONObject;
   locations: Location[];
   sender: string;
-  probesets: Probeset[];
-  affy_snp_id: string;
-  cust_id: string;
+  probesets?: Probeset[];
+  affy_snp_id?: string;
+  cust_id?: string;
 }
 
 export interface VariantsAPI {
