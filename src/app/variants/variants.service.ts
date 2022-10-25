@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { SortDirection } from '@angular/material/sort';
 import { environment } from 'src/environments/environment';
 
-import { VariantsAPI, VariantsSearch } from './variants.model';
+import { Variant, VariantsAPI, VariantsSearch } from './variants.model';
 
 @Injectable({
   providedIn: 'root'
@@ -61,4 +61,9 @@ export class VariantsService {
         params: params
       });
     }
+
+  getVariant(_id: string, species: string) {
+    const url = environment.backend_url + '/variants/' + species + "/" + _id;
+    return this.http.get<Variant>(url);
+  }
 }

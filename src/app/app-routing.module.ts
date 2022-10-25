@@ -13,6 +13,8 @@ import { SamplesComponent } from './samples/samples.component';
 import { SampleDetailComponent } from './samples/sample-detail/sample-detail.component';
 import { SampleResolver } from './samples/sample-detail/sample-resolver.service';
 import { VariantsComponent } from './variants/variants.component';
+import { VariantDetailComponent } from './variants/variant-detail/variant-detail.component';
+import { VariantResolver } from './variants/variant-detail/variant-resolver.service';
 
 
 const routes: Routes = [
@@ -49,6 +51,12 @@ const routes: Routes = [
     path: 'variants',
     component: VariantsComponent,
     canActivate: [ AuthGuard ],
+  },
+  {
+    path: 'variants/:species/:_id',
+    component: VariantDetailComponent,
+    canActivate: [ AuthGuard ],
+    resolve: { variant: VariantResolver }
   },
   {
     path: 'not-found',
