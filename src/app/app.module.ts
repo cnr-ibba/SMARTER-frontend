@@ -26,6 +26,7 @@ import { SexToStringPipe } from './shared/sex.pipe';
 import { SampleMetadataComponent } from './samples/sample-detail/sample-metadata/sample-metadata.component';
 import { VariantsComponent } from './variants/variants.component';
 import { VariantDetailComponent } from './variants/variant-detail/variant-detail.component';
+import { TextToColumnPipe } from './shared/text-to-column.pipe';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { VariantDetailComponent } from './variants/variant-detail/variant-detail
     SampleMetadataComponent,
     VariantsComponent,
     VariantDetailComponent,
+    TextToColumnPipe,
   ],
   imports: [
     BrowserModule,

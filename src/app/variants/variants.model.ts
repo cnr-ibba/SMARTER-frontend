@@ -16,6 +16,11 @@ export interface Location {
   imported_from: string;
 }
 
+export interface Probeset {
+  chip_name: string;
+  probeset_id: string;
+}
+
 export interface Variant {
   _id: ObjectID;
   rs_id: string[];
@@ -24,7 +29,7 @@ export interface Variant {
   sequence: JSONObject;
   locations: Location[];
   sender: string;
-  probesets: JSONObject[];
+  probesets: Probeset[];
   affy_snp_id: string;
   cust_id: string;
 }
