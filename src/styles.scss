@@ -46,6 +46,10 @@ html, body { height: 100%; }
 
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+.free-text {
+  padding-left: 15px;
+}
+
 h1 {
   color: map_get($my-primary, 500);
 }
