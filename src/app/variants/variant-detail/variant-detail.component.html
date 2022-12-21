@@ -10,6 +10,10 @@
           Chip name: {{ variant.chip_name }}
         </mat-list-item>
 
+        <mat-list-item role="listitem">
+          Illumina TOP: {{ variant.illumina_top }}
+        </mat-list-item>
+
         <mat-list-item role="listitem" *ngIf="variant.sender">
           Sender: {{ variant.sender }}
         </mat-list-item>
@@ -69,7 +73,7 @@
           </mat-expansion-panel-header>
           <mat-card *ngFor="let item of variant.sequence | keyvalue">
             <mat-card-content>
-              <span class="fasta-sequence">>{{ item.key }}</span><br>
+              <span class="fasta-sequence">>{{ item.key }}:{{ variant.name }}</span><br>
               <span class="fasta-sequence" [innerHTML]="item.value | textToColumn"></span>
             </mat-card-content>
           </mat-card>

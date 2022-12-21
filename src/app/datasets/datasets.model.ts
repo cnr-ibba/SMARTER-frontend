@@ -16,6 +16,7 @@ export interface Dataset {
   type: string[];
   contents: string[];
   chip_name: string;
+  doi?: string;
 }
 
 export interface DatasetsAPI {

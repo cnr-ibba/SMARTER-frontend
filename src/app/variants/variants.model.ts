@@ -33,6 +33,7 @@ export interface Variant {
   probesets?: Probeset[];
   affy_snp_id?: string;
   cust_id?: string;
+  illumina_top?: string;
 }
 
 export interface VariantsAPI {
