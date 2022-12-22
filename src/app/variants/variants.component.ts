@@ -91,7 +91,16 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.selectedSpecie = params['species'];
       }
       if (params['name']) {
-        this.variantSearch.name = params['original_id'];
+        this.variantSearch.name = params['namchip_name'];
+      }
+      if (params['chip_name']) {
+        this.variantSearch.chip_name = params['chip_name'];
+      }
+      if (params['rs_id']) {
+        this.variantSearch.rs_id = params['rs_id'];
+      }
+      if (params['probeset_id']) {
+        this.variantSearch.probeset_id = params['probeset_id'];
       }
       if (params['region']) {
         this.variantSearch.region = params['region'];
@@ -107,7 +116,10 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
       region: new FormControl(null, [
         this.noWhiteSpaceValidator,
         this.regionValidator
-      ])
+      ]),
+      chip_name: new FormControl(null, [this.noWhiteSpaceValidator]),
+      rs_id: new FormControl(null, [this.noWhiteSpaceValidator]),
+      probeset_id: new FormControl(null, [this.noWhiteSpaceValidator]),
     });
     this.variantsForm.patchValue(this.variantSearch);
   }
@@ -240,14 +252,12 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getQueryParams(): Object {
-    interface QueryParams {
+    interface QueryParams extends VariantsSearch{
       page?: number;
       size?: number;
       sort?: string;
       order?: string;
       species?: string;
-      name?: string;
-      region?: string;
     }
 
     let queryParams: QueryParams = {};
@@ -269,6 +279,18 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (this.variantSearch.name) {
       queryParams['name'] = this.variantSearch.name;
+    }
+
+    if (this.variantSearch.chip_name) {
+      queryParams['chip_name'] = this.variantSearch.chip_name;
+    }
+
+    if (this.variantSearch.rs_id) {
+      queryParams['rs_id'] = this.variantSearch.rs_id;
+    }
+
+    if (this.variantSearch.probeset_id) {
+      queryParams['probeset_id'] = this.variantSearch.probeset_id;
     }
 
     if (this.variantSearch.region) {

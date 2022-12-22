@@ -49,4 +49,7 @@ export interface VariantsAPI {
 export interface VariantsSearch {
   name?: string;
   region?: string;
+  chip_name?: string;
+  rs_id?: string;
+  probeset_id?: string;
 }

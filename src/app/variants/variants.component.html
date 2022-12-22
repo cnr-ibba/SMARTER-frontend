@@ -13,7 +13,7 @@
   [formGroup]="variantsForm"
   (ngSubmit)="onSubmit()">
     <div fxLayout="row wrap" fxLayoutAlign="center center" fxLayoutGap="20px">
-      <mat-form-field fxFlex="25%">
+      <mat-form-field fxFlex="12%">
         <input
           type="text"
           matInput
@@ -22,7 +22,34 @@
           <mat-error *ngIf="variantsForm.controls['name'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
       </mat-form-field>
 
-      <mat-form-field fxFlex="25%">
+      <mat-form-field fxFlex="12%">
+        <input
+          type="text"
+          matInput
+          placeholder="Chip name"
+          formControlName="chip_name">
+          <mat-error *ngIf="variantsForm.controls['chip_name'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
+      </mat-form-field>
+
+      <mat-form-field fxFlex="12%">
+        <input
+          type="text"
+          matInput
+          placeholder="SNP rsID identifier"
+          formControlName="rs_id">
+          <mat-error *ngIf="variantsForm.controls['rs_id'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
+      </mat-form-field>
+
+      <mat-form-field fxFlex="12%">
+        <input
+          type="text"
+          matInput
+          placeholder="Affymetrix probeset id"
+          formControlName="probeset_id">
+          <mat-error *ngIf="variantsForm.controls['probeset_id'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
+      </mat-form-field>
+
+      <mat-form-field fxFlex="12%">
         <input
           type="text"
           matInput
