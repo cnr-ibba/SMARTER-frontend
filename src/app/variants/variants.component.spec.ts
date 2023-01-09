@@ -61,4 +61,44 @@ describe('testing VariantsComponent', () => {
     expect(testEl.nativeElement.textContent.trim())
       .toEqual('Searching Goat SNPs in ARS1 assembly');
   });
+
+  it('Test noWhiteSpaceValidator with invalid input', () => {
+    const whiteInput = " test";
+
+    component.variantsForm.patchValue({
+      ['name']: whiteInput,
+      ['region']: whiteInput,
+      ['chip_name']: whiteInput,
+      ['rs_id']: whiteInput,
+      ['probeset_id']: whiteInput
+    })
+
+    expect(component.variantsForm.get(["name"])?.hasError("noWhiteSpaces")).toBe(true);
+    expect(component.variantsForm.get(["region"])?.hasError("noWhiteSpaces")).toBe(true);
+    expect(component.variantsForm.get(["chip_name"])?.hasError("noWhiteSpaces")).toBe(true);
+    expect(component.variantsForm.get(["rs_id"])?.hasError("noWhiteSpaces")).toBe(true);
+    expect(component.variantsForm.get(["probeset_id"])?.hasError("noWhiteSpaces")).toBe(true);
+  });
+
+  it('Test regionValidator with valid input', () => {
+    component.variantsForm.patchValue({
+      ['region']: "1"
+    })
+
+    expect(component.variantsForm.get(["region"])?.valid).toBe(true);
+
+    component.variantsForm.patchValue({
+      ['region']: "1:1-10000"
+    })
+
+    expect(component.variantsForm.get(["region"])?.valid).toBe(true);
+  });
+
+  it('Test regionValidator with invalid input', () => {
+    component.variantsForm.patchValue({
+      ['region']: "1:1"
+    })
+
+    expect(component.variantsForm.get(["region"])?.hasError("invalidRegion")).toBe(true);
+  });
 });
