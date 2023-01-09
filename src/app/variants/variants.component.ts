@@ -91,7 +91,7 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.selectedSpecie = params['species'];
       }
       if (params['name']) {
-        this.variantSearch.name = params['namchip_name'];
+        this.variantSearch.name = params['name'];
       }
       if (params['chip_name']) {
         this.variantSearch.chip_name = params['chip_name'];
