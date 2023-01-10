@@ -6,7 +6,7 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { delay, Observable, of } from 'rxjs';
 
 import { MaterialModule } from '../material/material.module';
@@ -20,6 +20,23 @@ describe('testing VariantsComponent', () => {
   let fixture: ComponentFixture<VariantsComponent>;
   let variantsService: VariantsService;
   let variants: VariantsAPI = variantsData;
+
+  // Creates an observable that will be used for testing ActivatedRoute params
+  const paramsMock = new Observable((observer) => {
+    observer.next({
+      species: 'Goat',
+      page: 1,
+      size: 5,
+      sort: 'name',
+      order: 'desc',
+      name: 'foo',
+      chip_name: 'bar',
+      rs_id: 'baz',
+      probeset_id: 'cippa',
+      region: '1:1-10000'
+    });
+    observer.complete();
+  });
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -35,6 +52,7 @@ describe('testing VariantsComponent', () => {
       declarations: [ VariantsComponent ],
       providers: [
         VariantsService,
+        { provide: ActivatedRoute, useValue: { queryParams: paramsMock }}
       ],
       // https://testing-angular.com/testing-components-with-children/#unit-test
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
@@ -110,6 +128,12 @@ describe('testing VariantsComponent', () => {
     expect(variantsService.getVariants).toHaveBeenCalled();
     expect(component.isLoading).toBeFalsy();
     expect(component.resultsLength).toBe(1);
-
   }));
+
+  it('Tries to route to a page', async () => {
+    const testEl = fixture.debugElement.query(By.css('h1'));
+    expect(testEl.nativeElement.textContent.trim())
+      .toEqual('Searching Goat SNPs in ARS1 assembly');
+  });
+
 });
