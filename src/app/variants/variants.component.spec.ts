@@ -25,6 +25,7 @@ describe('testing VariantsComponent', () => {
   const paramsMock = new Observable((observer) => {
     observer.next({
       species: 'Goat',
+      assembly: 'ARS1',
       page: 1,
       size: 5,
       sort: 'name',

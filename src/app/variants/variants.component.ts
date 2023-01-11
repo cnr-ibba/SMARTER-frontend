@@ -105,6 +105,15 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
       if (params['region']) {
         this.variantSearch.region = params['region'];
       }
+      if (params['assembly'] && params['species']) {
+        let assemblies: String[] = this.variantsService.supportedAssemblies[params['species']];
+        this.selectedIndex = assemblies.indexOf(params['assembly']);
+
+        // deal with wrong assemblies with this species
+        if (this.selectedIndex < 0) {
+          this.selectedIndex = 0;
+        }
+      }
     });
 
     this.speciesControl = new FormControl(this.selectedSpecie);
@@ -258,6 +267,7 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
       sort?: string;
       order?: string;
       species?: string;
+      assembly?: string;
     }
 
     let queryParams: QueryParams = {};
@@ -295,6 +305,10 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (this.variantSearch.region) {
       queryParams['region'] = this.variantSearch.region;
+    }
+
+    if (this.selectedAssembly) {
+      queryParams['assembly'] = this.selectedAssembly;
     }
 
     return queryParams;
