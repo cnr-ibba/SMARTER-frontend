@@ -1,0 +1,112 @@
+<div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px">
+  <div fxLayout="row" fxLayout fxLayoutAlign="center center" fxFill>
+    <mat-card fxFlex="75%">
+      <h1>{{ variant.name }}</h1>
+      <h2>id: {{ variant._id.$oid }}</h2>
+
+      <mat-list role="list">
+
+        <mat-list-item role="listitem">
+          Chip name: {{ variant.chip_name }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem">
+          Illumina TOP: {{ variant.illumina_top }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem" *ngIf="variant.sender">
+          Sender: {{ variant.sender }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem" *ngIf="variant.rs_id">
+          rs ID: {{ variant.rs_id }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem" *ngIf="variant.affy_snp_id">
+          Affymetrix SNP ID: {{ variant.affy_snp_id }}
+        </mat-list-item>
+
+        <mat-list-item role="listitem" *ngIf="variant.cust_id">
+          Affymetrix Customer ID: {{ variant.cust_id }}
+        </mat-list-item>
+
+        <mat-expansion-panel
+            [expanded]="panelLocation"
+            (opened)="panelLocation = true"
+            (closed)="panelLocation = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Locations
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <mat-accordion multi>
+            <mat-expansion-panel *ngFor="let location of variant.locations">
+              <mat-expansion-panel-header>
+                <mat-panel-title>Source: {{ location.imported_from }}, Version: {{ location.version }}</mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-card-content>
+                <mat-list-item role="listitem">Chrom: {{ location.chrom }}</mat-list-item>
+                <mat-list-item role="listitem">Position: {{ location.position }}</mat-list-item>
+                <mat-list-item role="listitem" *ngIf="location.illumina">Illumina: {{ location.illumina }}</mat-list-item>
+                <mat-list-item role="listitem">Illumina TOP: {{ location.illumina_top }}</mat-list-item>
+                <mat-list-item role="listitem" *ngIf="location.illumina_forward">Illumina Forward: {{ location.illumina_forward }}</mat-list-item>
+                <mat-list-item role="listitem" *ngIf="location.illumina_strand">Illumina Strand: {{ location.illumina_strand }}</mat-list-item>
+                <mat-list-item role="listitem" *ngIf="location.affymetrix_ab">Affymetrix AB: {{ location.affymetrix_ab }}</mat-list-item>
+                <mat-list-item role="listitem" *ngIf="location.alleles">Alleles: {{ location.alleles }}</mat-list-item>
+                <mat-list-item role="listitem" *ngIf="location.strand">Strand: {{ location.strand }}</mat-list-item>
+                <mat-list-item role="listitem" *ngIf="location.ss_id">ss ID: {{ location.ss_id }}</mat-list-item>
+              </mat-card-content>
+            </mat-expansion-panel>
+          </mat-accordion>
+
+        </mat-expansion-panel>
+
+        <mat-expansion-panel
+            [expanded]="panelSequence"
+            (opened)="panelSequence = true"
+            (closed)="panelSequence = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Sequence probes:
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-card *ngFor="let item of variant.sequence | keyvalue">
+            <mat-card-content>
+              <span class="fasta-sequence">>{{ item.key }}:{{ variant.name }}</span><br>
+              <span class="fasta-sequence" [innerHTML]="item.value | textToColumn"></span>
+            </mat-card-content>
+          </mat-card>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel
+            *ngIf="variant.probesets"
+            [expanded]="panelProbesets"
+            (opened)="panelProbesets = true"
+            (closed)="panelProbesets = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Affymetrix probesets:
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-list-item role="listitem" *ngFor="let item of variant.probesets">
+            Chip name: {{ item.chip_name }}, Probeset ID: {{ item.probeset_id }}
+          </mat-list-item>
+        </mat-expansion-panel>
+
+      </mat-list>
+    </mat-card>
+  </div>
+
+  <div fxLayout="row" fxLayout fxLayoutAlign="center center">
+    <button
+    [style.margin-bottom]="'24px'"
+    type="button"
+    mat-raised-button
+    color="accent"
+    (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon> Back
+    </button>
+  </div>
+
+</div>

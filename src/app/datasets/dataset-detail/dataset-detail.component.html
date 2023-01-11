@@ -55,6 +55,10 @@
           Chip name: {{ dataset.chip_name }}
         </mat-list-item>
 
+        <mat-list-item role="listitem" *ngIf="dataset.doi">
+          Doi:&nbsp;<a href="{{ dataset.doi }}">{{ dataset.doi }}</a>
+        </mat-list-item>
+
         <mat-expansion-panel
             (opened)="panelOpenState = true"
             (closed)="panelOpenState = false">

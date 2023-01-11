@@ -16,6 +16,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatTabsModule } from '@angular/material/tabs';
 
 
 @NgModule({
@@ -35,6 +36,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatButtonToggleModule,
     MatCardModule,
     MatExpansionModule,
+    MatTabsModule,
   ],
   exports: [
     MatSidenavModule,
@@ -52,6 +54,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatButtonToggleModule,
     MatCardModule,
     MatExpansionModule,
+    MatTabsModule,
   ],
 })
 export class MaterialModule { }

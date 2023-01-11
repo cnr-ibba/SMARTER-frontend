@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { Sample, JSONObject, JSONValue } from '../../samples.model';
+import { JSONObject, JSONValue } from 'src/app/shared/shared.model';
 
 interface Link {
   id: JSONValue;

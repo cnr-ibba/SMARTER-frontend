@@ -1,7 +1,4 @@
-
-export interface ObjectID {
-  "$oid": string;
-}
+import { ObjectID } from "../shared/shared.model";
 
 export interface Dataset {
   _id: ObjectID;
@@ -19,6 +16,7 @@ export interface Dataset {
   type: string[];
   contents: string[];
   chip_name: string;
+  doi?: string;
 }
 
 export interface DatasetsAPI {
