@@ -1,15 +1,27 @@
-export interface ObjectID {
-  $oid: string;
-}
+import { JSONObject, ObjectID } from "../shared/shared.model";
 
+export interface Multipoint {
+  coordinates: number[][];
+  type: string;
+}
 export interface Sample {
   _id: ObjectID;
-  original_id: string;
-  smarter_id: string;
-  country: string;
-  species: string;
+  alias: string;
   breed: string;
   breed_code: string;
+  chip_name?: string;
+  country: string;
+  dataset_id: ObjectID;
+  father_id?: ObjectID;
+  locations?: Multipoint;
+  metadata: JSONObject;
+  mother_id?: ObjectID;
+  original_id: string;
+  phenotype: JSONObject;
+  smarter_id: string;
+  species: string;
+  sex?: string;
+  type: string;
 }
 
 export interface SamplesAPI {
@@ -23,7 +35,10 @@ export interface SamplesAPI {
 }
 
 export interface SamplesSearch {
+  smarter_id?: string;
+  original_id?: string;
+  dataset?: string;
   breed?: string;
-  country?: string;
   breed_code?: string;
+  country?: string;
 }

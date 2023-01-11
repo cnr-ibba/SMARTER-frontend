@@ -1,11 +1,13 @@
+
 import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors } from '@angular/forms';
 
 import { merge, of as observableOf, Subscription, Subject } from 'rxjs';
-import { catchError, map, startWith, switchMap } from 'rxjs/operators';
+import { catchError, delay, map, startWith, switchMap } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, SortDirection } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Sample, SamplesSearch } from './samples.model';
 import { SamplesService } from './samples.service';
@@ -18,53 +20,123 @@ import { UIService } from '../shared/ui.service';
   styleUrls: ['./samples.component.scss']
 })
 export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
-  displayedColumns = ['original_id', 'smarter_id', 'breed', 'breed_code', 'country', 'species'];
+  displayedColumns = ['smarter_id', 'original_id', 'breed', 'breed_code', 'country', 'species'];
   dataSource = new MatTableDataSource<Sample>();
   private sortSubscription!: Subscription;
   private mergeSubscription!: Subscription;
   private speciesSubscription!: Subscription;
-  private searchSubscription!: Subscription;
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   resultsLength = 0;
-  isLoading = true;
+  isLoading = false;
   speciesControl!: FormControl;
 
   // control samples query parameters
   samplesForm!: FormGroup;
-  formChanged = new Subject();
-  private samplesSearch: SamplesSearch = {};
+  formChanged = new Subject<void>();
+
+  // track query params
+  pageIndex = 0;
+  pageSize = 10;
+  sortActive = '';
+  sortDirection: SortDirection = "desc";
+  samplesSearch: SamplesSearch = {};
 
   constructor(
     private samplesService: SamplesService,
     private uiService: UIService,
-  ) { }
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
+    this.pageSize = this.samplesService.pageSize;
+  }
+
+  noWhiteSpaceValidator(control: AbstractControl): ValidationErrors | null {
+    if (control.value) {
+      if (control.value.startsWith(" ") || control.value.endsWith(" ")) {
+        return {"noWhiteSpaces": true};
+      }
+    }
+    return null;
+  }
 
   ngOnInit(): void {
-    this.speciesControl = new FormControl(this.samplesService.selectedSpecie);
-    this.samplesForm = new FormGroup({
-      original_id: new FormControl(),
-      smarter_id: new FormControl(),
-      breed: new FormControl(),
-      country: new FormControl(),
-      breed_code: new FormControl(),
+    // get parameters from url
+    this.route.queryParams.subscribe(params => {
+      if (params['page']) {
+        this.pageIndex = +params['page'];
+      }
+      if (params['size']) {
+        this.pageSize = +params['size'];
+      }
+      if (params['sort']) {
+        this.sortActive = params['sort'];
+      }
+      if (params['order']) {
+        this.sortDirection = params['order'];
+      }
+      if (params['species']) {
+        this.samplesService.selectedSpecie = params['species'];
+      }
+      if (params['smarter_id']) {
+        this.samplesSearch.smarter_id = params['smarter_id'];
+      }
+      if (params['original_id']) {
+        this.samplesSearch.original_id = params['original_id'];
+      }
+      if (params['dataset']) {
+        this.samplesSearch.dataset = params['dataset'];
+      }
+      if (params['breed']) {
+        this.samplesSearch.breed = params['breed'];
+      }
+      if (params['breed_code']) {
+        this.samplesSearch.breed_code = params['breed_code'];
+      }
+      if (params['country']) {
+        this.samplesSearch.country = params['country'];
+      }
     });
+
+    this.speciesControl = new FormControl(this.samplesService.selectedSpecie);
+
+    this.samplesForm = new FormGroup({
+      original_id: new FormControl(null, [this.noWhiteSpaceValidator]),
+      smarter_id: new FormControl(null, [this.noWhiteSpaceValidator]),
+      dataset: new FormControl(null, [this.noWhiteSpaceValidator]),
+      breed: new FormControl(null, [this.noWhiteSpaceValidator]),
+      breed_code: new FormControl(null, [this.noWhiteSpaceValidator]),
+      country: new FormControl(null, [this.noWhiteSpaceValidator]),
+    });
+
+    this.samplesForm.patchValue(this.samplesSearch);
   }
 
   ngAfterViewInit() {
+    this.router.navigate(
+      ["/samples"],
+      {
+        queryParams: this.getQueryParams()
+      }
+    );
+
     // If the user changes the sort order, reset back to the first page.
     this.sortSubscription = this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-
-    // the same applies when user start searching stuff
-    this.searchSubscription = this.formChanged.subscribe(() => this.paginator.pageIndex = 0);
 
     // reset pagination and forms
     this.speciesSubscription = this.speciesControl.valueChanges.subscribe(() => {
       this.paginator.pageIndex = 0;
-      this.onReset()
       this.samplesService.selectedSpecie = this.speciesControl.value;
+      this.samplesForm.reset();
+      this.samplesSearch = this.samplesForm.value;
+      this.router.navigate(
+        ["/samples"],
+        {
+          queryParams: this.getQueryParams()
+        }
+      );
     });
 
     this.mergeSubscription = merge(
@@ -74,13 +146,23 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
       this.formChanged
       ).pipe(
         startWith({}),
-        switchMap((inputData) => {
+        // delay(0) is required to solve the ExpressionChangedAfterItHasBeenCheckedError:
+        // Expression has changed after it was checked. See https://blog.angular-university.io/angular-debugging/
+        delay(0),
+        switchMap(() => {
           this.isLoading = true;
+
+          // update values
+          this.sortActive = this.sort.active;
+          this.sortDirection = this.sort.direction;
+          this.pageIndex = this.paginator.pageIndex;
+          this.pageSize = this.paginator.pageSize;
+
           return this.samplesService.getSamples(
-              this.sort.active,
-              this.sort.direction,
-              this.paginator.pageIndex,
-              this.paginator.pageSize,
+              this.sortActive,
+              this.sortDirection,
+              this.pageIndex,
+              this.pageSize,
               this.samplesSearch)
             .pipe(catchError((error) => {
               console.log(error);
@@ -90,6 +172,13 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
           );
         }),
         map(data => {
+          this.router.navigate(
+            ["/samples"],
+            {
+              queryParams: this.getQueryParams()
+            }
+          );
+
           // Flip flag to show that loading has finished.
           this.isLoading = false;
 
@@ -109,13 +198,80 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
   onSubmit() {
     // copy form values into my private instance of SampleSearch
     this.samplesSearch = this.samplesForm.value;
+    this.paginator.pageIndex = 0
     this.formChanged.next();
   }
 
-  onReset() {
+  onReset(): void {
     this.samplesForm.reset();
-    this.samplesSearch = {};
+    this.samplesSearch = this.samplesForm.value;
+    this.paginator.pageIndex = 0;
     this.formChanged.next();
+    this.router.navigate(
+      ["/samples"],
+      {
+        queryParams: this.getQueryParams()
+      }
+    );
+  }
+
+  getQueryParams(): Object {
+    interface QueryParams {
+      page?: number;
+      size?: number;
+      sort?: string;
+      order?: string;
+      species?: string;
+      smarter_id?: string;
+      original_id?: string;
+      dataset?: string;
+      breed?: string;
+      breed_code?: string;
+      country?: string;
+    }
+
+    let queryParams: QueryParams = {};
+
+    // this value is always defined
+    queryParams['species'] = this.samplesService.selectedSpecie;
+
+    if (this.pageIndex) {
+      queryParams['page'] = this.pageIndex;
+    }
+
+    if (this.sortActive) {
+      queryParams['sort'] = this.sortActive;
+    }
+
+    if (this.sortDirection && this.sortActive) {
+      queryParams['order'] = this.sortDirection;
+    }
+
+    if (this.samplesSearch.smarter_id) {
+      queryParams['smarter_id'] = this.samplesSearch.smarter_id;
+    }
+
+    if (this.samplesSearch.original_id) {
+      queryParams['original_id'] = this.samplesSearch.original_id;
+    }
+
+    if (this.samplesSearch.dataset) {
+      queryParams['dataset'] = this.samplesSearch.dataset;
+    }
+
+    if (this.samplesSearch.breed) {
+      queryParams['breed'] = this.samplesSearch.breed;
+    }
+
+    if (this.samplesSearch.breed_code) {
+      queryParams['breed_code'] = this.samplesSearch.breed_code;
+    }
+
+    if (this.samplesSearch.country) {
+      queryParams['country'] = this.samplesSearch.country;
+    }
+
+    return queryParams;
   }
 
   ngOnDestroy() {

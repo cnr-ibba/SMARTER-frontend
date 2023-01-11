@@ -1,0 +1,57 @@
+{
+    "items": [
+        {
+            "_id": {
+                "$oid": "62a108f17e6eac7556b168a8"
+            },
+            "affy_snp_id": "Affx-122855459",
+            "chip_name": [
+                "IlluminaOvineSNP50",
+                "AffymetrixAxiomBGovisNP",
+                "AffymetrixAxiomBGovis2"
+            ],
+            "locations": [
+                {
+                    "alleles": "C/T",
+                    "chrom": "15",
+                    "illumina": "T/C",
+                    "illumina_forward": "T/C",
+                    "illumina_strand": "bottom",
+                    "illumina_top": "A/G",
+                    "imported_from": "SNPchiMp v.3",
+                    "position": 5870057,
+                    "ss_id": "ss836318713",
+                    "strand": "forward",
+                    "version": "Oar_v3.1"
+                }
+            ],
+            "name": "250506CS3900065000002_1238.1",
+            "probesets": [
+                {
+                    "chip_name": "AffymetrixAxiomBGovisNP",
+                    "probeset_id": [
+                        "AX-123186379"
+                    ]
+                },
+                {
+                    "chip_name": "AffymetrixAxiomBGovis2",
+                    "probeset_id": [
+                        "AX-123186379"
+                    ]
+                }
+            ],
+            "rs_id": [
+                "rs55630613"
+            ],
+            "sequence": {
+                "AffymetrixAxiomBGovis2": "TATTTGGGTCTTCTCTCAACTTCTCTTCTTCTCCC[C/T]TGCTGAGGAGGAGGCACTTTCAGATGTATTATGTT",
+                "AffymetrixAxiomBGovisNP": "TATTTGGGTCTTCTCTCAACTTCTCTTCTTCTCCC[C/T]TGCTGAGGAGGAGGCACTTTCAGATGTATTATGTT",
+                "IlluminaOvineSNP50": "NNNNNNNNNNNNNNNNCTGCTTCCGTATTTGGGTCTTCTCTCAACTTCTCTTCTTCTCCC[T/C]TGCTGAGGAGGAGGCACTTTCAGATGTATTATGTTAATGGAGAGAAAAAGCATAATATTG"
+            }
+        }
+    ],
+    "page": 1,
+    "pages": 1,
+    "size": 10,
+    "total": 1
+}

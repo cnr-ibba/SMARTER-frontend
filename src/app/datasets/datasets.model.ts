@@ -1,15 +1,22 @@
-
-export interface ObjectID {
-  "$oid": string;
-}
+import { ObjectID } from "../shared/shared.model";
 
 export interface Dataset {
   _id: ObjectID;
+  file: string;
+  uploader: string;
+  size: string;
+  partner: string;
+  country: string;
   species: string;
   breed: string;
-  country: string;
-  file: string;
+  n_of_individuals: number;
+  n_of_records?: number;
+  trait?: string;
+  gene_array: string;
   type: string[];
+  contents: string[];
+  chip_name: string;
+  doi?: string;
 }
 
 export interface DatasetsAPI {

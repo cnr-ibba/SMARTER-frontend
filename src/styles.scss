@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-@use '~@angular/material' as mat;
+@use '@angular/material' as mat;
 
 @include mat.core();
 
@@ -10,17 +10,46 @@ $my-accent: mat.define-palette(mat.$orange-palette, A200, A100, A400);
 // The "warn" palette is optional and defaults to red if not specified.
 $my-warn: mat.define-palette(mat.$red-palette);
 
+// A mixin to deal with mat-row hover
+// https://github.com/angular/components/issues/8204
+@mixin mat-table-hover($is-dark) {
+  mat-row {
+    @if $is-dark {
+      &:hover {
+        background: rgba(255, 255, 255, 0.04);
+      }
+    }
+    @else {
+      &:hover {
+        background: rgba(0, 0, 0, 0.04);
+      }
+    }
+  }
+}
+
 // define the light theme
 $my-theme: mat.define-light-theme((
- color: (
-   primary: $my-primary,
-   accent: $my-accent,
-   warn: $my-warn,
- )
+  color: (
+    primary: $my-primary,
+    accent: $my-accent,
+    warn: $my-warn,
+  )
 ));
 
 // includes styles for all components in the library
 @include mat.all-component-themes($my-theme);
 
+// include custom mixins
+@include mat-table-hover(false);
+
 html, body { height: 100%; }
+
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.free-text {
+  padding-left: 15px;
+}
+
+h1 {
+  color: map_get($my-primary, 500);
+}

@@ -11,6 +11,7 @@ import { BreedsAPI } from './breeds.model';
 })
 export class BreedsService {
   selectedSpecie = "Sheep";
+  pageSize = 10;
 
   constructor(
     private http: HttpClient,
@@ -29,6 +30,7 @@ export class BreedsService {
 
     if (size) {
       params = params.append('size', size);
+      this.pageSize = size;
     }
 
     if (sort) {
