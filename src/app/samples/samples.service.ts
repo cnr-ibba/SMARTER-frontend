@@ -13,7 +13,7 @@ import { forkJoin, Observable } from 'rxjs';
 })
 export class SamplesService {
   selectedSpecie = "Sheep";
-  countries: Country[] = [];
+  countries: string[] = [];
   pageSize = 10;
 
   constructor(
@@ -56,7 +56,13 @@ export class SamplesService {
   }
 
   getCountries(): void {
-    let params = new HttpParams().set('species', this.selectedSpecie);
+    let params = new HttpParams()
+      .set('species', this.selectedSpecie)
+      .set('size', 25);
+
+    // console.log("Getting countries for ", this.selectedSpecie);
+
+    this.countries = [];
 
     //make the first request
     this.http.get<CountriesAPI>(
@@ -65,7 +71,7 @@ export class SamplesService {
       }).subscribe(firstPage => {
         // read first page items
         firstPage.items.forEach((country: Country) => {
-          this.countries.push(country);
+          this.countries.push(country.name);
         });
 
         // now create an array of observables
@@ -81,7 +87,7 @@ export class SamplesService {
         forkJoin(requests).subscribe(results => {
           results.forEach((page: CountriesAPI) => {
             page.items.forEach((country: Country) => {
-              this.countries.push(country);
+              this.countries.push(country.name);
             })
           })
         });

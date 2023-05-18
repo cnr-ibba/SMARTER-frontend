@@ -1,15 +1,15 @@
 
-import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy, AfterContentInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors } from '@angular/forms';
 
-import { merge, of as observableOf, Subscription, Subject } from 'rxjs';
+import { merge, of as observableOf, Subscription, Subject, Observable } from 'rxjs';
 import { catchError, delay, map, startWith, switchMap } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, SortDirection } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Sample, SamplesSearch } from './samples.model';
+import { Sample, SamplesSearch, Country } from './samples.model';
 import { SamplesService } from './samples.service';
 import { UIService } from '../shared/ui.service';
 
@@ -19,7 +19,7 @@ import { UIService } from '../shared/ui.service';
   templateUrl: './samples.component.html',
   styleUrls: ['./samples.component.scss']
 })
-export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
+export class SamplesComponent implements OnInit, AfterViewInit, AfterContentInit, OnDestroy {
   displayedColumns = ['smarter_id', 'original_id', 'breed', 'breed_code', 'country', 'species'];
   dataSource = new MatTableDataSource<Sample>();
   private sortSubscription!: Subscription;
@@ -43,6 +43,9 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
   sortActive = '';
   sortDirection: SortDirection = "desc";
   samplesSearch: SamplesSearch = {};
+
+  // used by autocomplete forms
+  filteredCountries!: Observable<string[]>;
 
   constructor(
     private samplesService: SamplesService,
@@ -112,9 +115,6 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.samplesForm.patchValue(this.samplesSearch);
-
-    // get all countries
-    this.samplesService.getCountries();
   }
 
   ngAfterViewInit() {
@@ -124,6 +124,9 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
         queryParams: this.getQueryParams()
       }
     );
+
+    // get all countries
+    this.samplesService.getCountries();
 
     // If the user changes the sort order, reset back to the first page.
     this.sortSubscription = this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
@@ -140,6 +143,8 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
           queryParams: this.getQueryParams()
         }
       );
+      // reload countries
+      this.samplesService.getCountries();
     });
 
     this.mergeSubscription = merge(
@@ -196,6 +201,13 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
           return data.items;
         })
       ).subscribe(data => this.dataSource.data = data);
+  }
+
+  ngAfterContentInit(): void {
+    this.filteredCountries = this.samplesForm.controls['country'].valueChanges.pipe(
+      startWith(''),
+      map(value => this._filterCountry(value || '')),
+    );
   }
 
   onSubmit() {
@@ -275,6 +287,12 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     return queryParams;
+  }
+
+  private _filterCountry(value: string): string[] {
+    // console.log(this.samplesService.countries);
+    const filterValue = value.toLowerCase();
+    return this.samplesService.countries.filter(country => country.toLowerCase().includes(filterValue));
   }
 
   ngOnDestroy() {

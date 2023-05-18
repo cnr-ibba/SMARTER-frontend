@@ -63,9 +63,16 @@
         <input
           type="text"
           matInput
+          aria-label="Country"
           placeholder="Country"
+          [matAutocomplete]="auto_country"
           formControlName="country">
-          <mat-error *ngIf="samplesForm.controls['country'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
+          <mat-autocomplete #auto_country="matAutocomplete">
+            <mat-option *ngFor="let option of filteredCountries | async" [value]="option">
+              {{option}}
+            </mat-option>
+          </mat-autocomplete>
+        <mat-error *ngIf="samplesForm.controls['country'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
       </mat-form-field>
     </div>
 

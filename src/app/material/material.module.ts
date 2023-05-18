@@ -17,6 +17,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatCardModule,
     MatExpansionModule,
     MatTabsModule,
+    MatAutocompleteModule,
   ],
   exports: [
     MatSidenavModule,
@@ -55,6 +57,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatCardModule,
     MatExpansionModule,
     MatTabsModule,
+    MatAutocompleteModule,
   ],
 })
 export class MaterialModule { }
