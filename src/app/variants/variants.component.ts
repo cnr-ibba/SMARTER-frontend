@@ -62,7 +62,7 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   regionValidator(control: AbstractControl): ValidationErrors | null {
     const chrom_pattern = new RegExp('^[a-zA-Z0-9_]+$');
-    const region_pattern = new RegExp('^[a-zA-Z0-9_]:[0-9]+-[0-9]+$')
+    const region_pattern = new RegExp('^[a-zA-Z0-9_]+:[0-9]+-[0-9]+$')
 
     if (control.value) {
       if (!chrom_pattern.test(control.value) && !region_pattern.test(control.value)) {
