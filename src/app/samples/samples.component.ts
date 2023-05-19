@@ -1,5 +1,5 @@
 
-import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy, AfterContentInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors } from '@angular/forms';
 
 import { merge, of as observableOf, Subscription, Subject, Observable } from 'rxjs';
@@ -19,7 +19,7 @@ import { UIService } from '../shared/ui.service';
   templateUrl: './samples.component.html',
   styleUrls: ['./samples.component.scss']
 })
-export class SamplesComponent implements OnInit, AfterViewInit, AfterContentInit, OnDestroy {
+export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns = ['smarter_id', 'original_id', 'breed', 'breed_code', 'country', 'species'];
   dataSource = new MatTableDataSource<Sample>();
   private sortSubscription!: Subscription;
@@ -117,6 +117,25 @@ export class SamplesComponent implements OnInit, AfterViewInit, AfterContentInit
     });
 
     this.samplesForm.patchValue(this.samplesSearch);
+
+    // get all countries and breeds
+    this.samplesService.getCountries();
+    this.samplesService.getBreeds();
+
+    this.filteredCountries = this.samplesForm.controls['country'].valueChanges.pipe(
+      startWith(''),
+      map(value => this._filterCountry(value || '')),
+    );
+
+    this.filteredBreeds = this.samplesForm.controls['breed'].valueChanges.pipe(
+      startWith(''),
+      map(value => this._filterBreed(value || '')),
+    );
+
+    this.filteredCodes = this.samplesForm.controls['breed_code'].valueChanges.pipe(
+      startWith(''),
+      map(value => this._filterCode(value || '')),
+    );
   }
 
   ngAfterViewInit() {
@@ -127,17 +146,20 @@ export class SamplesComponent implements OnInit, AfterViewInit, AfterContentInit
       }
     );
 
-    // get all countries and breeds
-    this.samplesService.getCountries();
-    this.samplesService.getBreeds();
-
     // If the user changes the sort order, reset back to the first page.
     this.sortSubscription = this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
     // reset pagination and forms
     this.speciesSubscription = this.speciesControl.valueChanges.subscribe(() => {
-      this.paginator.pageIndex = 0;
+      // reset specie in services
       this.samplesService.selectedSpecie = this.speciesControl.value;
+
+      // reload countries and breeds
+      this.samplesService.getCountries();
+      this.samplesService.getBreeds();
+
+      // reset page stuff and navigation
+      this.paginator.pageIndex = 0;
       this.samplesForm.reset();
       this.samplesSearch = this.samplesForm.value;
       this.router.navigate(
@@ -146,9 +168,6 @@ export class SamplesComponent implements OnInit, AfterViewInit, AfterContentInit
           queryParams: this.getQueryParams()
         }
       );
-      // reload countries and breeds
-      this.samplesService.getCountries();
-      this.samplesService.getBreeds();
     });
 
     this.mergeSubscription = merge(
@@ -205,23 +224,6 @@ export class SamplesComponent implements OnInit, AfterViewInit, AfterContentInit
           return data.items;
         })
       ).subscribe(data => this.dataSource.data = data);
-  }
-
-  ngAfterContentInit(): void {
-    this.filteredCountries = this.samplesForm.controls['country'].valueChanges.pipe(
-      startWith(''),
-      map(value => this._filterCountry(value || '')),
-    );
-
-    this.filteredBreeds = this.samplesForm.controls['breed'].valueChanges.pipe(
-      startWith(''),
-      map(value => this._filterBreed(value || '')),
-    );
-
-    this.filteredCodes = this.samplesForm.controls['breed_code'].valueChanges.pipe(
-      startWith(''),
-      map(value => this._filterCode(value || '')),
-    );
   }
 
   onSubmit() {
