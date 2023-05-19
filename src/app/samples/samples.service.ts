@@ -2,19 +2,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { SortDirection } from '@angular/material/sort';
+import { forkJoin, Observable } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 
+import { Breed, BreedsAPI } from '../breeds/breeds.model';
 import { Sample, SamplesAPI, SamplesSearch, CountriesAPI, Country } from './samples.model';
-import { forkJoin, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SamplesService {
   selectedSpecie = "Sheep";
-  countries: string[] = [];
   pageSize = 10;
+  countries: string[] = [];
+  breeds: string[] = [];
+  breed_codes: string[] = [];
 
   constructor(
     private http: HttpClient,
@@ -88,6 +91,48 @@ export class SamplesService {
           results.forEach((page: CountriesAPI) => {
             page.items.forEach((country: Country) => {
               this.countries.push(country.name);
+            })
+          })
+        });
+      });
+  }
+
+  getBreeds(): void {
+    let params = new HttpParams()
+      .set('species', this.selectedSpecie)
+      .set('size', 25);
+
+    // console.log("Getting breeds for ", this.selectedSpecie);
+
+    this.breeds = [];
+    this.breed_codes = [];
+
+    //make the first request
+    this.http.get<BreedsAPI>(
+      environment.backend_url + '/breeds', {
+        params: params
+      }).subscribe(firstPage => {
+        // read first page items
+        firstPage.items.forEach((breed: Breed) => {
+          this.breeds.push(breed.name);
+          this.breed_codes.push(breed.code);
+        });
+
+        // now create an array of observables
+        let requests: Observable<BreedsAPI>[] = [];
+
+        // next create an HttpResponse observable for each page
+        for (let index = 2; index <= firstPage.pages; index++) {
+          params = params.set('page', index);
+          requests.push(this.http.get<BreedsAPI>( environment.backend_url + '/breeds', {params: params}));
+        }
+
+        // now execute all the requests in parallel. Then subscribe
+        forkJoin(requests).subscribe(results => {
+          results.forEach((page: BreedsAPI) => {
+            page.items.forEach((breed: Breed) => {
+              this.breeds.push(breed.name);
+              this.breed_codes.push(breed.code);
             })
           })
         });

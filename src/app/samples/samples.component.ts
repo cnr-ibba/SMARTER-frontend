@@ -46,6 +46,8 @@ export class SamplesComponent implements OnInit, AfterViewInit, AfterContentInit
 
   // used by autocomplete forms
   filteredCountries!: Observable<string[]>;
+  filteredBreeds!: Observable<string[]>;
+  filteredCodes!: Observable<string[]>;
 
   constructor(
     private samplesService: SamplesService,
@@ -125,8 +127,9 @@ export class SamplesComponent implements OnInit, AfterViewInit, AfterContentInit
       }
     );
 
-    // get all countries
+    // get all countries and breeds
     this.samplesService.getCountries();
+    this.samplesService.getBreeds();
 
     // If the user changes the sort order, reset back to the first page.
     this.sortSubscription = this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
@@ -143,8 +146,9 @@ export class SamplesComponent implements OnInit, AfterViewInit, AfterContentInit
           queryParams: this.getQueryParams()
         }
       );
-      // reload countries
+      // reload countries and breeds
       this.samplesService.getCountries();
+      this.samplesService.getBreeds();
     });
 
     this.mergeSubscription = merge(
@@ -207,6 +211,16 @@ export class SamplesComponent implements OnInit, AfterViewInit, AfterContentInit
     this.filteredCountries = this.samplesForm.controls['country'].valueChanges.pipe(
       startWith(''),
       map(value => this._filterCountry(value || '')),
+    );
+
+    this.filteredBreeds = this.samplesForm.controls['breed'].valueChanges.pipe(
+      startWith(''),
+      map(value => this._filterBreed(value || '')),
+    );
+
+    this.filteredCodes = this.samplesForm.controls['breed_code'].valueChanges.pipe(
+      startWith(''),
+      map(value => this._filterCode(value || '')),
     );
   }
 
@@ -293,6 +307,18 @@ export class SamplesComponent implements OnInit, AfterViewInit, AfterContentInit
     // console.log(this.samplesService.countries);
     const filterValue = value.toLowerCase();
     return this.samplesService.countries.filter(country => country.toLowerCase().includes(filterValue));
+  }
+
+  private _filterBreed(value: string): string[] {
+    // console.log(this.samplesService.breeds);
+    const filterValue = value.toLowerCase();
+    return this.samplesService.breeds.filter(breed => breed.toLowerCase().includes(filterValue));
+  }
+
+  private _filterCode(value: string): string[] {
+    // console.log(this.samplesService.breed_codes);
+    const filterValue = value.toLowerCase();
+    return this.samplesService.breed_codes.filter(code => code.toLowerCase().includes(filterValue));
   }
 
   ngOnDestroy() {
