@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { SortDirection } from '@angular/material/sort';
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin, Observable, Subject } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 
@@ -18,6 +18,10 @@ export class SamplesService {
   countries: string[] = [];
   breeds: string[] = [];
   breed_codes: string[] = [];
+
+  // notify that something has happened
+  countryStateChanged = new Subject<void>();
+  breedStateChanged = new Subject<void>();
 
   constructor(
     private http: HttpClient,
@@ -77,6 +81,9 @@ export class SamplesService {
           this.countries.push(country.name);
         });
 
+        // inform that a new page has been processed
+        this.countryStateChanged.next();
+
         // now create an array of observables
         let requests: Observable<CountriesAPI>[] = [];
 
@@ -91,8 +98,11 @@ export class SamplesService {
           results.forEach((page: CountriesAPI) => {
             page.items.forEach((country: Country) => {
               this.countries.push(country.name);
-            })
-          })
+            });
+          });
+
+          // inform that a new page has been processed
+          this.countryStateChanged.next();
         });
       });
   }
@@ -118,6 +128,9 @@ export class SamplesService {
           this.breed_codes.push(breed.code);
         });
 
+        // inform that a new page has been processed
+        this.breedStateChanged.next();
+
         // now create an array of observables
         let requests: Observable<BreedsAPI>[] = [];
 
@@ -133,8 +146,11 @@ export class SamplesService {
             page.items.forEach((breed: Breed) => {
               this.breeds.push(breed.name);
               this.breed_codes.push(breed.code);
-            })
-          })
+            });
+          });
+
+          // inform that a new page has been processed
+          this.breedStateChanged.next();
         });
       });
   }

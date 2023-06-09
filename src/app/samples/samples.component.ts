@@ -25,6 +25,8 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
   private sortSubscription!: Subscription;
   private mergeSubscription!: Subscription;
   private speciesSubscription!: Subscription;
+  private countryStateSubscription!: Subscription;
+  private breedStateSubscription!: Subscription;
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -121,21 +123,6 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
     // get all countries and breeds
     this.samplesService.getCountries();
     this.samplesService.getBreeds();
-
-    this.filteredCountries = this.samplesForm.controls['country'].valueChanges.pipe(
-      startWith(''),
-      map(value => this._filterCountry(value || '')),
-    );
-
-    this.filteredBreeds = this.samplesForm.controls['breed'].valueChanges.pipe(
-      startWith(''),
-      map(value => this._filterBreed(value || '')),
-    );
-
-    this.filteredCodes = this.samplesForm.controls['breed_code'].valueChanges.pipe(
-      startWith(''),
-      map(value => this._filterCode(value || '')),
-    );
   }
 
   ngAfterViewInit() {
@@ -224,6 +211,26 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
           return data.items;
         })
       ).subscribe(data => this.dataSource.data = data);
+
+    // subscribe to see when request are performed by the server
+    this.countryStateSubscription = this.samplesService.countryStateChanged.subscribe(() => {
+      this.filteredCountries = this.samplesForm.controls['country'].valueChanges.pipe(
+        startWith(''),
+        map(value => this._filterCountry(value || '')),
+      );
+    });
+
+    this.breedStateSubscription = this.samplesService.breedStateChanged.subscribe(() => {
+      this.filteredBreeds = this.samplesForm.controls['breed'].valueChanges.pipe(
+        startWith(''),
+        map(value => this._filterBreed(value || '')),
+      );
+
+      this.filteredCodes = this.samplesForm.controls['breed_code'].valueChanges.pipe(
+        startWith(''),
+        map(value => this._filterCode(value || '')),
+      );
+    });
   }
 
   onSubmit() {
@@ -327,6 +334,8 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sortSubscription.unsubscribe();
     this.mergeSubscription.unsubscribe();
     this.speciesSubscription.unsubscribe();
+    this.countryStateSubscription.unsubscribe();
+    this.breedStateSubscription.unsubscribe();
   }
 
 }

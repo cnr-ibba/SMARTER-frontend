@@ -21,6 +21,7 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
   dataSource = new MatTableDataSource<Variant>();
   private tableSubscription!: Subscription;
   private speciesSubscription!: Subscription;
+  private chipsStateSubscription!: Subscription;
 
   resultsLength = 0;
   isLoading = false;
@@ -137,12 +138,6 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // get all supported chips
     this.variantsService.getSupportedChips(this.selectedSpecie);
-
-    // filter chip names
-    this.filteredChips = this.variantsForm.controls['chip_name'].valueChanges.pipe(
-      startWith(''),
-      map(value => this._filterChips(value || '')),
-    );
   }
 
   ngAfterViewInit(): void {
@@ -225,6 +220,15 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
       })
     ).subscribe(data => {
       this.dataSource.data = data
+    });
+
+    // subscribe to see when request are performed by the server
+    this.chipsStateSubscription = this.variantsService.chipsStateChanged.subscribe(() => {
+      // filter chip names
+      this.filteredChips = this.variantsForm.controls['chip_name'].valueChanges.pipe(
+        startWith(''),
+        map(value => this._filterChips(value || '')),
+      );
     });
   }
 
@@ -331,6 +335,7 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private _filterChips(value: string): string[] {
     // console.log(this.variantsService.supportedChips);
+    // console.log(`value: '${value}'`)
     const filterValue = value.toLowerCase();
     return this.variantsService.supportedChips.filter(chip => chip.toLowerCase().includes(filterValue));
   }
@@ -338,5 +343,6 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.speciesSubscription.unsubscribe();
     this.tableSubscription.unsubscribe();
+    this.chipsStateSubscription.unsubscribe();
   }
 }
