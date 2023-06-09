@@ -4,7 +4,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { Sort, SortDirection } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of as observableOf, merge, Subject, Subscription } from 'rxjs';
+import { of as observableOf, merge, Subject, Subscription, Observable } from 'rxjs';
 import { catchError, switchMap, map, startWith, delay } from 'rxjs/operators';
 
 import { UIService } from '../shared/ui.service';
@@ -41,6 +41,9 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
   sortActive = '';
   sortDirection: SortDirection = "";
   variantSearch: VariantsSearch = {};
+
+  // used by autocomplete forms
+  filteredChips!: Observable<string[]>;
 
   constructor(
     private variantsService: VariantsService,
@@ -131,6 +134,15 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
       probeset_id: new FormControl(null, [this.noWhiteSpaceValidator]),
     });
     this.variantsForm.patchValue(this.variantSearch);
+
+    // get all supported chips
+    this.variantsService.getSupportedChips(this.selectedSpecie);
+
+    // filter chip names
+    this.filteredChips = this.variantsForm.controls['chip_name'].valueChanges.pipe(
+      startWith(''),
+      map(value => this._filterChips(value || '')),
+    );
   }
 
   ngAfterViewInit(): void {
@@ -147,6 +159,9 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.selectedSpecie = this.speciesControl.value;
       this.tabs = this.variantsService.supportedAssemblies[this.selectedSpecie];
       this.selectedAssembly = this.tabs[this.selectedIndex];
+
+      // reload chips
+      this.variantsService.getSupportedChips(this.selectedSpecie);
 
       this.variantsForm.reset();
       this.variantSearch = this.variantsForm.value;
@@ -312,6 +327,12 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     return queryParams;
+  }
+
+  private _filterChips(value: string): string[] {
+    // console.log(this.variantsService.supportedChips);
+    const filterValue = value.toLowerCase();
+    return this.variantsService.supportedChips.filter(chip => chip.toLowerCase().includes(filterValue));
   }
 
   ngOnDestroy(): void {

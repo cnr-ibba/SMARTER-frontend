@@ -53,3 +53,21 @@ export interface VariantsSearch {
   rs_id?: string;
   probeset_id?: string;
 }
+
+export interface SupportedChip {
+  _id: ObjectID;
+  manifacturer?: string;
+  n_of_snps?: number;
+  name: string;
+  species: string;
+}
+
+export interface SupportedChipsAPI {
+  items: SupportedChip[];
+  next?: string;
+  page: number;
+  pages: number;
+  prev?: string;
+  size: number;
+  total: number;
+}

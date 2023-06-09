@@ -19,16 +19,23 @@
           matInput
           placeholder="SNP name"
           formControlName="name">
-          <mat-error *ngIf="variantsForm.controls['name'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
+        <mat-error *ngIf="variantsForm.controls['name'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
       </mat-form-field>
 
       <mat-form-field fxFlex="12%">
         <input
           type="text"
           matInput
+          aria-label="Chip name"
           placeholder="Chip name"
+          [matAutocomplete]="auto_chip"
           formControlName="chip_name">
-          <mat-error *ngIf="variantsForm.controls['chip_name'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
+          <mat-autocomplete #auto_chip="matAutocomplete">
+            <mat-option *ngFor="let option of filteredChips | async" [value]="option">
+              {{option}}
+            </mat-option>
+          </mat-autocomplete>
+        <mat-error *ngIf="variantsForm.controls['chip_name'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
       </mat-form-field>
 
       <mat-form-field fxFlex="12%">
@@ -37,7 +44,7 @@
           matInput
           placeholder="SNP rsID identifier"
           formControlName="rs_id">
-          <mat-error *ngIf="variantsForm.controls['rs_id'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
+        <mat-error *ngIf="variantsForm.controls['rs_id'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
       </mat-form-field>
 
       <mat-form-field fxFlex="12%">
@@ -46,7 +53,7 @@
           matInput
           placeholder="Affymetrix probeset id"
           formControlName="probeset_id">
-          <mat-error *ngIf="variantsForm.controls['probeset_id'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
+        <mat-error *ngIf="variantsForm.controls['probeset_id'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
       </mat-form-field>
 
       <mat-form-field fxFlex="12%">
@@ -55,8 +62,8 @@
           matInput
           placeholder="<chrom>:<start>-<end> or <chrom>"
           formControlName="region">
-          <mat-error *ngIf="variantsForm.controls['region'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
-          <mat-error *ngIf="variantsForm.controls['region'].errors?.['invalidRegion']">Invalid region!</mat-error>
+        <mat-error *ngIf="variantsForm.controls['region'].errors?.['noWhiteSpaces']">No white spaces around fields are allowed!</mat-error>
+        <mat-error *ngIf="variantsForm.controls['region'].errors?.['invalidRegion']">Invalid region!</mat-error>
       </mat-form-field>
     </div>
 
