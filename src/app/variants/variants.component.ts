@@ -336,6 +336,14 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
   private _filterChips(value: string): string[] {
     // console.log(this.variantsService.supportedChips);
     // console.log(`value: '${value}'`)
+
+    // remove WholeGenomeSequencing from suggested values
+    const index = this.variantsService.supportedChips.indexOf("WholeGenomeSequencing", 0);
+
+    if (index > -1) {
+      this.variantsService.supportedChips.splice(index, 1);
+    }
+
     const filterValue = value.toLowerCase();
     return this.variantsService.supportedChips.filter(chip => chip.toLowerCase().includes(filterValue));
   }
