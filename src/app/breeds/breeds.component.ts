@@ -14,7 +14,7 @@ import { PaginationParams } from '../shared/shared.model';
 
 interface QueryParams extends PaginationParams {
   species?: string;
-  searchValue?: string;
+  search?: string;
 }
 
 @Component({
@@ -178,7 +178,7 @@ export class BreedsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.pageIndex ? queryParams['page'] = this.pageIndex : null;
     this.sortActive ? queryParams['sort'] = this.sortActive : null;
     this.sortDirection && this.sortActive ? queryParams['order'] = this.sortDirection : null;
-    this.searchValue ? queryParams['searchValue'] = this.searchValue : null;
+    this.searchValue ? queryParams['search'] = this.searchValue : null;
 
     return queryParams;
   }
