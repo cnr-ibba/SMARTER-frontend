@@ -12,7 +12,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Sample, SamplesSearch, Country } from './samples.model';
 import { SamplesService } from './samples.service';
 import { UIService } from '../shared/ui.service';
+import { PaginationParams } from '../shared/shared.model';
 
+interface QueryParams extends PaginationParams {
+  species?: string;
+  smarter_id?: string;
+  original_id?: string;
+  dataset?: string;
+  breed?: string;
+  breed_code?: string;
+  country?: string;
+}
 
 @Component({
   selector: 'app-samples',
@@ -71,40 +81,19 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     // get parameters from url
-    this.route.queryParams.subscribe(params => {
-      if (params['page']) {
-        this.pageIndex = +params['page'];
-      }
-      if (params['size']) {
-        this.pageSize = +params['size'];
-      }
-      if (params['sort']) {
-        this.sortActive = params['sort'];
-      }
-      if (params['order']) {
-        this.sortDirection = params['order'];
-      }
-      if (params['species']) {
-        this.samplesService.selectedSpecie = params['species'];
-      }
-      if (params['smarter_id']) {
-        this.samplesSearch.smarter_id = params['smarter_id'];
-      }
-      if (params['original_id']) {
-        this.samplesSearch.original_id = params['original_id'];
-      }
-      if (params['dataset']) {
-        this.samplesSearch.dataset = params['dataset'];
-      }
-      if (params['breed']) {
-        this.samplesSearch.breed = params['breed'];
-      }
-      if (params['breed_code']) {
-        this.samplesSearch.breed_code = params['breed_code'];
-      }
-      if (params['country']) {
-        this.samplesSearch.country = params['country'];
-      }
+    this.route.queryParams.subscribe((params: QueryParams) => {
+      // condition ? true_expression : false_expression
+      params['page'] ? this.pageIndex = +params['page'] : null;
+      params['size'] ? this.pageSize = +params['size'] : null;
+      params['sort'] ? this.sortActive = params['sort'] : null;
+      params['order'] ? this.sortDirection = params['order'] : null;
+      params['species'] ? this.samplesService.selectedSpecie = params['species'] : null;
+      params['smarter_id'] ? this.samplesSearch.smarter_id = params['smarter_id'] : null;
+      params['original_id'] ? this.samplesSearch.original_id = params['original_id'] : null;
+      params['dataset'] ? this.samplesSearch.dataset = params['dataset'] : null;
+      params['breed'] ? this.samplesSearch.breed = params['breed'] : null;
+      params['breed_code'] ? this.samplesSearch.breed_code = params['breed_code'] : null;
+      params['country'] ? this.samplesSearch.country = params['country'] : null;
     });
 
     this.speciesControl = new FormControl(this.samplesService.selectedSpecie);
@@ -254,60 +243,21 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getQueryParams(): Object {
-    interface QueryParams {
-      page?: number;
-      size?: number;
-      sort?: string;
-      order?: string;
-      species?: string;
-      smarter_id?: string;
-      original_id?: string;
-      dataset?: string;
-      breed?: string;
-      breed_code?: string;
-      country?: string;
-    }
-
     let queryParams: QueryParams = {};
 
     // this value is always defined
     queryParams['species'] = this.samplesService.selectedSpecie;
 
-    if (this.pageIndex) {
-      queryParams['page'] = this.pageIndex;
-    }
-
-    if (this.sortActive) {
-      queryParams['sort'] = this.sortActive;
-    }
-
-    if (this.sortDirection && this.sortActive) {
-      queryParams['order'] = this.sortDirection;
-    }
-
-    if (this.samplesSearch.smarter_id) {
-      queryParams['smarter_id'] = this.samplesSearch.smarter_id;
-    }
-
-    if (this.samplesSearch.original_id) {
-      queryParams['original_id'] = this.samplesSearch.original_id;
-    }
-
-    if (this.samplesSearch.dataset) {
-      queryParams['dataset'] = this.samplesSearch.dataset;
-    }
-
-    if (this.samplesSearch.breed) {
-      queryParams['breed'] = this.samplesSearch.breed;
-    }
-
-    if (this.samplesSearch.breed_code) {
-      queryParams['breed_code'] = this.samplesSearch.breed_code;
-    }
-
-    if (this.samplesSearch.country) {
-      queryParams['country'] = this.samplesSearch.country;
-    }
+    // condition ? true_expression : false_expression
+    this.pageIndex ? queryParams['page'] = this.pageIndex : null;
+    this.sortActive ? queryParams['sort'] = this.sortActive : null;
+    this.sortDirection && this.sortActive ? queryParams['order'] = this.sortDirection : null;
+    this.samplesSearch.smarter_id ? queryParams['smarter_id'] = this.samplesSearch.smarter_id : null;
+    this.samplesSearch.original_id ? queryParams['original_id'] = this.samplesSearch.original_id : null;
+    this.samplesSearch.dataset ? queryParams['dataset'] = this.samplesSearch.dataset : null;
+    this.samplesSearch.breed ? queryParams['breed'] = this.samplesSearch.breed : null;
+    this.samplesSearch.breed_code ? queryParams['breed_code'] = this.samplesSearch.breed_code : null;
+    this.samplesSearch.country ? queryParams['country'] = this.samplesSearch.country : null;
 
     return queryParams;
   }

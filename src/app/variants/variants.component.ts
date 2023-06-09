@@ -10,6 +10,12 @@ import { catchError, switchMap, map, startWith, delay } from 'rxjs/operators';
 import { UIService } from '../shared/ui.service';
 import { Variant, VariantsSearch } from './variants.model';
 import { VariantsService } from './variants.service';
+import { PaginationParams } from '../shared/shared.model';
+
+interface QueryParams extends VariantsSearch, PaginationParams {
+  species?: string;
+  assembly?: string;
+}
 
 @Component({
   selector: 'app-variants',
@@ -78,37 +84,18 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     // get parameters from url
-    this.route.queryParams.subscribe(params => {
-      if (params['page']) {
-        this.pageIndex = +params['page'];
-      }
-      if (params['size']) {
-        this.pageSize = +params['size'];
-      }
-      if (params['sort']) {
-        this.sortActive = params['sort'];
-      }
-      if (params['order']) {
-        this.sortDirection = params['order'];
-      }
-      if (params['species']) {
-        this.selectedSpecie = params['species'];
-      }
-      if (params['name']) {
-        this.variantSearch.name = params['name'];
-      }
-      if (params['chip_name']) {
-        this.variantSearch.chip_name = params['chip_name'];
-      }
-      if (params['rs_id']) {
-        this.variantSearch.rs_id = params['rs_id'];
-      }
-      if (params['probeset_id']) {
-        this.variantSearch.probeset_id = params['probeset_id'];
-      }
-      if (params['region']) {
-        this.variantSearch.region = params['region'];
-      }
+    this.route.queryParams.subscribe((params: QueryParams) => {
+      params['page'] ? this.pageIndex = +params['page'] : null;
+      params['size'] ? this.pageSize = +params['size'] : null;
+      params['sort'] ? this.sortActive = params['sort'] : null;
+      params['order'] ? this.sortDirection = params['order'] : null;
+      params['species'] ? this.selectedSpecie = params['species'] : null;
+      params['name'] ? this.variantSearch.name = params['name'] : null;
+      params['chip_name'] ? this.variantSearch.chip_name = params['chip_name'] : null;
+      params['rs_id'] ? this.variantSearch.rs_id = params['rs_id'] : null;
+      params['probeset_id'] ? this.variantSearch.probeset_id = params['probeset_id'] : null
+      params['region'] ? this.variantSearch.region = params['region'] : null;
+
       if (params['assembly'] && params['species']) {
         let assemblies: String[] = this.variantsService.supportedAssemblies[params['species']];
         this.selectedIndex = assemblies.indexOf(params['assembly']);
@@ -280,55 +267,21 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getQueryParams(): Object {
-    interface QueryParams extends VariantsSearch{
-      page?: number;
-      size?: number;
-      sort?: string;
-      order?: string;
-      species?: string;
-      assembly?: string;
-    }
-
     let queryParams: QueryParams = {};
 
     // this value is always defined
     queryParams['species'] = this.selectedSpecie;
 
-    if (this.pageIndex) {
-      queryParams['page'] = this.pageIndex;
-    }
-
-    if (this.sortActive) {
-      queryParams['sort'] = this.sortActive;
-    }
-
-    if (this.sortDirection && this.sortActive) {
-      queryParams['order'] = this.sortDirection;
-    }
-
-    if (this.variantSearch.name) {
-      queryParams['name'] = this.variantSearch.name;
-    }
-
-    if (this.variantSearch.chip_name) {
-      queryParams['chip_name'] = this.variantSearch.chip_name;
-    }
-
-    if (this.variantSearch.rs_id) {
-      queryParams['rs_id'] = this.variantSearch.rs_id;
-    }
-
-    if (this.variantSearch.probeset_id) {
-      queryParams['probeset_id'] = this.variantSearch.probeset_id;
-    }
-
-    if (this.variantSearch.region) {
-      queryParams['region'] = this.variantSearch.region;
-    }
-
-    if (this.selectedAssembly) {
-      queryParams['assembly'] = this.selectedAssembly;
-    }
+    // condition ? true_expression : false_expression
+    this.pageIndex ? queryParams['page'] = this.pageIndex : null;
+    this.sortActive ? queryParams['sort'] = this.sortActive : null;
+    this.sortDirection && this.sortActive ? queryParams['order'] = this.sortDirection : null;
+    this.variantSearch.name ? queryParams['name'] = this.variantSearch.name : null;
+    this.variantSearch.chip_name ? queryParams['chip_name'] = this.variantSearch.chip_name : null;
+    this.variantSearch.rs_id ? queryParams['rs_id'] = this.variantSearch.rs_id : null;
+    this.variantSearch.probeset_id ? queryParams['probeset_id'] = this.variantSearch.probeset_id : null;
+    this.variantSearch.region ? queryParams['region'] = this.variantSearch.region : null;
+    this.selectedAssembly ? queryParams['assembly'] = this.selectedAssembly : null;
 
     return queryParams;
   }

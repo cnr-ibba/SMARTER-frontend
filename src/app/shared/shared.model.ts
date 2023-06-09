@@ -1,3 +1,6 @@
+import { SortDirection } from "@angular/material/sort";
+import { Params } from "@angular/router";
+
 export interface ObjectID {
   $oid: string;
 }
@@ -15,3 +18,10 @@ export interface JSONObject {
 }
 
 export interface JSONArray extends Array<JSONValue> { }
+
+export interface PaginationParams extends Params {
+  page?: number;
+  size?: number;
+  sort?: string;
+  order?: SortDirection;
+}
