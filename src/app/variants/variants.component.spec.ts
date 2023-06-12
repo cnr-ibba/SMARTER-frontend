@@ -100,6 +100,12 @@ describe('testing VariantsComponent', () => {
     })
 
     expect(component.variantsForm.get(["region"])?.valid).toBe(true);
+
+    component.variantsForm.patchValue({
+      ['region']: "26:1-10000"
+    })
+
+    expect(component.variantsForm.get(["region"])?.valid).toBe(true);
   });
 
   it('Test regionValidator with invalid input', () => {

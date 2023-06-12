@@ -10,7 +10,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Dataset } from './datasets.model';
 import { DatasetsService } from './datasets.service';
 import { UIService } from '../shared/ui.service';
+import { PaginationParams } from '../shared/shared.model';
 
+interface QueryParams extends PaginationParams {
+  search?: string;
+}
 @Component({
   selector: 'app-datasets',
   templateUrl: './datasets.component.html',
@@ -49,22 +53,12 @@ export class DatasetsComponent implements AfterViewInit, OnInit, OnDestroy {
 
   ngOnInit() {
     // get parameters from url
-    this.route.queryParams.subscribe(params => {
-      if (params['search']) {
-        this.searchValue = params['search'];
-      }
-      if (params['page']) {
-        this.pageIndex = +params['page'];
-      }
-      if (params['size']) {
-        this.pageSize = +params['size'];
-      }
-      if (params['sort']) {
-        this.sortActive = params['sort'];
-      }
-      if (params['order']) {
-        this.sortDirection = params['order'];
-      }
+    this.route.queryParams.subscribe((params: QueryParams) => {
+      params['page'] ? this.pageIndex = +params['page'] : null;
+      params['size'] ? this.pageSize = +params['size'] : null;
+      params['sort'] ? this.sortActive = params['sort'] : null;
+      params['order'] ? this.sortDirection = params['order'] : null;
+      params['search'] ? this.searchValue = params['search'] : null;
     });
   }
 
@@ -143,31 +137,13 @@ export class DatasetsComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   getQueryParams(): Object {
-    interface QueryParams {
-      search?: string;
-      page?: number;
-      size?: number;
-      sort?: string;
-      order?: string;
-    }
-
     let queryParams: QueryParams = {};
 
-    if (this.searchValue) {
-      queryParams['search'] = this.searchValue;
-    }
-
-    if (this.pageIndex) {
-      queryParams['page'] = this.pageIndex;
-    }
-
-    if (this.sortActive) {
-      queryParams['sort'] = this.sortActive;
-    }
-
-    if (this.sortDirection && this.sortActive) {
-      queryParams['order'] = this.sortDirection;
-    }
+    // condition ? true_expression : false_expression
+    this.pageIndex ? queryParams['page'] = this.pageIndex : null;
+    this.sortActive ? queryParams['sort'] = this.sortActive : null;
+    this.sortDirection && this.sortActive ? queryParams['order'] = this.sortDirection : null;
+    this.searchValue ? queryParams['searchValue'] = this.searchValue : null;
 
     return queryParams;
   }

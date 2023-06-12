@@ -4,12 +4,18 @@ import { PageEvent } from '@angular/material/paginator';
 import { Sort, SortDirection } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of as observableOf, merge, Subject, Subscription } from 'rxjs';
+import { of as observableOf, merge, Subject, Subscription, Observable } from 'rxjs';
 import { catchError, switchMap, map, startWith, delay } from 'rxjs/operators';
 
 import { UIService } from '../shared/ui.service';
 import { Variant, VariantsSearch } from './variants.model';
 import { VariantsService } from './variants.service';
+import { PaginationParams } from '../shared/shared.model';
+
+interface QueryParams extends VariantsSearch, PaginationParams {
+  species?: string;
+  assembly?: string;
+}
 
 @Component({
   selector: 'app-variants',
@@ -21,6 +27,7 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
   dataSource = new MatTableDataSource<Variant>();
   private tableSubscription!: Subscription;
   private speciesSubscription!: Subscription;
+  private chipsStateSubscription!: Subscription;
 
   resultsLength = 0;
   isLoading = false;
@@ -42,6 +49,9 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
   sortDirection: SortDirection = "";
   variantSearch: VariantsSearch = {};
 
+  // used by autocomplete forms
+  filteredChips!: Observable<string[]>;
+
   constructor(
     private variantsService: VariantsService,
     private uiService: UIService,
@@ -62,7 +72,7 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   regionValidator(control: AbstractControl): ValidationErrors | null {
     const chrom_pattern = new RegExp('^[a-zA-Z0-9_]+$');
-    const region_pattern = new RegExp('^[a-zA-Z0-9_]:[0-9]+-[0-9]+$')
+    const region_pattern = new RegExp('^[a-zA-Z0-9_]+:[0-9]+-[0-9]+$')
 
     if (control.value) {
       if (!chrom_pattern.test(control.value) && !region_pattern.test(control.value)) {
@@ -74,37 +84,18 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     // get parameters from url
-    this.route.queryParams.subscribe(params => {
-      if (params['page']) {
-        this.pageIndex = +params['page'];
-      }
-      if (params['size']) {
-        this.pageSize = +params['size'];
-      }
-      if (params['sort']) {
-        this.sortActive = params['sort'];
-      }
-      if (params['order']) {
-        this.sortDirection = params['order'];
-      }
-      if (params['species']) {
-        this.selectedSpecie = params['species'];
-      }
-      if (params['name']) {
-        this.variantSearch.name = params['name'];
-      }
-      if (params['chip_name']) {
-        this.variantSearch.chip_name = params['chip_name'];
-      }
-      if (params['rs_id']) {
-        this.variantSearch.rs_id = params['rs_id'];
-      }
-      if (params['probeset_id']) {
-        this.variantSearch.probeset_id = params['probeset_id'];
-      }
-      if (params['region']) {
-        this.variantSearch.region = params['region'];
-      }
+    this.route.queryParams.subscribe((params: QueryParams) => {
+      params['page'] ? this.pageIndex = +params['page'] : null;
+      params['size'] ? this.pageSize = +params['size'] : null;
+      params['sort'] ? this.sortActive = params['sort'] : null;
+      params['order'] ? this.sortDirection = params['order'] : null;
+      params['species'] ? this.selectedSpecie = params['species'] : null;
+      params['name'] ? this.variantSearch.name = params['name'] : null;
+      params['chip_name'] ? this.variantSearch.chip_name = params['chip_name'] : null;
+      params['rs_id'] ? this.variantSearch.rs_id = params['rs_id'] : null;
+      params['probeset_id'] ? this.variantSearch.probeset_id = params['probeset_id'] : null
+      params['region'] ? this.variantSearch.region = params['region'] : null;
+
       if (params['assembly'] && params['species']) {
         let assemblies: String[] = this.variantsService.supportedAssemblies[params['species']];
         this.selectedIndex = assemblies.indexOf(params['assembly']);
@@ -131,6 +122,9 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
       probeset_id: new FormControl(null, [this.noWhiteSpaceValidator]),
     });
     this.variantsForm.patchValue(this.variantSearch);
+
+    // get all supported chips
+    this.variantsService.getSupportedChips(this.selectedSpecie);
   }
 
   ngAfterViewInit(): void {
@@ -147,6 +141,9 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.selectedSpecie = this.speciesControl.value;
       this.tabs = this.variantsService.supportedAssemblies[this.selectedSpecie];
       this.selectedAssembly = this.tabs[this.selectedIndex];
+
+      // reload chips
+      this.variantsService.getSupportedChips(this.selectedSpecie);
 
       this.variantsForm.reset();
       this.variantSearch = this.variantsForm.value;
@@ -211,6 +208,15 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
     ).subscribe(data => {
       this.dataSource.data = data
     });
+
+    // subscribe to see when request are performed by the server
+    this.chipsStateSubscription = this.variantsService.chipsStateChanged.subscribe(() => {
+      // filter chip names
+      this.filteredChips = this.variantsForm.controls['chip_name'].valueChanges.pipe(
+        startWith(''),
+        map(value => this._filterChips(value || '')),
+      );
+    });
   }
 
   tabChanged(index: number): void {
@@ -261,61 +267,43 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getQueryParams(): Object {
-    interface QueryParams extends VariantsSearch{
-      page?: number;
-      size?: number;
-      sort?: string;
-      order?: string;
-      species?: string;
-      assembly?: string;
-    }
-
     let queryParams: QueryParams = {};
 
     // this value is always defined
     queryParams['species'] = this.selectedSpecie;
 
-    if (this.pageIndex) {
-      queryParams['page'] = this.pageIndex;
-    }
-
-    if (this.sortActive) {
-      queryParams['sort'] = this.sortActive;
-    }
-
-    if (this.sortDirection && this.sortActive) {
-      queryParams['order'] = this.sortDirection;
-    }
-
-    if (this.variantSearch.name) {
-      queryParams['name'] = this.variantSearch.name;
-    }
-
-    if (this.variantSearch.chip_name) {
-      queryParams['chip_name'] = this.variantSearch.chip_name;
-    }
-
-    if (this.variantSearch.rs_id) {
-      queryParams['rs_id'] = this.variantSearch.rs_id;
-    }
-
-    if (this.variantSearch.probeset_id) {
-      queryParams['probeset_id'] = this.variantSearch.probeset_id;
-    }
-
-    if (this.variantSearch.region) {
-      queryParams['region'] = this.variantSearch.region;
-    }
-
-    if (this.selectedAssembly) {
-      queryParams['assembly'] = this.selectedAssembly;
-    }
+    // condition ? true_expression : false_expression
+    this.pageIndex ? queryParams['page'] = this.pageIndex : null;
+    this.sortActive ? queryParams['sort'] = this.sortActive : null;
+    this.sortDirection && this.sortActive ? queryParams['order'] = this.sortDirection : null;
+    this.variantSearch.name ? queryParams['name'] = this.variantSearch.name : null;
+    this.variantSearch.chip_name ? queryParams['chip_name'] = this.variantSearch.chip_name : null;
+    this.variantSearch.rs_id ? queryParams['rs_id'] = this.variantSearch.rs_id : null;
+    this.variantSearch.probeset_id ? queryParams['probeset_id'] = this.variantSearch.probeset_id : null;
+    this.variantSearch.region ? queryParams['region'] = this.variantSearch.region : null;
+    this.selectedAssembly ? queryParams['assembly'] = this.selectedAssembly : null;
 
     return queryParams;
+  }
+
+  private _filterChips(value: string): string[] {
+    // console.log(this.variantsService.supportedChips);
+    // console.log(`value: '${value}'`)
+
+    // remove WholeGenomeSequencing from suggested values
+    const index = this.variantsService.supportedChips.indexOf("WholeGenomeSequencing", 0);
+
+    if (index > -1) {
+      this.variantsService.supportedChips.splice(index, 1);
+    }
+
+    const filterValue = value.toLowerCase();
+    return this.variantsService.supportedChips.filter(chip => chip.toLowerCase().includes(filterValue));
   }
 
   ngOnDestroy(): void {
     this.speciesSubscription.unsubscribe();
     this.tableSubscription.unsubscribe();
+    this.chipsStateSubscription.unsubscribe();
   }
 }

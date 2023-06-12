@@ -10,7 +10,12 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Breed } from './breeds.model';
 import { BreedsService } from './breeds.service';
 import { UIService } from '../shared/ui.service';
+import { PaginationParams } from '../shared/shared.model';
 
+interface QueryParams extends PaginationParams {
+  species?: string;
+  search?: string;
+}
 
 @Component({
   selector: 'app-breeds',
@@ -52,25 +57,14 @@ export class BreedsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     // get parameters from url
-    this.route.queryParams.subscribe(params => {
-      if (params['page']) {
-        this.pageIndex = +params['page'];
-      }
-      if (params['size']) {
-        this.pageSize = +params['size'];
-      }
-      if (params['sort']) {
-        this.sortActive = params['sort'];
-      }
-      if (params['order']) {
-        this.sortDirection = params['order'];
-      }
-      if (params['species']) {
-        this.breedsService.selectedSpecie = params['species'];
-      }
-      if (params['search']) {
-        this.searchValue = params['search'];
-      }
+    this.route.queryParams.subscribe((params: QueryParams) => {
+      // condition ? true_expression : false_expression
+      params['page'] ? this.pageIndex = +params['page'] : null;
+      params['size'] ? this.pageSize = +params['size'] : null;
+      params['sort'] ? this.sortActive = params['sort'] : null;
+      params['order'] ? this.sortDirection = params['order'] : null;
+      params['species'] ? this.breedsService.selectedSpecie = params['species'] : null;
+      params['search'] ? this.searchValue = params['search'] : null;
     });
 
     this.speciesControl = new FormControl(this.breedsService.selectedSpecie);
@@ -175,35 +169,16 @@ export class BreedsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getQueryParams(): Object {
-    interface QueryParams {
-      page?: number;
-      size?: number;
-      sort?: string;
-      order?: string;
-      species?: string;
-      searchValue?: string;
-    }
-
     let queryParams: QueryParams = {};
 
     // this value is always defined
     queryParams['species'] = this.breedsService.selectedSpecie;
 
-    if (this.pageIndex) {
-      queryParams['page'] = this.pageIndex;
-    }
-
-    if (this.sortActive) {
-      queryParams['sort'] = this.sortActive;
-    }
-
-    if (this.sortDirection && this.sortActive) {
-      queryParams['order'] = this.sortDirection;
-    }
-
-    if (this.searchValue) {
-      queryParams.searchValue = this.searchValue;
-    }
+    // condition ? true_expression : false_expression
+    this.pageIndex ? queryParams['page'] = this.pageIndex : null;
+    this.sortActive ? queryParams['sort'] = this.sortActive : null;
+    this.sortDirection && this.sortActive ? queryParams['order'] = this.sortDirection : null;
+    this.searchValue ? queryParams['search'] = this.searchValue : null;
 
     return queryParams;
   }

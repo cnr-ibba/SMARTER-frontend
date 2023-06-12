@@ -42,3 +42,23 @@ export interface SamplesSearch {
   breed_code?: string;
   country?: string;
 }
+
+export interface Country {
+  _id: ObjectID;
+  alpha_2: string;
+  alpha_3: string;
+  name: string;
+  numeric?: number;
+  official_name?: string;
+  species: string[];
+}
+
+export interface CountriesAPI {
+  items: Country[];
+  next?: string;
+  page: number;
+  pages: number;
+  prev?: string;
+  size: number;
+  total: number;
+}

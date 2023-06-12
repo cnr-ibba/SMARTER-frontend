@@ -49,4 +49,20 @@ describe('SamplesService', () => {
     const request = controller.expectOne(expectedUrl);
     controller.verify();
   });
+
+  it('Test getting all countries', () => {
+    const expectedUrl = `${environment.backend_url}/countries?species=${service.selectedSpecie}&size=25`;
+    service.getCountries();
+
+    const request = controller.expectOne(expectedUrl);
+    controller.verify();
+  });
+
+  it('Test getting all breeds', () => {
+    const expectedUrl = `${environment.backend_url}/breeds?species=${service.selectedSpecie}&size=25`;
+    service.getBreeds();
+
+    const request = controller.expectOne(expectedUrl);
+    controller.verify();
+  })
 });
