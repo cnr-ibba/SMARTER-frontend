@@ -27,6 +27,7 @@ import { SampleMetadataComponent } from './samples/sample-detail/sample-metadata
 import { VariantsComponent } from './variants/variants.component';
 import { VariantDetailComponent } from './variants/variant-detail/variant-detail.component';
 import { TextToColumnPipe } from './shared/text-to-column.pipe';
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { TextToColumnPipe } from './shared/text-to-column.pipe';
     VariantsComponent,
     VariantDetailComponent,
     TextToColumnPipe,
+    AboutComponent,
   ],
   imports: [
     BrowserModule,
