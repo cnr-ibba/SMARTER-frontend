@@ -298,7 +298,7 @@ export class VariantsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     const filterValue = value.toLowerCase();
-    return this.variantsService.supportedChips.filter(chip => chip.toLowerCase().includes(filterValue));
+    return this.variantsService.supportedChips.filter(chip => chip.toLowerCase().includes(filterValue)).sort();
   }
 
   ngOnDestroy(): void {

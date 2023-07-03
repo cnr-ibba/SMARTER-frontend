@@ -265,19 +265,19 @@ export class SamplesComponent implements OnInit, AfterViewInit, OnDestroy {
   private _filterCountry(value: string): string[] {
     // console.log(this.samplesService.countries);
     const filterValue = value.toLowerCase();
-    return this.samplesService.countries.filter(country => country.toLowerCase().includes(filterValue));
+    return this.samplesService.countries.filter(country => country.toLowerCase().includes(filterValue)).sort();
   }
 
   private _filterBreed(value: string): string[] {
     // console.log(this.samplesService.breeds);
     const filterValue = value.toLowerCase();
-    return this.samplesService.breeds.filter(breed => breed.toLowerCase().includes(filterValue));
+    return this.samplesService.breeds.filter(breed => breed.toLowerCase().includes(filterValue)).sort();
   }
 
   private _filterCode(value: string): string[] {
     // console.log(this.samplesService.breed_codes);
     const filterValue = value.toLowerCase();
-    return this.samplesService.breed_codes.filter(code => code.toLowerCase().includes(filterValue));
+    return this.samplesService.breed_codes.filter(code => code.toLowerCase().includes(filterValue)).sort();
   }
 
   ngOnDestroy() {
