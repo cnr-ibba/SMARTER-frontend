@@ -2,7 +2,15 @@
 
 <div flex fxLayout="row" fxLayoutAlign="center center">
   <div fxFlex="90">
+
+    <p>
+      The SMARTER project site is a place where WP4 partners of the
+      <a href="https://www.smarterproject.eu/">Smarter project</a>
+      can browse and access their data.
+    </p>
+
     <h2>The SMARTER project</h2>
+
     <p>
       Small ruminant populations play a fundamental role for the livelihood and
       socio-economic well-being of human settlements, especially in marginal areas
@@ -14,48 +22,98 @@
       conditions, resistance to biotic and abiotic stressors, and the production
       of quality of products of animal origin.
     </p>
+
     <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet accusantium
-      vero dolore consequatur quaerat fuga debitis reiciendis, voluptates est?
-      Corporis quia sequi tempore sint impedit reprehenderit deleniti quisquam omnis soluta.
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet accusantium
-      vero dolore consequatur quaerat fuga debitis reiciendis, voluptates est?
-      Corporis quia sequi tempore sint impedit reprehenderit deleniti quisquam omnis soluta.
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet accusantium
-      vero dolore consequatur quaerat fuga debitis reiciendis, voluptates est?
-      Corporis quia sequi tempore sint impedit reprehenderit deleniti quisquam omnis soluta.
+      In this particular context, WP4 aims to address knowledge gaps concerning
+      genetic diversity in goats and sheep. Its objective is to identify genetic
+      factors that contribute to their ability to adapt to climate conditions and,
+      more broadly, to withstand environmental disturbances.
+      Available datasets relevant to the genomic characterization
+      were identified and furthermore comprehensive data on hardy and under-utilized
+      breeds were collected, including genotypes, phenotypes, and environmental
+      measurements associated with rearing conditions.
+      To ensure consistency, the recording of this data was standardized: genotypes
+      were converted to the same genome version and coding convention.
+      Finally, a shared database was established, consolidating
+      the wealth of knowledge on genetic variation in small ruminants,
+      as a culmination of the project's efforts.
     </p>
+
     <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet accusantium
-      vero dolore consequatur quaerat fuga debitis reiciendis, voluptates est?
-      Corporis quia sequi tempore sint impedit reprehenderit deleniti quisquam omnis soluta.
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet accusantium
-      vero dolore consequatur quaerat fuga debitis reiciendis, voluptates est?
-      Corporis quia sequi tempore sint impedit reprehenderit deleniti quisquam omnis soluta.
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet accusantium
-      vero dolore consequatur quaerat fuga debitis reiciendis, voluptates est?
-      Corporis quia sequi tempore sint impedit reprehenderit deleniti quisquam omnis soluta.
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet accusantium
-      vero dolore consequatur quaerat fuga debitis reiciendis, voluptates est?
-      Corporis quia sequi tempore sint impedit reprehenderit deleniti quisquam omnis soluta.
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet accusantium
-      vero dolore consequatur quaerat fuga debitis reiciendis, voluptates est?
-      Corporis quia sequi tempore sint impedit reprehenderit deleniti quisquam omnis soluta.
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet accusantium
-      vero dolore consequatur quaerat fuga debitis reiciendis, voluptates est?
-      Corporis quia sequi tempore sint impedit reprehenderit deleniti quisquam omnis soluta.
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet accusantium
-      vero dolore consequatur quaerat fuga debitis reiciendis, voluptates est?
-      Corporis quia sequi tempore sint impedit reprehenderit deleniti quisquam omnis soluta.
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet accusantium
-      vero dolore consequatur quaerat fuga debitis reiciendis, voluptates est?
-      Corporis quia sequi tempore sint impedit reprehenderit deleniti quisquam omnis soluta.
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet accusantium
-      vero dolore consequatur quaerat fuga debitis reiciendis, voluptates est?
-      Corporis quia sequi tempore sint impedit reprehenderit deleniti quisquam omnis soluta.
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet accusantium
-      vero dolore consequatur quaerat fuga debitis reiciendis, voluptates est?
-      Corporis quia sequi tempore sint impedit reprehenderit deleniti quisquam omnis soluta.
+      Data are made available to the community using three different instruments:
     </p>
+
+      <ul>
+        <li>
+          The <a href="https://github.com/cnr-ibba/SMARTER-database">SMARTER-database</a>,
+          which is a collection of tools and scripts to collect, standardize and provide
+          to the community a collection of genotype data and metadata information
+          in hardy goat and sheep populations by combining new with already existing datasets.
+          This project is better explained and documented in its
+          <a href="https://smarter-database.readthedocs.io/en/latest/index.html">manual pages</a>.
+        </li>
+        <li>
+          The <a href="https://github.com/cnr-ibba/SMARTER-backend">SMARTER-backend</a>,
+          which is a REST API service developed on top of the <em>SMARTER-database</em>
+          which provide methods to interact and access with SMARTER data using web resources.
+          By using <em>SMARTER-backend</em>, you can develop softwares or scripts which get
+          access to SMARTER data through web, without have a local instance
+          of the <em>SMARTER-database</em>. An example of this is the
+          <a href="https://github.com/cnr-ibba/r-smarter-api">smarterapi R package</a>,
+          which allow to collect SMARTER data using the <em>SMARTER-backend</em>. More
+          information can be found in the
+          <a href="https://smarter-backend.readthedocs.io/en/latest/index.html">SMARTER-backend documentation</a>
+          and <a href="https://cnr-ibba.github.io/r-smarter-api/index.html">smarterapi manual pages</a>.
+        </li>
+        <li>
+          The <a href="https://github.com/cnr-ibba/SMARTER-frontend">SMARTER-frontend</a>
+          (<a routerLink="/">this site</a>), which is a web interface to browse <em>SMARTER-database</em>
+          data relying on <em>SMARTER-backend</em>.
+        </li>
+      </ul>
+
+      <p>
+        Those instrument can be used to collect metadata and other samples information: genotypes
+        are available for both <em>Goat and Sheep species</em> as a whole PLINK binary file for each
+        of the supported assemblies. Users are required to identify their samples of interest and then
+        subset the genotype files according their needs. Additional filtering steps
+        on the selected genotypes can be done to get rid of missing samples or variants.
+      </p>
+
+    <h2>About this site</h2>
+
+    <p>
+      You can browse WP4 SMARTER using the different tabs. Data like samples, variants
+      and breed can be browsed by <em>species</em> (Goat, Sheep): you will find
+      a button on the top of the page which will select the data you can browse.
+      Data like datasets are available in the same page for both species. Here's
+      a list of the site sections:
+    </p>
+
+    <ul>
+      <li>
+        <a routerLink="/breeds">Breeds</a>: navigate data by breeds, you can
+        search for a specific breed or get general information about how many samples
+        belong to the same breed. You can follow the links to retrieve all samples
+        of a particular breed.
+      </li>
+      <li>
+        <a routerLink="/datasets">Datasets</a>: navigate data by datasets, browse
+        data relying on the files submitted by the partners or by file content. For
+        a <em>genotypes</em> dataset you can follow the links a retrieve all samples
+        belonging to the same dataset.
+      </li>
+      <li>
+        <a routerLink="/samples">Samples</a>: navigate samples by species.
+        You can filter out samples by filling the form fields.
+      </li>
+      <li>
+        <a routerLink="/variants">Variants</a>: navigate the variants used
+        to normalize the genotype files and collect information about their positions
+        and genotype codings. You can browse variants by species and
+        by assembly versions, and filter out variants by filling the form fields.
+      </li>
+    </ul>
+
   </div>
 </div>
