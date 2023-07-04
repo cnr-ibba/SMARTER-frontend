@@ -1,8 +1,9 @@
-import { NgModule } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AuthGuard } from './auth/auth.guard';
 import { HomeComponent } from './home/home.component';
+import { AboutComponent } from './about/about.component';
 import { LoginComponent } from './auth/login/login.component';
 import { DatasetsComponent } from './datasets/datasets.component';
 import { DatasetDetailComponent } from './datasets/dataset-detail/dataset-detail.component';
@@ -19,6 +20,7 @@ import { VariantResolver } from './variants/variant-detail/variant-resolver.serv
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
+  { path: 'about', component: AboutComponent },
   { path: 'login', component: LoginComponent },
   {
     path: 'breeds',
