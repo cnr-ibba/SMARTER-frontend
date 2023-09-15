@@ -7,11 +7,11 @@ import { Multipoint } from '../samples/samples.model';
 })
 export class LocationsListPipe implements PipeTransform {
 
-  transform(value: Multipoint): string {
-    let result = '';
+  transform(value: Multipoint): string[] {
+    let result: string[] = [];
 
     value.coordinates.forEach(position => {
-      result += `latitude: ${position[1]}, longitude: ${position[0]} `
+      result.push(`latitude: ${position[1]}, longitude: ${position[0]}`);
     });
 
     return result;

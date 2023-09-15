@@ -55,9 +55,14 @@
           Type: {{ sample.type }}
         </mat-list-item>
 
-        <mat-list-item role="listitem" *ngIf="sample.locations">
-          Locations: {{ sample.locations | locationsList }}
-        </mat-list-item>
+        <ng-container *ngIf="sample.locations">
+          <mat-list-item>Locations: </mat-list-item>
+          <mat-list class="subitem">
+            <div *ngFor="let location of sample.locations | locationsList">
+              <mat-list-item>{{ location }}</mat-list-item>
+            </div>
+          </mat-list>
+        </ng-container>
 
         <mat-expansion-panel
             *ngIf="sample.metadata"
