@@ -56,7 +56,7 @@ export interface VariantsSearch {
 
 export interface SupportedChip {
   _id: ObjectID;
-  manifacturer?: string;
+  manufacturer?: string;
   n_of_snps?: number;
   name: string;
   species: string;
