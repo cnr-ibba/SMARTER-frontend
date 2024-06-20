@@ -26,12 +26,6 @@
       <li>
         <a routerLink="/variants" routerLinkActive="active">Variants</a>
       </li>
-      <li>
-        <a routerLink="/login" routerLinkActive="active" *ngIf="!isAuthenticated">Login</a>
-      </li>
-      <li>
-        <a *ngIf="isAuthenticated" (click)="onLogout()">Logout</a>
-      </li>
     </ul>
   </div>
 </mat-toolbar>
