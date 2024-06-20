@@ -48,6 +48,7 @@
               <mat-card-content>
                 <mat-list-item role="listitem">Chrom: {{ location.chrom }}</mat-list-item>
                 <mat-list-item role="listitem">Position: {{ location.position }}</mat-list-item>
+                <mat-list-item role="listitem"*ngIf="location.date" >Date: {{ location.date.$date | date:'longDate':'en-US' }}</mat-list-item>
                 <mat-list-item role="listitem" *ngIf="location.illumina">Illumina: {{ location.illumina }}</mat-list-item>
                 <mat-list-item role="listitem">Illumina TOP: {{ location.illumina_top }}</mat-list-item>
                 <mat-list-item role="listitem" *ngIf="location.illumina_forward">Illumina Forward: {{ location.illumina_forward }}</mat-list-item>
