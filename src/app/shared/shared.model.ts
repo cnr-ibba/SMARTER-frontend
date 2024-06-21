@@ -6,13 +6,18 @@ export interface ObjectID {
 }
 
 export class ObjectDate {
-  $date: Date;
+  $date: Date | string;
 
   constructor(value: string | Date) {
     if (value instanceof Date) {
       this.$date = value;
     } else {
-      this.$date = new Date(value);
+      const date = new Date(value);
+      if (isNaN(date.getTime())) {
+        this.$date = value; // Store the original string
+      } else {
+        this.$date = date;
+      }
     }
   }
 }
