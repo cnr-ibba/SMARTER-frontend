@@ -55,10 +55,10 @@ export interface Country {
 
 export interface CountriesAPI {
   items: Country[];
-  next?: string;
+  next?: string | null;
   page: number;
   pages: number;
-  prev?: string;
+  prev?: string | null;
   size: number;
   total: number;
 }

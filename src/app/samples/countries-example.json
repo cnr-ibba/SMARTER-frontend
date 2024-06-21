@@ -1,0 +1,32 @@
+{
+  "items": [
+    {
+      "_id": {
+        "$oid": "665679be2c1c55629d917d14"
+      },
+      "alpha_2": "AL",
+      "alpha_3": "ALB",
+      "name": "Albania",
+      "numeric": 8,
+      "official_name": "Republic of Albania",
+      "species": ["Sheep"]
+    },
+    {
+      "_id": {
+        "$oid": "665679be2c1c55629d917d15"
+      },
+      "alpha_2": "DZ",
+      "alpha_3": "DZA",
+      "name": "Algeria",
+      "numeric": 12,
+      "official_name": "People's Democratic Republic of Algeria",
+      "species": ["Sheep"]
+    }
+  ],
+  "next": "/smarter-api/countries?species=Sheep&size=2&page=2",
+  "page": 1,
+  "pages": 1,
+  "prev": null,
+  "size": 2,
+  "total": 2
+}

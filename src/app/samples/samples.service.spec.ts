@@ -4,11 +4,13 @@ import { SortDirection } from '@angular/material/sort';
 
 import { environment } from '../../environments/environment';
 import { SamplesService } from './samples.service';
-import { SamplesSearch } from './samples.model';
+import { CountriesAPI, SamplesSearch } from './samples.model';
+import countriesData from './countries-example.json';
 
 describe('SamplesService', () => {
   let service: SamplesService;
   let controller: HttpTestingController;
+  let mockCountries: CountriesAPI = countriesData;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -23,15 +25,15 @@ describe('SamplesService', () => {
   });
 
   it('Test for searching samples', () => {
-    const pageIndex = 0;
-    const pageSize = 10;
-    const sortActive = '';
+    const pageIndex = 1;
+    const pageSize = 2;
+    const sortActive = 'sample_id';
     const sortDirection: SortDirection = "desc";
     const samplesSearch: SamplesSearch = {
       breed: "Merino"
     };
 
-    const expectedUrl = `${environment.backend_url}/samples/${service.selectedSpecie.toLowerCase()}?size=${pageSize}&breed=Merino`;
+    const expectedUrl = `${environment.backend_url}/samples/${service.selectedSpecie.toLowerCase()}?page=2&size=2&sort=sample_id&order=desc&breed=Merino`;
 
     service.getSamples(sortActive, sortDirection, pageIndex, pageSize, samplesSearch).subscribe(
       (samples) => {});
@@ -55,6 +57,8 @@ describe('SamplesService', () => {
     service.getCountries();
 
     const request = controller.expectOne(expectedUrl);
+    request.flush(mockCountries);
+    expect(service.countries.length).toBe(mockCountries.total)
     controller.verify();
   });
 
