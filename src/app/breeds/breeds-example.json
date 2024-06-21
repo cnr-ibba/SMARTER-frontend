@@ -1,0 +1,131 @@
+{
+  "items": [
+    {
+      "_id": {
+        "$oid": "66544d35719e7ca41a58d257"
+      },
+      "aliases": [
+        {
+          "dataset_id": {
+            "$oid": "604f75a61a08c53cebd09b67"
+          },
+          "fid": "TEXEL_UY"
+        },
+        {
+          "dataset_id": {
+            "$oid": "638a3fc844981838fd398504"
+          },
+          "fid": "TEX"
+        },
+        {
+          "dataset_id": {
+            "$oid": "638a3fc844981838fd398505"
+          },
+          "fid": "TEX"
+        },
+        {
+          "dataset_id": {
+            "$oid": "638a3fc944981838fd398506"
+          },
+          "fid": "TEX"
+        },
+        {
+          "dataset_id": {
+            "$oid": "638a3fca44981838fd398507"
+          },
+          "fid": "TEX"
+        },
+        {
+          "dataset_id": {
+            "$oid": "638a3fcb44981838fd398508"
+          },
+          "fid": "TEX"
+        },
+        {
+          "dataset_id": {
+            "$oid": "638a3fcc44981838fd398509"
+          },
+          "fid": "TEX"
+        },
+        {
+          "country": "Netherlands",
+          "dataset_id": {
+            "$oid": "604f75a61a08c53cebd09b58"
+          },
+          "fid": "TEX"
+        },
+        {
+          "country": "Netherlands",
+          "dataset_id": {
+            "$oid": "632addae76fa33fed2d2cc6d"
+          },
+          "fid": "TEX"
+        },
+        {
+          "country": "Unknown",
+          "dataset_id": {
+            "$oid": "632c869f0b8c366746d6e8b7"
+          },
+          "fid": "TEX"
+        }
+      ],
+      "code": "TEX",
+      "n_individuals": 686,
+      "name": "Texel",
+      "species": "Sheep"
+    },
+    {
+      "_id": {
+        "$oid": "66544d36655c76b775dbebd1"
+      },
+      "aliases": [
+        {
+          "dataset_id": {
+            "$oid": "604f74db1a08c53cebd09ae1"
+          },
+          "fid": "0"
+        },
+        {
+          "dataset_id": {
+            "$oid": "614ece6d6ac707ecf33bd641"
+          },
+          "fid": "FRI"
+        },
+        {
+          "dataset_id": {
+            "$oid": "614ece766ac707ecf33bd642"
+          },
+          "fid": "FRI"
+        },
+        {
+          "dataset_id": {
+            "$oid": "618d4568d65f4170c18fb2a4"
+          },
+          "fid": "0"
+        },
+        {
+          "dataset_id": {
+            "$oid": "6197b5a58aaeeb2699e4c925"
+          },
+          "fid": "FRI"
+        },
+        {
+          "dataset_id": {
+            "$oid": "621d081f020817ce8440ca9b"
+          },
+          "fid": "FRZ"
+        }
+      ],
+      "code": "FRZ",
+      "n_individuals": 688,
+      "name": "Frizarta",
+      "species": "Sheep"
+    }
+  ],
+  "next": "/smarter-api/breeds?species=Sheep&size=2&page=2",
+  "page": 1,
+  "pages": 1,
+  "prev": null,
+  "size": 2,
+  "total": 2
+}

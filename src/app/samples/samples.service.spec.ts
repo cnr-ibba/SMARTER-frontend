@@ -6,11 +6,14 @@ import { environment } from '../../environments/environment';
 import { SamplesService } from './samples.service';
 import { CountriesAPI, SamplesSearch } from './samples.model';
 import countriesData from './countries-example.json';
+import breedsData from '../breeds/breeds-example.json';
+import { BreedsAPI } from '../breeds/breeds.model';
 
 describe('SamplesService', () => {
   let service: SamplesService;
   let controller: HttpTestingController;
   let mockCountries: CountriesAPI = countriesData;
+  let mockBreeds: BreedsAPI = breedsData;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -67,6 +70,8 @@ describe('SamplesService', () => {
     service.getBreeds();
 
     const request = controller.expectOne(expectedUrl);
+    request.flush(mockBreeds);
+    expect(service.breeds.length).toBe(mockBreeds.total);
     controller.verify();
   })
 });
