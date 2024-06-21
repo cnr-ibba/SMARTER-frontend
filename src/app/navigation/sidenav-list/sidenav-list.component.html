@@ -23,14 +23,4 @@
     <mat-icon>list</mat-icon>
     <span class="nav-caption">Variants</span>
   </a>
-  <a *ngIf="!isAuthenticated" mat-list-item routerLink="/login" routerLinkActive="active" (click)="onClose()">
-    <mat-icon>face</mat-icon>
-    <span class="nav-caption">Login</span>
-  </a>
-  <mat-list-item *ngIf="isAuthenticated">
-    <button mat-icon-button (click)="onLogout()">
-      <mat-icon>eject</mat-icon>
-      <span class="nav-caption">Logout</span>
-    </button>
-  </mat-list-item>
 </mat-nav-list>

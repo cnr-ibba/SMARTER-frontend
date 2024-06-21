@@ -32,4 +32,21 @@ describe('SidenavListComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should emit closeSidenav event when onClose is called', () => {
+    spyOn(component.closeSidenav, 'emit');
+
+    component.onClose();
+
+    expect(component.closeSidenav.emit).toHaveBeenCalled();
+  });
+
+  it('should call onClose when onLogout is called', () => {
+    spyOn(component, 'onClose');
+
+    component.onLogout();
+
+    expect(component.onClose).toHaveBeenCalled();
+  });
+
 });

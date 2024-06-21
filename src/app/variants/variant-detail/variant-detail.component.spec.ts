@@ -21,7 +21,7 @@ const variant: Variant = {
     {
       "chrom": "15",
       "date": {
-        "$date": "2009-01-07T00:00:00Z"
+        "$date": new Date("2009-01-07T00:00:00Z")
       },
       "illumina": "A/G",
       "illumina_strand": "TOP",
@@ -47,7 +47,7 @@ const variant: Variant = {
     {
       "chrom": "15",
       "date": {
-        "$date": "2017-03-13T00:00:00Z"
+        "$date": new Date("2017-03-13T00:00:00Z")
       },
       "illumina": "A/G",
       "illumina_strand": "TOP",
