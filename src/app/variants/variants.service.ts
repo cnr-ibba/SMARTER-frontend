@@ -1,3 +1,4 @@
+import { map } from 'rxjs/operators';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SortDirection } from '@angular/material/sort';
@@ -5,6 +6,7 @@ import { environment } from 'src/environments/environment';
 
 import { SupportedChip, SupportedChipsAPI, Variant, VariantsAPI, VariantsSearch } from './variants.model';
 import { Observable, Subject, forkJoin } from 'rxjs';
+import { ObjectDate } from '../shared/shared.model';
 
 @Injectable({
   providedIn: 'root'
@@ -69,7 +71,16 @@ export class VariantsService {
 
   getVariant(_id: string, species: string) {
     const url = environment.backend_url + '/variants/' + species + "/" + _id;
-    return this.http.get<Variant>(url);
+    return this.http.get<Variant>(url).pipe(
+      map((variant: Variant) => {
+        variant.locations.forEach((location) => {
+          if (location.date) {
+            location.date = new ObjectDate(location.date.$date);
+          }
+        });
+        return variant;
+      })
+    );
   }
 
   getSupportedChips(species: string,): void {

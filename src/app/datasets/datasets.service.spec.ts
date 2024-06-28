@@ -22,13 +22,13 @@ describe('DatasetsService', () => {
   });
 
   it('Test for searching datasets', () => {
-    const pageIndex = 0;
-    const pageSize = 10;
-    const sortActive = '';
+    const pageIndex = 1;
+    const pageSize = 2;
+    const sortActive = 'file';
     const sortDirection: SortDirection = "desc";
     const searchValue = 'adaptmap';
 
-    const expectedUrl = `${environment.backend_url}/datasets?size=${pageSize}&search=${searchValue}`;
+    const expectedUrl = `${environment.backend_url}/datasets?page=${pageSize}&size=${pageSize}&sort=${sortActive}&order=${sortDirection}&search=${searchValue}`;
 
     service.getDatasets(sortActive, sortDirection, pageIndex, pageSize, searchValue).subscribe(
       (datasets) => {});

@@ -10,6 +10,18 @@ $my-accent: mat.define-palette(mat.$orange-palette, A200, A100, A400);
 // The "warn" palette is optional and defaults to red if not specified.
 $my-warn: mat.define-palette(mat.$red-palette);
 
+// define the light theme
+$my-theme: mat.define-light-theme((
+  color: (
+    primary: $my-primary,
+    accent: $my-accent,
+    warn: $my-warn,
+  )
+));
+
+// includes styles for all components in the library
+@include mat.all-component-themes($my-theme);
+
 // A mixin to deal with mat-row hover
 // https://github.com/angular/components/issues/8204
 @mixin mat-table-hover($is-dark) {
@@ -27,18 +39,6 @@ $my-warn: mat.define-palette(mat.$red-palette);
   }
 }
 
-// define the light theme
-$my-theme: mat.define-light-theme((
-  color: (
-    primary: $my-primary,
-    accent: $my-accent,
-    warn: $my-warn,
-  )
-));
-
-// includes styles for all components in the library
-@include mat.all-component-themes($my-theme);
-
 // include custom mixins
 @include mat-table-hover(false);
 
@@ -46,7 +46,7 @@ html, body { height: 100%; }
 
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-.free-text {
+.small-padding {
   padding-left: 15px;
 }
 

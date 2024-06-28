@@ -27,6 +27,6 @@ describe('HomeComponent', () => {
     const fixture = TestBed.createComponent(HomeComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to the SMARTER database');
+    expect(compiled.querySelector('h1').textContent).toContain('Welcome to the SMARTER Database');
   });
 });

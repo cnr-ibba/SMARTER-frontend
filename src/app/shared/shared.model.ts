@@ -5,6 +5,23 @@ export interface ObjectID {
   $oid: string;
 }
 
+export class ObjectDate {
+  $date: Date | string;
+
+  constructor(value: string | Date) {
+    if (value instanceof Date) {
+      this.$date = value;
+    } else {
+      const date = new Date(value);
+      if (isNaN(date.getTime())) {
+        this.$date = value; // Store the original string
+      } else {
+        this.$date = date;
+      }
+    }
+  }
+}
+
 // https://dev.to/ankittanna/how-to-create-a-type-for-complex-json-object-in-typescript-d81
 export type JSONValue =
     | string

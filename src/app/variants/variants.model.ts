@@ -1,5 +1,5 @@
 
-import { JSONObject, ObjectID } from "../shared/shared.model";
+import { JSONObject, ObjectID, ObjectDate } from "../shared/shared.model";
 
 export interface Location {
   ss_id?: string;
@@ -14,7 +14,7 @@ export interface Location {
   affymetrix_ab?: string;
   strand?: string;
   imported_from: string;
-  date?: JSONObject;
+  date?: ObjectDate;
 }
 
 export interface Probeset {
@@ -56,7 +56,7 @@ export interface VariantsSearch {
 
 export interface SupportedChip {
   _id: ObjectID;
-  manifacturer?: string;
+  manufacturer?: string;
   n_of_snps?: number;
   name: string;
   species: string;

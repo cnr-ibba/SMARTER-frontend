@@ -1,19 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-
-import { AuthService } from './auth/auth.service';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'SMARTER-frontend';
 
-  constructor(private authService: AuthService) { }
-
-  ngOnInit(): void {
-    // try authologin when starting application
-    this.authService.autoLogin();
-  }
 }
