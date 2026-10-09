@@ -13,7 +13,7 @@ SMARTER-frontend is an Angular 14 + Angular Material single-page app (NgModule-b
 - `npm run build` — production build into `dist/`
 - `npm test` — Karma/Jasmine in watch mode with Chrome
 - Single run as in CI: `npm run test:ci`
-- Utilities: `npm run build:prod`, `build:gh-pages` (base-href `/SMARTER-frontend/`), `clean` (node_modules), `clean:dist`, `reinstall`, `rebuild`
+- Utilities: `npm run build:prod`, `build:webserver` (base-href `/smarter/`, for https://webserver.ibba.cnr.it/smarter/), `clean` (node_modules), `clean:dist`, `reinstall`, `rebuild`
 - Single spec: `npm test -- --no-watch --include='src/app/samples/samples.service.spec.ts'`
 
 There is no lint script or e2e setup. CI (Node 16) runs `npm ci` + the headless test command on pushes/PRs to `master` and `devel`; pushing to `master` deploys with `ng deploy --base-href=/SMARTER-frontend/`.

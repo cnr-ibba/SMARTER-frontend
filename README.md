@@ -32,7 +32,7 @@ available through the npm scripts below, or with `npx ng <command>`.
 | Script | Description |
 | --- | --- |
 | `npm run build:prod` | production build into `dist/` |
-| `npm run build:gh-pages` | production build with `--base-href /SMARTER-frontend/` (GitHub Pages) |
+| `npm run build:webserver` | production build with `--base-href /smarter/` (https://webserver.ibba.cnr.it/smarter/) |
 | `npm run test:ci` | single headless test run with coverage, as in CI |
 | `npm run clean` | remove `node_modules` |
 | `npm run clean:dist` | remove `dist` |
