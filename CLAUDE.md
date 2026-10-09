@@ -8,10 +8,12 @@ SMARTER-frontend is an Angular 14 + Angular Material single-page app (NgModule-b
 
 ## Commands
 
+- `npm ci` — install dependencies (inside a conda env: `conda create -n smarter-frontend -c conda-forge nodejs=16`; don't install `ng` globally)
 - `npm start` (`ng serve`) — dev server at http://localhost:4200/
 - `npm run build` — production build into `dist/`
 - `npm test` — Karma/Jasmine in watch mode with Chrome
-- Single run as in CI: `npm test -- --no-watch --no-progress --code-coverage --browsers=ChromeHeadlessCI`
+- Single run as in CI: `npm run test:ci`
+- Utilities: `npm run build:prod`, `build:gh-pages` (base-href `/SMARTER-frontend/`), `clean` (node_modules), `clean:dist`, `reinstall`, `rebuild`
 - Single spec: `npm test -- --no-watch --include='src/app/samples/samples.service.spec.ts'`
 
 There is no lint script or e2e setup. CI (Node 16) runs `npm ci` + the headless test command on pushes/PRs to `master` and `devel`; pushing to `master` deploys with `ng deploy --base-href=/SMARTER-frontend/`.

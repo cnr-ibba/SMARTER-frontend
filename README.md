@@ -7,9 +7,41 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.4.
 
+## Setup environment
+
+The Angular CLI (`ng`, version 14) is a project dependency: do **not** install it globally
+(a different global version may be incompatible with this project). Create a conda
+environment with Node.js only, then install the dependencies:
+
+```
+$ conda create -n smarter-frontend -c conda-forge nodejs=16
+$ conda activate smarter-frontend
+```
+
+## Install dependencies
+
+```
+$ npm ci
+```
+
+Use `npm install` instead if you need to update `package-lock.json`. The `ng` command is then
+available through the npm scripts below, or with `npx ng <command>`.
+
+## Utility scripts
+
+| Script | Description |
+| --- | --- |
+| `npm run build:prod` | production build into `dist/` |
+| `npm run build:gh-pages` | production build with `--base-href /SMARTER-frontend/` (GitHub Pages) |
+| `npm run test:ci` | single headless test run with coverage, as in CI |
+| `npm run clean` | remove `node_modules` |
+| `npm run clean:dist` | remove `dist` |
+| `npm run reinstall` | `clean` + `npm install` |
+| `npm run rebuild` | `clean` + `npm install` + `build` |
+
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Run `npm start` (or `npx ng serve`) for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
 ## Code scaffolding
 
@@ -22,10 +54,6 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 ## Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
 
 ## Further help
 
